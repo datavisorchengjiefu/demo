@@ -17,12 +17,6 @@
 
 package com.fcjexample.demo.service;
 
-import com.fcjexample.demo.model.TestEntity;
-
-public interface DataViewService {
-    String publishDataView(String tenant);
-
-    Integer getViewType(String tenant);
-
-    TestEntity publishEntity(String tenant);
+public interface EmployeeManager {
+    String getNameById(Integer id);
 }

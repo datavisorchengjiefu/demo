@@ -1,14 +1,18 @@
 package com.fcjexample.demo.controller;
 
 import com.fcjexample.demo.model.ApiResult;
+import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.service.DataViewService;
+import com.fcjexample.demo.util.exception.DataViewException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/hello")
@@ -25,26 +29,70 @@ public class HelloController {
     }
 
     @RequestMapping("/{tenant}/publish")
-    public Object publishDataView(@PathVariable("tenant") String tenant) {
+    public String publishDataView(@PathVariable("tenant") String tenant) throws Exception {
+        try {
+            String res = null;
+            res = dataViewService.publishDataView(tenant);
+            return res;
+        } finally {
+            // todo
+        }
+    }
+
+    @RequestMapping("/{tenant}/publishEntity")
+    public TestEntity publishEntity(@PathVariable("tenant") String tenant) throws Exception {
+        try {
+            TestEntity res = null;
+            res = dataViewService.publishEntity(tenant);
+            return res;
+        } catch (Exception e) {
+            LOGGER.error("publishEntity failed for {}. ", tenant, e);
+            throw e;
+        } finally {
+            // todo
+        }
+    }
+
+    @RequestMapping("/{tenant}/publish2")
+    public String publishDataView2(@PathVariable("tenant") String tenant) {
         try {
             String res = null;
             res = dataViewService.publishDataView(tenant);
             return res;
         } catch (Exception e) {
-            LOGGER.error("publish error is: {}", "haha", e);
+            LOGGER.error("publish failed for {}. ", tenant, e);
+            throw e;
         } finally {
-            return "done";
+            // todo
         }
     }
 
-    @RequestMapping("/{tenant}/publish2")
-    public Object publishDataView2(@PathVariable("tenant") String tenant) {
+    @RequestMapping("/{tenant}/publishType")
+    public Integer publishType(@PathVariable("tenant") String tenant) {
         try {
-            String res = null;
-            res = dataViewService.publishDataView(tenant);
+            Integer res = null;
+            res = dataViewService.getViewType(tenant);
             return res;
+        } catch (Exception e) {
+            LOGGER.error("publish type failed for {}. ", tenant, e);
+            throw e;
         } finally {
+            // todo
+        }
+    }
 
+    @RequestMapping("/{tenant}/customPublish")
+    // responseEntity
+    // errorHandler
+    public String customPublish(@PathVariable("tenant") String tenant) {
+        try {
+            String customRes = dataViewService.publishDataView(tenant);
+            return customRes;
+        } catch (DataViewException exc) {
+            LOGGER.error("customPublish failed for {}. ", tenant, exc);
+            throw new ResponseStatusException(HttpStatus.LENGTH_REQUIRED, "custom message", exc);
+        } finally {
+            // todo
         }
     }
 

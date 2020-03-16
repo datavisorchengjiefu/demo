@@ -1,0 +1,15 @@
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xsi:schemaLocation="http://www.springframework.org/schema/beans-->
+<!--   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">-->
+
+<!--    &lt;!&ndash; Enable @AspectJ annotation support  &ndash;&gt;-->
+<!--    &lt;!&ndash;    <aop:aspectj-autoproxy/>&ndash;&gt;-->
+
+<!--    &lt;!&ndash; Employee manager &ndash;&gt;-->
+<!--    &lt;!&ndash;    <bean id="employeeManager" class="com.howtodoinjava.app.service.impl.EmployeeManagerImpl"/>&ndash;&gt;-->
+
+<!--    &lt;!&ndash; Logging Aspect &ndash;&gt;-->
+<!--    <bean id="loggingAspect" class="com.fcjexample.demo.aspect.LoggingAspect"/>-->
+
+<!--</beans>-->

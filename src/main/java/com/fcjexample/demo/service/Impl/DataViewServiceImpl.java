@@ -17,19 +17,42 @@
 
 package com.fcjexample.demo.service.Impl;
 
+import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.service.DataViewService;
 import com.fcjexample.demo.util.exception.DataViewException;
 import com.fcjexample.demo.util.exception.ViewTypeException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class DataViewServiceImpl implements DataViewService {
     @Override public String publishDataView(String tenant) {
         if ("hao".equalsIgnoreCase(tenant)) {
-            throw new DataViewException("hao is denied!!!");
+            throw new DataViewException("attention! hao is denied!!!");
         }
 
         return tenant + "666";
+    }
+
+    @Override public TestEntity publishEntity(String tenant) {
+        if ("hao".equalsIgnoreCase(tenant)) {
+            throw new DataViewException("attention! entity, hao is denied!!!");
+        }
+
+        TestEntity subEntity = new TestEntity();
+        subEntity.setName("sub2");
+
+        TestEntity entity = new TestEntity();
+        entity.setId(4);
+        entity.setName(tenant);
+        entity.setCreateTime(System.currentTimeMillis());
+        Map<Integer, TestEntity> map = new HashMap<>();
+        map.put(1, subEntity);
+        entity.setSubTestEntitys(map);
+        return entity;
+
     }
 
     @Override

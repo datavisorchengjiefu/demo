@@ -39,11 +39,33 @@ public class HelloController {
         }
     }
 
+    @RequestMapping("/{tenant}/feature/testException/internal")
+    // 该方法里的testStringException方法里有显示地throw exception，
+    // 所以testExceptionInternal也要显示地throws exception.
+    public String testExceptionInternal(@PathVariable("tenant") String tenant) throws Exception {
+        //    public String testExceptionInternal(@PathVariable("tenant") String tenant) {
+        try {
+            //                        String res = dataViewService.publishDataView(tenant);
+            String s = dataViewService.testStringException(tenant);
+
+            return "eee";
+        } catch (Exception e) {
+            LOGGER.error("testExceptionInternal failed for {}", tenant, e);
+            throw e;
+            //            return null;
+        } finally {
+        }
+    }
+
     @RequestMapping("/{tenant}/publishEntity")
     public TestEntity publishEntity(@PathVariable("tenant") String tenant) throws Exception {
         try {
             TestEntity res = null;
+            if (tenant == "test") {
+                throw new RuntimeException();
+            }
             res = dataViewService.publishEntity(tenant);
+
             return res;
         } catch (Exception e) {
             LOGGER.error("publishEntity failed for {}. ", tenant, e);
@@ -54,6 +76,8 @@ public class HelloController {
     }
 
     @RequestMapping("/{tenant}/publish2")
+    // 该方法里的testStringException方法里没有显示地throw exception，
+    // 所以testExceptionInternal不需要显示地throws exception.
     public String publishDataView2(@PathVariable("tenant") String tenant) {
         try {
             String res = null;

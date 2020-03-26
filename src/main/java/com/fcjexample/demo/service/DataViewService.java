@@ -25,4 +25,6 @@ public interface DataViewService {
     Integer getViewType(String tenant);
 
     TestEntity publishEntity(String tenant);
+
+    public String testStringException(String str) throws Exception;
 }

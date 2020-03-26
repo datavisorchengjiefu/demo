@@ -62,4 +62,15 @@ public class DataViewServiceImpl implements DataViewService {
         }
         return 33;
     }
+
+    //    public String testStringException(String str) throws Exception {
+    @Override
+    public String testStringException(String str) throws Exception {
+        if ("hao".equalsIgnoreCase(str)) {
+            throw new ViewTypeException("haha exception " + str);
+            //            throw new ParseException("ee", 4);
+        }
+
+        return "succeed: " + str;
+    }
 }

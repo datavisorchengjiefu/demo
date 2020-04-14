@@ -19,6 +19,7 @@ package com.fcjexample.demo.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class TestEntity {
 
@@ -58,6 +59,20 @@ public class TestEntity {
     public void setSubTestEntitys(
             Map<Integer, TestEntity> subTestEntitys) {
         this.subTestEntitys = subTestEntitys;
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        TestEntity entity = (TestEntity) o;
+        return Objects.equals(id, entity.id) &&
+                Objects.equals(name, entity.name);
+    }
+
+    @Override public int hashCode() {
+        return Objects.hash(id, name);
     }
 
     @Override public String toString() {

@@ -60,9 +60,10 @@ public class TestExceptionDemo {
             e.printStackTrace();
             System.out.println("【顶层异常】");
         }
+        System.out.println("catch2 888");
     }
 
-    public static void getRead2() throws Exception, ParseException {
+    public static void getRead2() throws ParseException, Exception {
         //    public static void getRead2() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -76,6 +77,9 @@ public class TestExceptionDemo {
         } catch (Exception e) {
             System.out.println("【异常】");
             //            throw new Exception();
+        } finally {
+            System.out.println("finally 666");
         }
+        System.out.println("hahaha");
     }
 }

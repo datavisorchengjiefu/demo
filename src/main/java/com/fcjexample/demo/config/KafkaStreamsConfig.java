@@ -147,6 +147,7 @@ public class KafkaStreamsConfig {
     @PreDestroy
     public void after() {
         logger.info("kafkaStreams preDestroy. ");
+        System.out.println("333");
         kafkaStreams.close();
     }
 }

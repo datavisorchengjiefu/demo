@@ -27,6 +27,7 @@ public class TestExceptionDemo {
 
     @Test
     public void testTryCatch() {
+        //        getRead();
         try {
             getRead();
         } catch (Exception e) {
@@ -41,8 +42,9 @@ public class TestExceptionDemo {
             Date date = dateFormat.parse("2018-1a 3-01");
             System.out.println("date:" + date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            //            e.printStackTrace();
             System.out.println("【解析异常】");
+            throw new RuntimeException("hhh01");
         } catch (Exception e) {
             System.out.println("【异常】");
             //throw new Exception();

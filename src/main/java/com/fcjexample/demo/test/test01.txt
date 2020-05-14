@@ -1,0 +1,40 @@
+{
+    "topic":  "senario1.test_client",
+    "timeField":  "time",
+    "timeFormat": "yyyy-MM-dd HH:mm:ss",
+    "creator":  "datavisor",
+    "script":  "Map<String, Tuple2<String, String>> fieldToValueMap = new HashMap<>();String content = (String) inputObject;Map<String, String> contentJson = (Map<String, String>) (new JSONParser()).parse(content);for (String key : contentJson.keySet()) {if (key.equals(\"amount\")) {
+fieldToValueMap.put(key, new Tuple2<>(\"Long\", contentJson.get(key)));
+ } else {
+fieldToValueMap.put(key, new Tuple2<>(\"String\", contentJson.get(key)));
+ }
+}
+
+return Arrays.asList(fieldToValueMap);",
+
+    "postTransformScript":"JSONObject resultJson = new JSONObject();
+if (featureValueMaps == null || featureValueMaps.size() == 0) {
+resultJson.put(\"resultCode\", \"1\");
+return resultJson;
+}
+
+boolean detected = false;
+JSONArray detailedResult = new JSONArray();
+for (Map<String, Object> oneDetection : featureValueMaps) {
+if (oneDetection.containsKey(\"amountVelocity\")) {
+ Long amountVelocity = (Long) oneDetection.get(\"amountVelocity\");
+ if (amountVelocity > 1000) {
+detected = true;
+ObjectMapper mapper = new ObjectMapper();
+detailedResult.add(mapper.writeValueAsString(oneDetection));
+ }
+}
+}
+resultJson.put(\"resultCode\", (detected) ? \"0\" : \"1\");
+resultJson.put(\"detailedResult\", detailedResult);
+return resultJson;"
+}
+
+
+Map<String, Tuple2<String, String>> fieldToValueMap = new HashMap<>();
+return Arrays.asList(fieldToValueMap);

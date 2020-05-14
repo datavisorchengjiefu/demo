@@ -1,0 +1,38 @@
+{
+	"FP_API_ERROR_DEFAULT_STATUS":"默认状态",
+	"FP_API_ERROR_DEFAULT_ERROR":"默认错误",
+
+	"FP_API_ERROR_AggregationConfigurationException":"聚合配置异常",
+	"FP_API_ERROR_AlreadyExistsException":"已经存在异常",
+	"FP_API_ERROR_ConfigurationException":"配置异常",
+	"FP_API_ERROR_DataViewException":"DataView异常",
+	"FP_API_ERROR_DeepNestedFeatureException":"特征深嵌套异常",
+	"FP_API_ERROR_DependencyException":"依赖异常",
+	"FP_API_ERROR_EntityConfigException":"实体配置异常",
+	"FP_API_ERROR_FeatureDuplicateException":"特征重复异常",
+	"FP_API_ERROR_FeatureException":"特征异常",
+	"FP_API_ERROR_FeatureNotFoundException":"特征无法找到异常",
+	"FP_API_ERROR_FeaturePlatException":"特征平台异常",
+	"FP_API_ERROR_FeatureTimeOutException":"特征超时异常",
+	"FP_API_ERROR_FpEntityNotFoundException":"Fp实体无法找到异常",
+	"FP_API_ERROR_FpEntityStatusException":"Fp实体状态异常",
+	"FP_API_ERROR_FpIllegalNameException":"Fp非法命名异常",
+	"FP_API_ERROR_FunctionExecutionException":"函数执行异常",
+	"FP_API_ERROR_FunctionNotFoundException":"函数无法找到异常",
+	"FP_API_ERROR_InvalidEntityStructureException":"无效的实体结构异常",
+	"FP_API_ERROR_InvalidEventTypeException":"无效的事件类型异常",
+	"FP_API_ERROR_InvalidFeatureNameException":"无效的特征名称异常",
+	"FP_API_ERROR_InvalidRequestException":"无效的请求异常",
+	"FP_API_ERROR_InvalidTtlException":"无效的ttl异常",
+	"FP_API_ERROR_LongTableException":"LongTable异常",
+	"FP_API_ERROR_OperatorException":"Operator异常",
+	"FP_API_ERROR_RequestExecutionException":"请求执行异常",
+	"FP_API_ERROR_RequestTimeoutException":"请求超时异常",
+	"FP_API_ERROR_RequestValidationException":"请求无效异常",
+	"FP_API_ERROR_RuleNotFoundException":"规则无法找到异常",
+	"FP_API_ERROR_StartupException":"启动异常",
+	"FP_API_ERROR_SyntaxException":"语法异常",
+	"FP_API_ERROR_ReplayException":"Replay异常"
+
+
+}

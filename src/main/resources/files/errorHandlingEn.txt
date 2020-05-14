@@ -1,0 +1,38 @@
+{
+	"FP_API_ERROR_DEFAULT_STATUS":"Default Status",
+	"FP_API_ERROR_DEFAULT_ERROR":"Default Error",
+
+	"FP_API_ERROR_AggregationConfigurationException":"Aggregation Configuration Exception",
+	"FP_API_ERROR_AlreadyExistsException":"Already Exists Exception",
+	"FP_API_ERROR_ConfigurationException":"Configuration Exception",
+	"FP_API_ERROR_DataViewException":"DataView Exception",
+	"FP_API_ERROR_DeepNestedFeatureException":"Deep Nested Feature Exception",
+	"FP_API_ERROR_DependencyException":"Dependency Exception",
+	"FP_API_ERROR_EntityConfigException":"Entity Config Exception",
+	"FP_API_ERROR_FeatureDuplicateException":"Feature Duplicate Exception",
+	"FP_API_ERROR_FeatureException":"Feature Exception",
+	"FP_API_ERROR_FeatureNotFoundException":"Feature Not Found Exception",
+	"FP_API_ERROR_FeaturePlatException":"Feature Plat Exception",
+	"FP_API_ERROR_FeatureTimeOutException":"Feature TimeOut Exception",
+	"FP_API_ERROR_FpEntityNotFoundException":"FpEntity Not Found Exception",
+	"FP_API_ERROR_FpEntityStatusException":"Fp Entity Status Exception",
+	"FP_API_ERROR_FpIllegalNameException":"Fp Illegal Name Exception",
+	"FP_API_ERROR_FunctionExecutionException":"Function Execution Exception",
+	"FP_API_ERROR_FunctionNotFoundException":"Function Not Found Exception",
+	"FP_API_ERROR_InvalidEntityStructureException":"Invalid Entity Structure Exception",
+	"FP_API_ERROR_InvalidEventTypeException":"Invalid Event Type Exception",
+	"FP_API_ERROR_InvalidFeatureNameException":"Invalid Feature Name Exception",
+	"FP_API_ERROR_InvalidRequestException":"Invalid Request Exception",
+	"FP_API_ERROR_InvalidTtlException":"Invalid Ttl Exception",
+	"FP_API_ERROR_LongTableException":"LongTable Exception",
+	"FP_API_ERROR_OperatorException":"Operator Exception",
+	"FP_API_ERROR_RequestExecutionException":"Request Execution Exception",
+	"FP_API_ERROR_RequestTimeoutException":"Request Timeout Exception",
+	"FP_API_ERROR_RequestValidationException":"Request Validation Exception",
+	"FP_API_ERROR_RuleNotFoundException":"Rule Not Found Exception",
+	"FP_API_ERROR_StartupException":"Start up Exception",
+	"FP_API_ERROR_SyntaxException":"Syntax Exception",
+	"FP_API_ERROR_ReplayException":"Replay Exception"
+
+
+}

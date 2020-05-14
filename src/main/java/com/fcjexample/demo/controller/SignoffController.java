@@ -37,4 +37,8 @@ public class SignoffController {
         System.out.println("test03");
         return "02" + testEntity.getName();
     }
+
+    public void test() {
+
+    }
 }

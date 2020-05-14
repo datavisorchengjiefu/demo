@@ -32,6 +32,7 @@ public class SignoffController {
 
     @PostMapping("/signoff/02")
     public String signoff02(@RequestBody TestEntity testEntity) {
+        System.out.println("test");
         return "02" + testEntity.getName();
     }
 }

@@ -34,7 +34,6 @@ public class SignoffController {
     public String signoff02(@RequestBody TestEntity testEntity) {
         System.out.println("test");
         System.out.println("test02");
-        System.out.println("test03");
         return "02" + testEntity.getName();
     }
 

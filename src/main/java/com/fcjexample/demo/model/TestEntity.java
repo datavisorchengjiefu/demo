@@ -18,6 +18,7 @@
 package com.fcjexample.demo.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,7 +27,25 @@ public class TestEntity {
     Integer id;
     String name;
     Long createTime;
+    Object event;
+    List<Object> events;
     private Map<Integer, TestEntity> subTestEntitys = new HashMap<>();
+
+    public Object getEvent() {
+        return event;
+    }
+
+    public void setEvent(Object event) {
+        this.event = event;
+    }
+
+    public List<Object> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Object> events) {
+        this.events = events;
+    }
 
     public Integer getId() {
         return id;
@@ -80,6 +99,8 @@ public class TestEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", createTime=" + createTime +
+                ", event=" + event +
+                ", events=" + events +
                 ", subTestEntitys=" + subTestEntitys +
                 '}';
     }

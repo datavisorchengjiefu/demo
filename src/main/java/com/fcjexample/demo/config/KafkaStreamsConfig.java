@@ -28,15 +28,13 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 
 import javax.annotation.PreDestroy;
 import java.util.Arrays;
 import java.util.Properties;
 
-@Configuration
+//@Configuration
 //@Component
 public class KafkaStreamsConfig {
 
@@ -122,7 +120,7 @@ public class KafkaStreamsConfig {
                 .to(OUTPUT_TOPIC, Produced.with(Serdes.String(), Serdes.Long()));
     }
 
-    @EventListener
+    //    @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) throws Exception {
         props = getStreamsConfig();
         final StreamsBuilder builder = new StreamsBuilder();

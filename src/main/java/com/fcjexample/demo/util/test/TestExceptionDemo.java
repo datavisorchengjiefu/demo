@@ -65,7 +65,8 @@ public class TestExceptionDemo {
         System.out.println("catch2 888");
     }
 
-    public static void getRead2() throws ParseException, Exception {
+    //    public static void getRead2() throws ParseException, Exception {
+    public static void getRead2() throws ParseException {
         //    public static void getRead2() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {

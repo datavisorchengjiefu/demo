@@ -6,13 +6,19 @@ import com.fcjexample.demo.service.DataViewService;
 import com.fcjexample.demo.util.exception.DataViewException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.HandlerMapping;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/hello")
@@ -26,6 +32,20 @@ public class HelloController {
     @RequestMapping("/hhh")
     public Object helloha() {
         return "hello haha fcjdormi";
+    }
+
+    @Autowired
+    ApplicationContext context;
+
+    @RequestMapping(value = "/test")
+    public String handleRequest() {
+        Map<String, HandlerMapping> matchingBeans = BeanFactoryUtils.beansOfTypeIncludingAncestors(
+                context, HandlerMapping.class, true, false);
+
+        matchingBeans.forEach((k, v) -> System.out.printf("order:%s %s=%s%n",
+                ((Ordered) v).getOrder(),
+                k, v.getClass().getSimpleName()));
+        return "response from /test";
     }
 
     @RequestMapping("/{tenant}/publish")

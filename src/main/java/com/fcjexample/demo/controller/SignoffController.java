@@ -18,22 +18,49 @@
 package com.fcjexample.demo.controller;
 
 import com.fcjexample.demo.model.TestEntity;
+import com.fcjexample.demo.service.SignoffService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
 @RestController
 public class SignoffController {
 
+    private static final Logger logger = LoggerFactory.getLogger(SignoffController.class);
+
+    @Autowired
+    Environment environment;
+
+    @Autowired
+    SignoffService signoffService;
+
     @PostMapping("/signoff/01")
     public String signoff01(@RequestBody TestEntity testEntity) {
+        environment.getProperty("JAVA_HOME");
+        System.getenv();
+        System.getProperties();
+        try {
+            logger.info("start signoff 01...");
+            signoffService.test();
+        } catch (Exception e) {
+            logger.error("signoff01 failed. ", e);
+        }
         return "01" + testEntity.getName();
     }
 
-    @PostMapping("/signoff/02")
-    public String signoff02(@RequestBody TestEntity testEntity) {
-        System.out.println("test");
-        System.out.println("test02");
+    @PostMapping("/signoff/02/{tenant}/{topic}")
+    public String computeSignoff02(@RequestBody TestEntity testEntity,
+            @PathVariable("tenant") String tenant,
+            @PathVariable("topic") String topic) {
         return "02" + testEntity.getName();
     }
 
@@ -41,7 +68,30 @@ public class SignoffController {
 
     }
 
-    public void test01() {
+    public static void main(String[] args) throws InterruptedException {
+        // define capacity of LinkedBlockingQueue
+        int capacity = 2;
+
+        // create object of LinkedBlockingQueue
+        // using LinkedBlockingQueue(int initialCapacity) constructor
+        BlockingQueue<Integer> lbq
+                = new ArrayBlockingQueue<>(capacity);
+
+        // add  numbers
+        //        lbq.add(1);
+        //        lbq.add(2);
+        //        lbq.add(3);
+        lbq.offer(1);
+        lbq.offer(2);
+        lbq.offer(3);
+        lbq.offer(4);
+        lbq.poll();
+        lbq.remove();
+        lbq.poll(100, TimeUnit.SECONDS);
+
+        // print queue
+        System.out.println("ArrayBlockingQueue:"
+                + lbq);
 
     }
 }

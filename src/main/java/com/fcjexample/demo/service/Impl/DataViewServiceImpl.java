@@ -21,6 +21,8 @@ import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.service.DataViewService;
 import com.fcjexample.demo.util.exception.DataViewException;
 import com.fcjexample.demo.util.exception.ViewTypeException;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,6 +30,14 @@ import java.util.Map;
 
 @Service
 public class DataViewServiceImpl implements DataViewService {
+
+    @EventListener
+    public void onApplicationEvente(ContextRefreshedEvent event) throws Exception {
+
+        System.out.println("listenerhaha.");
+
+    }
+
     @Override public String publishDataView(String tenant) {
         if ("hao".equalsIgnoreCase(tenant)) {
             throw new DataViewException("attention! hao is denied!!!");

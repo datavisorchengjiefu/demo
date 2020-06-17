@@ -17,12 +17,26 @@
 
 package com.fcjexample.demo.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class TT {
-    @NotNull(message = "Please haha.")
-    //    @NotNull
+    //    @NotNull(message = "Please haha.")
+    @NotNull
     private String name;
+
+    @Min(value = 18, message = "Age should not be less than 18")
+    @Max(value = 150, message = "Age should not be greater than 150")
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public String getName() {
         return name;

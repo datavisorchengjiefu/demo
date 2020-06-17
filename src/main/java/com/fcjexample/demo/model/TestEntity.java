@@ -17,6 +17,8 @@
 
 package com.fcjexample.demo.model;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +27,23 @@ import java.util.Objects;
 public class TestEntity {
 
     Integer id;
+    @NotNull(message = "hhh name != null")
     String name;
+
     Long createTime;
+    @NotEmpty(message = "desc not empty")
+    String desc;
     Object event;
     List<Object> events;
     private Map<Integer, TestEntity> subTestEntitys = new HashMap<>();
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public Object getEvent() {
         return event;

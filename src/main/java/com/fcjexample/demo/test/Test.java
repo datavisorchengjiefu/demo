@@ -20,6 +20,9 @@ package com.fcjexample.demo.test;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -31,6 +34,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Test {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
     private static Consumer<Map.Entry<Integer, String>> mapConsumer = new Consumer<Map.Entry<Integer, String>>() {
         @Override public void accept(
                 //                Map.Entry<Integer, Object> value) {
@@ -54,6 +59,11 @@ public class Test {
         Set<TestEntity> set = new HashSet<>();
         set.add(entity1);
         set.add(entity2);
+
+        Iterator<TestEntity> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            System.out.println("hahais: " + iterator.next().getName());
+        }
 
         System.out.println(set.size());
 
@@ -149,15 +159,30 @@ public class Test {
                 .collect(Collectors.joining(","));
 
         System.out.println("With Java 8 : " + result);
+        System.out.println("++++++++++++++");
 
         TT tt = new TT();
-        tt.setName(null);
+        //        tt.setName(null);
+        tt.setAge(30);
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<TT>> constraintViolationSet = validator.validate(tt);
-        System.out.println(constraintViolationSet.size());
+
+        System.out.println("constraintViolationSet size: " + constraintViolationSet.size());
+
+        for (ConstraintViolation<TT> violation : constraintViolationSet) {
+            LOGGER.error(violation.getMessage());
+        }
 
         System.out.println(tt.getName());
+        System.out.println("++++++++++++++");
+
+        List<String> fcjList = Arrays.asList("a", "b");
+
+        List<Object> fcjObjectList = Arrays.asList(fcjList);
+
+        System.out.println(fcjList.contains("a"));
+        System.out.println(fcjObjectList.contains("a"));
 
         int testInt01 = 2;
         switch (testInt01) {
@@ -176,6 +201,49 @@ public class Test {
             System.out.println("default");
         }
 
+        String test01 = "123";
+        String test02 = "fcj ha ge";
+        Integer test1 = Integer.parseInt(test01);
+        System.out.println(test1);
+        try {
+            Integer test2 = Integer.parseInt(test02);
+            System.out.println(test2);
+        } catch (Exception e) {
+            String mess = e.getMessage();
+            System.out.println("666: " + mess);
+            System.out.println("777: " + JSONValue.escape(mess));
+            LOGGER.error("haha ex: ", e);
+
+        }
+
+        StringBuilder sb = null;
+        if (8 > 6) {
+            sb = new StringBuilder("5eee");
+        }
+        //        assert sb != null : "bad!!!";
+        assert sb != null;
+        System.out.println(sb.toString());
+
+        //
+        Map<Integer, Object> rawFeatureValueMap = new HashMap<>();
+        rawFeatureValueMap.put(1, "r1");
+        rawFeatureValueMap.put(2, "r2");
+        rawFeatureValueMap.put(3, "r3");
+        Map<Integer, Object> signoffFeatureValueMap = new HashMap<>();
+        signoffFeatureValueMap.put(1, "r1");
+        signoffFeatureValueMap.put(2, "rha2");
+        signoffFeatureValueMap.put(3, "ruuu3");
+
+        Map<Integer, Object> resultRaw = rawFeatureValueMap.entrySet().stream()
+                .filter(e -> !e.getValue().equals(signoffFeatureValueMap.get(e.getKey())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        Map<Integer, Object> resultSignoff = rawFeatureValueMap.entrySet().stream()
+                .filter(e -> !e.getValue().equals(signoffFeatureValueMap.get(e.getKey())))
+                .collect(Collectors
+                        .toMap(Map.Entry::getKey, e -> signoffFeatureValueMap.get(e.getKey())));
+
+        System.out.println(resultRaw);
     }
 
 }

@@ -17,7 +17,10 @@
 
 package com.fcjexample.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fcjexample.demo.model.ApiException;
+import com.fcjexample.demo.util.ValidationError;
+import com.fcjexample.demo.util.ValidationErrorBuilder;
 import com.fcjexample.demo.util.enums.ApiStatus;
 import com.fcjexample.demo.util.exception.DataViewException;
 import com.fcjexample.demo.util.exception.ViewTypeException;
@@ -25,8 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -48,18 +49,18 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Set;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
-    //public class ResponseExceptionHandler {
+//public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+public class ResponseExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseExceptionHandler.class);
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    //    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = Exception.class)
     protected ResponseEntity<ApiException> handleAllCustomException(Exception ex,
             WebRequest request) {
         ApiException apiException = new ApiException(
@@ -87,12 +88,20 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiException, headers, status);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(
-            NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status,
-            WebRequest request) {
-        String error = "Malformed JSON request";
-        return new ResponseEntity<>(error, headers, status);
+    @ExceptionHandler(value = { MethodArgumentNotValidException.class })
+    protected ResponseEntity<ApiException> handleValidationException(Exception ex,
+            WebRequest request) throws Exception {
+        ApiException apiException = new ApiException();
+
+        ValidationError validationError = ValidationErrorBuilder
+                .fromBindingErrors(((MethodArgumentNotValidException) ex).getBindingResult());
+        apiException.setMsg(mapper.writeValueAsString(validationError));
+        apiException.setExInfo(ex.toString());
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(apiException, headers, status);
     }
 
     /**
@@ -102,21 +111,21 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      */
     @ExceptionHandler({
-            //            HttpRequestMethodNotSupportedException.class,
-            //            HttpMediaTypeNotSupportedException.class,
-            //            HttpMediaTypeNotAcceptableException.class,
-            //            MissingPathVariableException.class,
-            //            MissingServletRequestParameterException.class,
-            //            ServletRequestBindingException.class,
-            //            ConversionNotSupportedException.class,
-            //            TypeMismatchException.class,
-            //            HttpMessageNotReadableException.class,
-            //            HttpMessageNotWritableException.class,
+            HttpRequestMethodNotSupportedException.class,
+            HttpMediaTypeNotSupportedException.class,
+            HttpMediaTypeNotAcceptableException.class,
+            MissingPathVariableException.class,
+            MissingServletRequestParameterException.class,
+            ServletRequestBindingException.class,
+            ConversionNotSupportedException.class,
+            TypeMismatchException.class,
+            HttpMessageNotReadableException.class,
+            HttpMessageNotWritableException.class,
             //            MethodArgumentNotValidException.class,
-            //            MissingServletRequestPartException.class,
-            //            BindException.class,
-            //            NoHandlerFoundException.class,
-            //            AsyncRequestTimeoutException.class
+            MissingServletRequestPartException.class,
+            BindException.class,
+            NoHandlerFoundException.class,
+            AsyncRequestTimeoutException.class
     })
     public ResponseEntity<ApiException> handleExceptionHaha(Exception ex, WebRequest request)
             throws Exception {

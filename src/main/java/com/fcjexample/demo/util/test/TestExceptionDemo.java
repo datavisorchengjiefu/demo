@@ -18,6 +18,8 @@
 package com.fcjexample.demo.util.test;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,15 +27,31 @@ import java.util.Date;
 
 public class TestExceptionDemo {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestExceptionDemo.class);
+
     @Test
     public void testTryCatch() {
         //        getRead();
         try {
-            getRead();
+            //            getRead();
+            //                        getRead01();
+            getRead02();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("顶层：");
+            LOGGER.error("testTryCatch failed. ", e);
         }
+
+        System.out.println("end!");
+    }
+
+    public static void getRead01() throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = dateFormat.parse("2018-1a 3-01");
+        System.out.println("date:" + date);
+    }
+
+    public static void getRead02() {
+        int a = 4 / 0;
+
     }
 
     public static void getRead() {
@@ -42,12 +60,11 @@ public class TestExceptionDemo {
             Date date = dateFormat.parse("2018-1a 3-01");
             System.out.println("date:" + date);
         } catch (ParseException e) {
-            //            e.printStackTrace();
-            System.out.println("【解析异常】");
-            throw new RuntimeException("hhh01");
+            LOGGER.error("getRead failed. ", e);
+            //            throw new RuntimeException("hhh01");
         } catch (Exception e) {
-            System.out.println("【异常】");
-            //throw new Exception();
+            //            throw new RuntimeException();
+            //            throw new Exception();
         }
     }
 

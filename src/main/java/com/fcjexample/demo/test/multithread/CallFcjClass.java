@@ -17,26 +17,29 @@
 
 package com.fcjexample.demo.test.multithread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.Callable;
 
 public class CallFcjClass implements Callable<String> {
 
-    @Override public String call() throws Exception {
-        /**
-         try {
-         Thread.sleep(1000);
-         int a = 8 / 0;
-         return "Call: " + Thread.currentThread().getName();
-         } catch (Exception e) {
-         //                System.out.println("call fcj: " + e.getMessage());
-         LOGGER.error("call fcj failed. ", e);
-         //                throw e;
-         }
-         return null;
-         **/
+    private static final Logger LOGGER = LoggerFactory.getLogger(CallFcjClass.class);
 
-        Thread.sleep(1000);
-        int a = 8 / 0;
-        return "Call: " + Thread.currentThread().getName();
+    @Override public String call() throws Exception {
+        try {
+            Thread.sleep(1000);
+            int a = 8 / 0;
+            return "Call: " + Thread.currentThread().getName();
+        } catch (Exception e) {
+            //                System.out.println("call fcj: " + e.getMessage());
+            LOGGER.error("call fcj failed. ", e);
+            //            throw e;
+        }
+        return null;
+
+        //        Thread.sleep(1000);
+        //        int a = 8 / 0;
+        //        return "Call: " + Thread.currentThread().getName();
     }
 }

@@ -33,8 +33,10 @@ public class CommandLineTest {
         input.setRequired(true);
         options.addOption(input);
 
+        // required表明这个参数是否必须填
+        // hasArg表明这个参数是否要有值
         Option output = new Option("o", "output", true, "output file");
-        output.setRequired(true);
+        output.setRequired(false);
         options.addOption(output);
 
         CommandLineParser parser = new DefaultParser();

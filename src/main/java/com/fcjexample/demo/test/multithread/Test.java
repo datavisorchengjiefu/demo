@@ -42,7 +42,7 @@ public class Test {
             }
         });
 
-        int count = 20;
+        int count = 1;
         List<Future> futureList = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             //            futureList.add(signoffThreadPool.submit(new ConsumerSignoff()));
@@ -55,11 +55,15 @@ public class Test {
                 LOGGER.error("submit failed. ", e);
             }
 
+            LOGGER.info("fcjha01 finished.");
+
         }
 
         for (Future future : futureList) {
             try {
-                System.out.println("result: " + future.get());
+                // CallFcjClass线程池里的抛错，如果没有future.get()，这外面是不会看到报错的。所以最好在线程池里自己try catch住打log。
+                //                System.out.println("result: " + future.get());
+
             } catch (Exception e) {
                 LOGGER.error("get() failed. ", e);
             }
@@ -91,25 +95,4 @@ public class Test {
         }
     }
 
-    //    static class CallFcjClass implements Callable<String> {
-    //
-    //        @Override public String call() throws Exception {
-    //            /**
-    //             try {
-    //             Thread.sleep(1000);
-    //             int a = 8 / 0;
-    //             return "Call: " + Thread.currentThread().getName();
-    //             } catch (Exception e) {
-    //             //                System.out.println("call fcj: " + e.getMessage());
-    //             LOGGER.error("call fcj failed. ", e);
-    //             //                throw e;
-    //             }
-    //             return null;
-    //             **/
-    //
-    //            Thread.sleep(1000);
-    //            int a = 8 / 0;
-    //            return "Call: " + Thread.currentThread().getName();
-    //        }
-    //    }
 }

@@ -30,6 +30,25 @@ public class TT {
     @Max(value = 150, message = "Age should not be greater than 150")
     private int age;
 
+    private Long height;
+    private long width;
+
+    public long getWidth() {
+        return width;
+    }
+
+    public void setWidth(long width) {
+        this.width = width;
+    }
+
+    public Long getHeight() {
+        return height;
+    }
+
+    public void setHeight(Long height) {
+        this.height = height;
+    }
+
     public int getAge() {
         return age;
     }

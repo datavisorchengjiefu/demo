@@ -244,6 +244,9 @@ public class Test {
                         .toMap(Map.Entry::getKey, e -> signoffFeatureValueMap.get(e.getKey())));
 
         System.out.println(resultRaw);
+
+        System.out.println(tt.getHeight()); // Long 默认为null
+        System.out.println(tt.getWidth()); // long 默认为0
     }
 
 }

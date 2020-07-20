@@ -33,13 +33,13 @@ public class HelloController {
     @Autowired
     private HelloService hello;
 
+    @Autowired
+    ApplicationContext context;
+
     @RequestMapping("/hhh")
     public Object helloha() {
         return "hello haha fcjdormi";
     }
-
-    @Autowired
-    ApplicationContext context;
 
     @GetMapping("/test01")
     public String test01Controller() {
@@ -140,7 +140,7 @@ public class HelloController {
             //                        String res = dataViewService.publishDataView(tenant);
             String s = dataViewService.testStringException(tenant);
 
-            return "eee";
+            return s;
         } catch (Exception e) {
             LOGGER.error("testExceptionInternal failed for {}", tenant, e);
             throw e;

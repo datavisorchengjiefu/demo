@@ -34,7 +34,7 @@ public class CallFcjClass implements Callable<String> {
         } catch (Exception e) {
             //                System.out.println("call fcj: " + e.getMessage());
             LOGGER.error("call fcj failed. ", e);
-            //            throw e;
+            //            throw e; 如果没有logger.error，并且外面没有future.get()，即使throw e也没有用的。
         }
         return null;
 

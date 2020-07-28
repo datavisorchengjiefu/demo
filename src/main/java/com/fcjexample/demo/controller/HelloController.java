@@ -33,13 +33,23 @@ public class HelloController {
     @Autowired
     private HelloService hello;
 
+    @Autowired
+    ApplicationContext context;
+
     @RequestMapping("/hhh")
     public Object helloha() {
         return "hello haha fcjdormi";
     }
 
-    @Autowired
-    ApplicationContext context;
+    @RequestMapping("/hhh02")
+    public Object helloha02(@RequestBody String rawExternal) {
+        return rawExternal + "hello haha fcjdormi";
+    }
+
+    @RequestMapping("/hhh03")
+    public Object helloha03(@RequestBody TestEntity entity) {
+        return entity.getName() + "hello haha fcjdormi";
+    }
 
     @GetMapping("/test01")
     public String test01Controller() {
@@ -140,7 +150,7 @@ public class HelloController {
             //                        String res = dataViewService.publishDataView(tenant);
             String s = dataViewService.testStringException(tenant);
 
-            return "eee";
+            return s;
         } catch (Exception e) {
             LOGGER.error("testExceptionInternal failed for {}", tenant, e);
             throw e;

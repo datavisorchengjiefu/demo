@@ -20,10 +20,10 @@ package com.fcjexample.demo.aspect;
 import com.fcjexample.demo.model.TestEntity;
 import com.google.common.collect.Queues;
 import org.apache.commons.lang3.ArrayUtils;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
@@ -89,11 +89,11 @@ public class SignoffAspect {
      * @return result
      * @throws Throwable throws IllegalArgumentException
      */
-    @Before("applicationPackagePointcut() && featureControllerPointcut() && "
+    @Around("applicationPackagePointcut() && featureControllerPointcut() && "
             + " computeFeaturesPointcut()")
     @SuppressWarnings("unchecked")
-    public void metricsAround(JoinPoint joinPoint) throws Throwable {
-        Object[] args = joinPoint.getArgs();
+    //  ProceedingJoinPoint is only supported for around advice
+    public void metricsAround(ProceedingJoinPoint joinPoint) throws Throwable {
         //        for (Object o : args) {
         //            if (o instanceof TestEntity) {
         //                TestEntity testEntity = (TestEntity) o;
@@ -101,12 +101,11 @@ public class SignoffAspect {
         //            }
         //        }
         //
-        Signature signature = joinPoint.getSignature();
-        MethodSignature methodSignature = (MethodSignature) signature;
-        String[] parameterNames = methodSignature.getParameterNames();
-        int testEntityIndex = ArrayUtils.indexOf(parameterNames, "testEntity");
-        sampleQueue.offer((TestEntity) (args[testEntityIndex]));
-        int tenantIndex = ArrayUtils.indexOf(parameterNames, "tenant");
+        //        Signature signature = joinPoint.getSignature();
+        //        MethodSignature methodSignature = (MethodSignature) signature;
+        //        String[] parameterNames = methodSignature.getParameterNames();
+        //        int testEntityIndex = ArrayUtils.indexOf(parameterNames, "testEntity");
+        sampleQueue.offer((TestEntity) getParameter(joinPoint, "testEntity"));
         //        if (tenantIndex == -1) {
         //            throw new RuntimeException("tenant not found! ");
         //        }
@@ -121,6 +120,18 @@ public class SignoffAspect {
         //            throw e;
         //        } finally {
         //        }
+    }
+
+    private Object getParameter(ProceedingJoinPoint joinPoint, Object object) {
+        Object[] args = joinPoint.getArgs();
+        Signature signature = joinPoint.getSignature();
+        MethodSignature methodSignature = (MethodSignature) signature;
+        String[] parameterNames = methodSignature.getParameterNames();
+        int index = ArrayUtils.indexOf(parameterNames, object);
+        if (index == -1) {
+            throw new RuntimeException(object.toString() + " not found! ");
+        }
+        return args[index];
     }
 
     /**

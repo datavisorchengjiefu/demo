@@ -71,6 +71,13 @@ public class SignoffController {
         return "02" + num + "+" + testEntity.getName();
     }
 
+    @PostMapping("/signoff/04/{tenant}/{topic}")
+    public String computeSignoff04(@RequestBody String testEntity,
+            @PathVariable("tenant") String tenant,
+            @PathVariable("topic") String topic) {
+        return "02" + testEntity;
+    }
+
     public void test() {
 
     }

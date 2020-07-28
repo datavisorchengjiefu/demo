@@ -41,6 +41,16 @@ public class HelloController {
         return "hello haha fcjdormi";
     }
 
+    @RequestMapping("/hhh02")
+    public Object helloha02(@RequestBody String rawExternal) {
+        return rawExternal + "hello haha fcjdormi";
+    }
+
+    @RequestMapping("/hhh03")
+    public Object helloha03(@RequestBody TestEntity entity) {
+        return entity.getName() + "hello haha fcjdormi";
+    }
+
     @GetMapping("/test01")
     public String test01Controller() {
         LOGGER.info(Thread.currentThread().getName() + " 进入test01Controller方法");

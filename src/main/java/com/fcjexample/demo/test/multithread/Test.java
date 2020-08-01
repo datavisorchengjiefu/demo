@@ -33,7 +33,7 @@ public class Test {
         int replayThreadCount = 4;
         ExecutorService signoffThreadPool = Executors.newFixedThreadPool(replayThreadCount);
 
-        ExecutorService signoffThreadPool2 = new ThreadPoolExecutor(4, 6, 0, TimeUnit.SECONDS,
+        ExecutorService signoffThreadPool2 = new ThreadPoolExecutor(30, 30, 0, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(100), new ThreadFactory() {
             AtomicInteger integer = new AtomicInteger();
 
@@ -42,7 +42,17 @@ public class Test {
             }
         });
 
-        int count = 1;
+        //
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(4,
+                new ThreadFactory() {
+                    AtomicInteger integer = new AtomicInteger();
+
+                    @Override public Thread newThread(Runnable r) {
+                        return new Thread(r, "testfcj-consumer-" + integer.getAndIncrement());
+                    }
+                });
+
+        int count = 40;
         List<Future> futureList = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             //            futureList.add(signoffThreadPool.submit(new ConsumerSignoff()));
@@ -51,6 +61,19 @@ public class Test {
             try {
 
                 futureList.add(signoffThreadPool2.submit(new CallFcjClass()));
+
+                //                futureList.add(executorService.scheduleWithFixedDelay(new Runnable() {
+                //                    @Override public void run() {
+                //                        try {
+                //                            Thread.sleep(1000);
+                //                        } catch (InterruptedException e) {
+                //                            e.printStackTrace();
+                //                        }
+                //                        //            int a = 8 / 0;
+                //
+                //                        LOGGER.info("callha02!!");
+                //                    }
+                //                }, 200, 200, TimeUnit.MILLISECONDS));
             } catch (Exception e) {
                 LOGGER.error("submit failed. ", e);
             }

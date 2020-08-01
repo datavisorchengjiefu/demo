@@ -28,8 +28,26 @@ public class CallFcjClass implements Callable<String> {
 
     @Override public String call() throws Exception {
         try {
-            Thread.sleep(1000);
-            int a = 8 / 0;
+            //            Thread.sleep(1000);
+            //            int a = 8 / 0;
+
+            LOGGER.info("callha!!");
+
+            //            while (true) {
+            //                //                Thread.sleep(500);// 无用
+            //                if (1 == 3) {
+            //                    break;
+            //                }
+            //            }
+
+            for (int i = 0; i < 500000; i++) {
+                if (i % 10000 == 0) {
+                    //                    Thread.sleep(50);
+                    LOGGER.info("by 1000, name is: {}", Thread.currentThread().getName());
+                }
+            }
+
+            LOGGER.info("callha end!! name is: {}", Thread.currentThread().getName());
             return "Call: " + Thread.currentThread().getName();
         } catch (Exception e) {
             //                System.out.println("call fcj: " + e.getMessage());

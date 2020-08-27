@@ -21,6 +21,8 @@ import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -46,7 +50,7 @@ public class Test {
         }
     };
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("hhh");
 
         TestEntity entity1 = new TestEntity();
@@ -247,6 +251,123 @@ public class Test {
 
         System.out.println(tt.getHeight()); // Long 默认为null
         System.out.println(tt.getWidth()); // long 默认为0
+
+        InnerTest innerTest = new InnerTest();
+        Map<Integer, String> map = new HashMap<>();
+        map.put(1, "test01");
+        map.put(2, "test02");
+        String test = map.get(null);
+        System.out.println(test);
+
+        innerTest.setMap(map);
+        Map<Integer, String> originMap = innerTest.getMap();
+
+        Map<Integer, String> copyMap = new HashMap<>(originMap);
+
+        copyMap.put(2, "haha02");
+
+        System.out.println("result: " + originMap.get(1) + "," + originMap.get(2));
+        System.out.println("result: " + copyMap.get(1) + "," + copyMap.get(2));
+
+        List<Integer> arrayList = new ArrayList<>();
+        arrayList.add(1);
+        arrayList.add(2);
+        arrayList.add(3);
+        arrayList.add(4);
+        arrayList.add(5);
+        arrayList.add(6);
+        System.out.println(arrayList.size());
+
+        Iterator<Integer> integerIterator = arrayList.iterator();
+        while (integerIterator.hasNext()) {
+            Integer integer = integerIterator.next();
+            if (integer % 2 == 0) {
+                integerIterator.remove();
+                //                arrayList.add(100);  再加是不行的
+            }
+        }
+
+        System.out.println(arrayList.size());
+
+        printTest02();
+
+    }
+
+    private static void printTest() throws IOException {
+
+        String resourcePath = "testfiles/test03.txt";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        InputStream is = loader.getResourceAsStream(resourcePath);
+
+        //        FileInputStream fileInputStream = null;
+        Reader reader = null;
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            //            fileInputStream = new FileInputStream(fileName);
+            //            reader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        } finally {
+            reader.close();
+            writer.close();
+            is.close();
+        }
+        String str = writer.toString();
+        long end = System.currentTimeMillis();
+    }
+
+    private static void printTest02() throws IOException, ParseException {
+        List<String> list = new ArrayList<>();
+        String resourcePath = "testfiles/test03.txt";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        InputStream is = loader.getResourceAsStream(resourcePath);
+
+        //        FileInputStream fileInputStream = null;
+        BufferedReader reader = null;
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            //            fileInputStream = new FileInputStream(fileName);
+            //            reader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            String line = reader.readLine();
+            while (line != null) {
+                list.add(line);
+                // read next line
+                line = reader.readLine();
+            }
+        } finally {
+            reader.close();
+            writer.close();
+            is.close();
+        }
+
+        TreeMap<String, String> treeMap = new TreeMap<>();
+
+        for (String str : list) {
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(str);
+            treeMap.put((String) json.get("event_time"),
+                    (String) json.get("testVelocityFeatureWithNegativeWindowOffset_feature"));
+        }
+
+        System.out.println(list.size());
+    }
+
+    static class InnerTest {
+        Map<Integer, String> map;
+
+        public Map<Integer, String> getMap() {
+            return map;
+        }
+
+        public void setMap(Map<Integer, String> map) {
+            this.map = map;
+        }
     }
 
 }

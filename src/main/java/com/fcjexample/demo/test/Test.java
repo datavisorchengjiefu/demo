@@ -355,7 +355,16 @@ public class Test {
                     (String) json.get("testVelocityFeatureWithNegativeWindowOffset_feature"));
         }
 
+        String wenzheng = "all";
+        System.out.println("hhh is: " + wenzheng + "end!!!");
+
         System.out.println(list.size());
+
+        String test01 = "ddd";
+        String[] arrays = test01.split("_");
+        System.out.println(arrays.length);
+        System.out.println(String.join(",", arrays));
+        System.out.println("end");
     }
 
     static class InnerTest {

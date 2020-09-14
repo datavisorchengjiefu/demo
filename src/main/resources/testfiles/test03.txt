@@ -1,15 +1,155 @@
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"150","amount":"120","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"120","event_time":"120"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"10","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"10","event_time":"10"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"120","amount":"110","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"110","event_time":"110"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"10","amount":"70","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"70","event_time":"70"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"210","amount":"140","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"140","event_time":"140"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"180","amount":"130","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"130","event_time":"130"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"30","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"30","event_time":"30"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"0","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"0","event_time":"0"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"60","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"60","event_time":"60"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"50","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"50","event_time":"50"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"30","amount":"80","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"80","event_time":"80"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"60","amount":"90","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"90","event_time":"90"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"20","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"20","event_time":"20"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"0","amount":"40","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"40","event_time":"40"}
-{"testVelocityFeatureWithNegativeWindowOffset_feature":"90","amount":"100","testVelocityFeatureWithNegativeWindowOffset_window":"30","user_id":"user001","time":"100","event_time":"100"}
+CREATE TABLE dv.record_index_tenant01 (
+    user_id text,
+    type tinyint,
+    time bigint,
+    record_id text,
+    PRIMARY KEY (user_id, type, time)
+) WITH CLUSTERING ORDER BY (type ASC, time ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 15552000
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE dv.event_tenant01 (
+    id text PRIMARY KEY,
+    fields map<int, text>,
+    name text,
+    time bigint
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 15552000
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE dv.user_event_tenant01 (
+    user_id text,
+    time bigint,
+    event_id text,
+    PRIMARY KEY (user_id, time)
+) WITH CLUSTERING ORDER BY (time ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE dv.dvinstances_snapshot_tenant01 (
+    id text PRIMARY KEY,
+    dv_snapshots map<bigint, blob>
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 15552000
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE dv.velocity_result_tenant01 (
+    user_id text,
+    time bigint,
+    dataview_id bigint,
+    event map<int, text>,
+    value blob,
+    PRIMARY KEY ((user_id, time), dataview_id)
+) WITH CLUSTERING ORDER BY (dataview_id ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 7776000
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+
+CREATE TABLE dv.velocity_tenant01 (
+    accu_id int,
+    dim text,
+    time bigint,
+    detail map<int, text>,
+    PRIMARY KEY ((accu_id, dim), time)
+) WITH CLUSTERING ORDER BY (time DESC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 7776000
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+CREATE TABLE dv.velocity_agg_tenant01 (
+    accu_id int,
+    dim text,
+    time bigint,
+    agg_level bigint,
+    detail map<int, text>,
+    PRIMARY KEY ((accu_id, dim), time, agg_level)
+) WITH CLUSTERING ORDER BY (time ASC, agg_level ASC)
+    AND bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 15552000
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+
+

@@ -53,7 +53,7 @@ public class Test {
                 });
 
         int count = 40;
-        List<Future> futureList = new ArrayList<>();
+        List<Future<String>> futureList = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             //            futureList.add(signoffThreadPool.submit(new ConsumerSignoff()));
             //            futureList.add(signoffThreadPool2.submit(new ConsumerSignoff()));
@@ -82,10 +82,10 @@ public class Test {
 
         }
 
-        for (Future future : futureList) {
+        for (Future<String> future : futureList) {
             try {
                 // CallFcjClass线程池里的抛错，如果没有future.get()，这外面是不会看到报错的。所以最好在线程池里自己try catch住打log。
-                //                System.out.println("result: " + future.get());
+                System.out.println("result: " + future.get());
 
             } catch (Exception e) {
                 LOGGER.error("get() failed. ", e);

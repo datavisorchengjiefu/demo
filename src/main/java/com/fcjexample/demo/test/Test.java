@@ -17,6 +17,7 @@
 
 package com.fcjexample.demo.test;
 
+import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
 import org.json.simple.JSONObject;
@@ -289,8 +290,13 @@ public class Test {
 
         System.out.println(arrayList.size());
 
-        printTest02();
+        //        printTest02();
 
+        TestEntity02 testEntity02 = new TestEntity02();
+        //        testEntity02.setTimeout(30L);
+        long timeout = testEntity02.getTimeout() == null ? 60 : testEntity02.getTimeout();
+
+        System.out.println(timeout);
     }
 
     private static void printTest() throws IOException {

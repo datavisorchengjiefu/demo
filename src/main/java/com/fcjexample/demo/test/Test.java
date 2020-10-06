@@ -20,6 +20,7 @@ package com.fcjexample.demo.test;
 import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
+import javafx.util.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -52,6 +53,8 @@ public class Test {
     };
 
     public static void main(String[] args) throws Exception {
+
+
         System.out.println("hhh");
 
         TestEntity entity1 = new TestEntity();
@@ -297,6 +300,30 @@ public class Test {
         long timeout = testEntity02.getTimeout() == null ? 60 : testEntity02.getTimeout();
 
         System.out.println(timeout);
+
+        System.out.println("---------===========");
+        //        Set<String> stringSet = ConcurrentHashMap.newKeySet();
+        Set<String> stringSet = new HashSet<>();
+        stringSet.add("yushu");
+        stringSet.add(null);
+
+        for (String yushu : stringSet) {
+            System.out.println(yushu);
+        }
+
+        RuleTestClass ruleTestClass = new RuleTestClass(null, "gg");
+        System.out.println("finished");
+
+    }
+
+    static class RuleTestClass {
+        Object id;
+        String name;
+
+        public RuleTestClass(Object id, String name) {
+            this.id = id;
+            this.name = name;
+        }
     }
 
     private static void printTest() throws IOException {
@@ -384,5 +411,7 @@ public class Test {
             this.map = map;
         }
     }
+
+
 
 }

@@ -51,14 +51,27 @@ public class TestGetTimeout {
 
         List<CallTestClass> callTestClassList = new ArrayList<>();
         for (Integer integer : timeoutList) {
-            callTestClassList.add(new CallTestClass(integer));
+            // invokeAll
+            //            callTestClassList.add(new CallTestClass(integer));
+
+            /**
+             * invokeAll和submit不能一起用，因为两者调用后都会开始执行call里面的方法，会重复执行
+             * 执行与future.get()是没有关系的，get()只是用于获取结果
+             */
+            // awaitTermination
             //            futureList.add(threadPool2.submit(new CallTestClass(integer)));
         }
 
+        // invokeAll
         try {
-            List<Future<String>> futureListInvoke = threadPool2.invokeAll(callTestClassList);
+            System.out.println("start to invokeAll");
+            long startInvokeAll = System.currentTimeMillis();
+            futureList = threadPool2.invokeAll(callTestClassList, 1600, TimeUnit.MILLISECONDS);
+            System.out.println("last for " + (System.currentTimeMillis() - startInvokeAll));
 
-            for (Future<String> future : futureListInvoke) {
+            //            threadPool2.shutdown();
+
+            for (Future<String> future : futureList) {
                 long start = System.currentTimeMillis();
                 System.out.println("start..");
                 try {
@@ -67,14 +80,32 @@ public class TestGetTimeout {
                     //                System.out.println(futureList.get(i).get(1200, TimeUnit.MILLISECONDS));
                 } catch (Exception e) {
                     logger.error("error", e);
-                    threadPool2.shutdown();
+                    //                    threadPool2.shutdown();
                 }
                 System.out.println(System.currentTimeMillis() - start);
             }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             logger.error("Failed. ", e);
         }
 
+        System.out.println(threadPool2.isShutdown());
+        System.out.println(threadPool2.isTerminated());
+
+        // awaitTermination
+        //        System.out.println("start to await");
+        //        long startAwait = System.currentTimeMillis();
+        //        try {
+        //            threadPool2.shutdown();
+        //            if (!threadPool2.awaitTermination(2300, TimeUnit.MILLISECONDS)) {
+        //                logger.info("timeout!");
+        //                threadPool2.shutdownNow();
+        //            }
+        //        } catch (InterruptedException e) {
+        //            logger.error("threadPool failed. ", e);
+        //            threadPool2.shutdownNow();
+        //        }
+        //        System.out.println("last for " + (System.currentTimeMillis() - startAwait));
+        //
         //        for (int i = 0; i < timeoutList.size(); i++) {
         //            long start = System.currentTimeMillis();
         //            System.out.println("start..");
@@ -84,12 +115,11 @@ public class TestGetTimeout {
         //                //                System.out.println(futureList.get(i).get(1200, TimeUnit.MILLISECONDS));
         //            } catch (Exception e) {
         //                logger.error("error", e);
-        //                threadPool2.shutdown();
         //            }
         //            System.out.println(System.currentTimeMillis() - start);
         //        }
 
-        threadPool2.shutdown();
+
 
     }
 

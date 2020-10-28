@@ -36,6 +36,15 @@ public class TestEntity {
     Object event;
     List<Object> events;
     private Map<Integer, TestEntity> subTestEntitys = new HashMap<>();
+    private long testTime;
+
+    public long getTestTime() {
+        return testTime;
+    }
+
+    public void setTestTime(long testTime) {
+        this.testTime = testTime;
+    }
 
     public String getDesc() {
         return desc;

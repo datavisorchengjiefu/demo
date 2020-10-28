@@ -51,6 +51,15 @@ public class ConsumerTest implements Runnable {
         //            queue.poll();
         //        }
 
+        //        while (queue.poll() != null) {
+        //            count++;
+        //            try {
+        //                Thread.sleep(10);
+        //            } catch (InterruptedException e) {
+        //                e.printStackTrace();
+        //            }
+        //        }
+
         while (queue.poll() != null) {
             integer.addAndGet(1);
             try {
@@ -60,6 +69,7 @@ public class ConsumerTest implements Runnable {
             }
         }
         System.out.println("integer" + integer);
+        System.out.println("count" + count);
         System.out.println(queue.size());
     }
 

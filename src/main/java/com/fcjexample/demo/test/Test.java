@@ -20,7 +20,6 @@ package com.fcjexample.demo.test;
 import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
-import javafx.util.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -36,6 +35,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -54,7 +54,6 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-
         System.out.println("hhh");
 
         TestEntity entity1 = new TestEntity();
@@ -63,6 +62,9 @@ public class Test {
         entity2.setName("h2");
         TestEntity entity3 = new TestEntity();
         entity3.setName("h3");
+
+        System.out.println(entity1.getCreateTime());
+        System.out.println(entity1.getTestTime());
 
         Set<TestEntity> set = new HashSet<>();
         set.add(entity1);
@@ -124,14 +126,24 @@ public class Test {
                 })
                 .forEach(System.out::println); // zhang cheng
 
-        Map<Integer, String> HOSTING = new HashMap<>();
-        HOSTING.put(1, "linode.com");
-        HOSTING.put(2, "heroku.com");
-        HOSTING.put(3, "digitalocean.com");
-        HOSTING.put(4, "aws.amazon.com");
+        List<Map<String, String>> mapList = lists
+                .stream() // .collect(Collectors.toList(Collectors.toMap(e, e)));
+                .map(e -> new HashMap<String, String>() {{
+                    put(e, e);
+                }}).collect(Collectors.toList());
+
+        Map<String, String> map01 = lists.stream()
+                .collect(Collectors.toMap(Function.identity(), e -> e));
+
+        //
+        Map<Integer, String> hostingMap = new HashMap<>();
+        hostingMap.put(1, "linode.com");
+        hostingMap.put(2, "heroku.com");
+        hostingMap.put(3, "digitalocean.com");
+        hostingMap.put(4, "aws.amazon.com");
 
         System.out.println("==========");
-        HOSTING.entrySet().stream().filter(new Predicate<Map.Entry<Integer, String>>() {
+        hostingMap.entrySet().stream().filter(new Predicate<Map.Entry<Integer, String>>() {
             @Override public boolean test(Map.Entry<Integer, String> integerStringEntry) {
                 return integerStringEntry.getKey() > 2;
             }
@@ -140,7 +152,7 @@ public class Test {
 
         // Before Java 8
         String result = "";
-        for (Map.Entry<Integer, String> entry : HOSTING.entrySet()) {
+        for (Map.Entry<Integer, String> entry : hostingMap.entrySet()) {
             if ("aws.amazon.com".equals(entry.getValue())) {
                 result = entry.getValue();
             }
@@ -148,7 +160,7 @@ public class Test {
         System.out.println("Before Java 8 : " + result);
 
         //Map -> Stream -> Filter -> String
-        result = HOSTING.entrySet().stream()
+        result = hostingMap.entrySet().stream()
                 .filter(map -> "aws.amazon.com".equals(map.getValue()))
                 .map(map -> map.getValue())
                 .collect(Collectors.joining());
@@ -156,7 +168,7 @@ public class Test {
         System.out.println("With Java 8 : " + result);
 
         // filter more values
-        result = HOSTING.entrySet().stream()
+        result = hostingMap.entrySet().stream()
                 .filter(x -> {
                     if (!x.getValue().contains("amazon") && !x.getValue().contains("digital")) {
                         return true;
@@ -314,6 +326,55 @@ public class Test {
         RuleTestClass ruleTestClass = new RuleTestClass(null, "gg");
         System.out.println("finished");
 
+        Integer fcjInteger = 5;
+        Object v = new Integer(4);
+        //        double ttv = Double.parseDouble((String) v);// fail
+        double c = Double.valueOf(v.toString());
+        double d = Double.parseDouble(v.toString());
+        System.out.println("c is: " + c);
+
+        Double fcjDouble = fcjInteger.doubleValue();
+        System.out.println(fcjDouble);
+
+        Set<String> testSet = new HashSet<>();
+        testSet.add("1");
+        testSet.add("2");
+        testSet.add("3");
+        Object sss = testSet;
+        double setSize = ((Set) sss).size();
+        System.out.println(setSize);
+
+        //        byte[] code = new byte[] {};
+        //        File file = new File("/Users/dormifu/test/javaClass/aaa.class");
+        //        FileOutputStream fos = new FileOutputStream(file);
+        //        fos.write(code);
+
+        Date date = new Date();
+        System.out.println(date.getTime());
+
+        List<String> stringList01 = new ArrayList<>();
+        stringList01.add("1");
+        stringList01.add("2");
+        stringList01.add("3");
+        stringList01.add("4");
+        stringList01.add("5");
+        stringList01.add("6");
+
+        List<String> newList = stringList01.subList(2, 4);
+
+        System.out.println(newList.size());
+
+        String s1012 = "123456789";
+        System.out.println(s1012.substring(2, 5));
+
+        String testNull = "test";
+        Map<String, String> mapTest = new HashMap<>();
+        //        mapTest.put(null, null);
+        mapTest.put("sg", "tt");
+        mapTest.get("sg").equals("tt");
+        //        mapTest.get(null)
+        //                .equals("eee");
+
     }
 
     static class RuleTestClass {
@@ -411,7 +472,5 @@ public class Test {
             this.map = map;
         }
     }
-
-
 
 }

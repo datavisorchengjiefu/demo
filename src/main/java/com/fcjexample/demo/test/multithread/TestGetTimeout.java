@@ -52,21 +52,23 @@ public class TestGetTimeout {
         List<CallTestClass> callTestClassList = new ArrayList<>();
         for (Integer integer : timeoutList) {
             // invokeAll
-            //            callTestClassList.add(new CallTestClass(integer));
+            callTestClassList.add(new CallTestClass(integer));
 
             /**
              * invokeAll和submit不能一起用，因为两者调用后都会开始执行call里面的方法，会重复执行
              * 执行与future.get()是没有关系的，get()只是用于获取结果
              */
             // awaitTermination
-            //            futureList.add(threadPool2.submit(new CallTestClass(integer)));
+            futureList.add(threadPool2.submit(new CallTestClass(integer)));
         }
 
-        // invokeAll
+        /**
+         * invokeAll
+         */
         try {
             System.out.println("start to invokeAll");
             long startInvokeAll = System.currentTimeMillis();
-            futureList = threadPool2.invokeAll(callTestClassList, 1600, TimeUnit.MILLISECONDS);
+            futureList = threadPool2.invokeAll(callTestClassList, 6600, TimeUnit.MILLISECONDS);
             System.out.println("last for " + (System.currentTimeMillis() - startInvokeAll));
 
             //            threadPool2.shutdown();
@@ -88,38 +90,44 @@ public class TestGetTimeout {
             logger.error("Failed. ", e);
         }
 
-        System.out.println(threadPool2.isShutdown());
+        System.out.println("haha01: " + threadPool2.isShutdown());
+        threadPool2.shutdown();
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println(threadPool2.isTerminated());
 
-        // awaitTermination
-        //        System.out.println("start to await");
-        //        long startAwait = System.currentTimeMillis();
-        //        try {
-        //            threadPool2.shutdown();
-        //            if (!threadPool2.awaitTermination(2300, TimeUnit.MILLISECONDS)) {
-        //                logger.info("timeout!");
-        //                threadPool2.shutdownNow();
-        //            }
-        //        } catch (InterruptedException e) {
-        //            logger.error("threadPool failed. ", e);
-        //            threadPool2.shutdownNow();
-        //        }
-        //        System.out.println("last for " + (System.currentTimeMillis() - startAwait));
-        //
-        //        for (int i = 0; i < timeoutList.size(); i++) {
-        //            long start = System.currentTimeMillis();
-        //            System.out.println("start..");
-        //            try {
-        //                //                System.out.println(futureList.get(i).isDone());
-        //                System.out.println(futureList.get(i).get());
-        //                //                System.out.println(futureList.get(i).get(1200, TimeUnit.MILLISECONDS));
-        //            } catch (Exception e) {
-        //                logger.error("error", e);
-        //            }
-        //            System.out.println(System.currentTimeMillis() - start);
-        //        }
+        /**
+         * awaitTermination
+         */
+        System.out.println("start to await");
+        long startAwait = System.currentTimeMillis();
+        try {
+            threadPool2.shutdown();
+            if (!threadPool2.awaitTermination(6300, TimeUnit.MILLISECONDS)) {
+                logger.info("timeout!");
+                threadPool2.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            logger.error("threadPool failed. ", e);
+            threadPool2.shutdownNow();
+        }
+        System.out.println("last for " + (System.currentTimeMillis() - startAwait));
 
-
+        for (int i = 0; i < timeoutList.size(); i++) {
+            long start = System.currentTimeMillis();
+            System.out.println("start..");
+            try {
+                //                System.out.println(futureList.get(i).isDone());
+                System.out.println(futureList.get(i).get());
+                //                System.out.println(futureList.get(i).get(1200, TimeUnit.MILLISECONDS));
+            } catch (Exception e) {
+                logger.error("error", e);
+            }
+            System.out.println(System.currentTimeMillis() - start);
+        }
 
     }
 

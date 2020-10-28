@@ -35,6 +35,6 @@ public class HelloServiceImpl implements HelloService {
             logger.error("interrupted. ", e);
         }
         logger.info("exit sayHello. ");
-        return "";
+        return "haha6666";
     }
 }

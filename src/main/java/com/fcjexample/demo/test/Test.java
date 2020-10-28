@@ -362,16 +362,16 @@ public class Test {
 
         List<String> newList = stringList01.subList(2, 4);
 
-        System.out.println(newList.size());
+        System.out.println(newList.size());// 01
 
         String s1012 = "123456789";
         System.out.println(s1012.substring(2, 5));
 
-        String testNull = "test";
-        Map<String, String> mapTest = new HashMap<>();
+        String testNull = "test";// 02
+        Map<String, String> mapTest = new HashMap<>();// 03
         //        mapTest.put(null, null);
-        mapTest.put("sg", "tt");
-        mapTest.get("sg").equals("tt");
+        mapTest.put("sg", "tt");// 04
+        mapTest.get("sg").equals("tt");// 05
         //        mapTest.get(null)
         //                .equals("eee");
 

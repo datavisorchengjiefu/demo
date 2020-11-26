@@ -24,6 +24,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,8 +133,25 @@ public class Test {
                     put(e, e);
                 }}).collect(Collectors.toList());
 
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, String> resultMapInternal = new HashMap<>();
+        resultMapInternal.put("ha", "uuu");
+        resultMapInternal.put("ha01", "uuu02");
+        resultMap.put("1", "ggg");
+        resultMap.put("4", resultMapInternal);
+
+        String fcj112401 = ((Map<String, String>) resultMap.get(String.valueOf(4))).get("ha01");
+
+        Assert.assertTrue(((Map<String, String>) resultMap.get(String.valueOf(4)))
+                .containsKey("ha"));
+
         Map<String, String> map01 = lists.stream()
                 .collect(Collectors.toMap(Function.identity(), e -> e));
+
+        List<String> listsFCJ = new ArrayList<>();
+        Map<String, String> map02fcj = listsFCJ.stream()
+                .collect(Collectors.toMap(Function.identity(), e -> e));
+        System.out.println("hahalist");
 
         //
         Map<Integer, String> hostingMap = new HashMap<>();
@@ -263,7 +281,8 @@ public class Test {
                 .collect(Collectors
                         .toMap(Map.Entry::getKey, e -> signoffFeatureValueMap.get(e.getKey())));
 
-        System.out.println(resultRaw);
+        System.out.println("resultRaw: " + resultRaw);
+        System.out.println("resultSignoff: " + resultSignoff);
 
         System.out.println(tt.getHeight()); // Long 默认为null
         System.out.println(tt.getWidth()); // long 默认为0
@@ -374,6 +393,20 @@ public class Test {
         mapTest.get("sg").equals("tt");// 05
         //        mapTest.get(null)
         //                .equals("eee");
+        Map<String, String> map2214 = new HashMap<>();
+        //        map2214.put("ggg", "uuu");
+        System.out.println(map2214.keySet());
+
+        Object id1125 = 81;
+        Long test1125 = Long.valueOf(String.valueOf(id1125));
+        //        Long test1125 = (Long) id1125;
+        System.out.println(test1125);
+
+        List<Integer> list1126 = new ArrayList<>();
+        list1126.add(3);
+        list1126.add(7);
+        list1126.add(4);
+        LOGGER.info("list is ha: {}", list1126);
 
     }
 

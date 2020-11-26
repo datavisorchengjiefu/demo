@@ -223,7 +223,9 @@ public class HelloController {
     }
 
     @RequestMapping(value = "/getViewType")
-    public ApiResult<Integer> getViewType(@RequestParam(value = "appName") String appName) {
+    public ApiResult<Integer> getViewType(
+            @RequestParam(value = "appName") String appName,
+            @RequestHeader(value = "name", required = false) String name) {
         try {
             Integer viewType = dataViewService.getViewType(appName);
             return new ApiResult<>(0, "success", viewType);

@@ -1,18 +1,1 @@
-http://127.0.0.1:8080/api-1.0-SNAPSHOT/actuator/prometheus/
-
-feature_value_bucket{id="8",tenant="tenant01",le="1.0",} 0.0
-feature_value_bucket{id="8",tenant="tenant01",le="2.0",} 0.0
-feature_value_bucket{id="8",tenant="tenant01",le="3.0",} 0.0
-feature_value_bucket{id="8",tenant="tenant01",le="4.0",} 0.0
-feature_value_bucket{id="8",tenant="tenant01",le="5.0",} 100.0
-feature_value_bucket{id="8",tenant="tenant01",le="6.0",} 100.0
-…...
-feature_value_bucket{id="8",tenant="tenant01",le="4.2273788502251054E18",} 100.0
-feature_value_bucket{id="8",tenant="tenant01",le="9.223372036854776E18",} 100.0
-feature_value_bucket{id="8",tenant="tenant01",le="+Inf",} 100.0
-feature_value_count{id="8",tenant="tenant01",} 100.0
-feature_value_sum{id="8",tenant="tenant01",} 500.0
-
-
-
-
+"{\"condition\": {\"operands\": [\"age\", \"10\"], \"operator\": \"INT_LT\"},\"actions\": {\"$df1\": {\"value\": \"\\\"1\\\"\",\"type\": \"String\",\"priority\": \"2\"},\"$df2\": {\"value\": \"\\\"1\\\"\",\"type\": \"String\"},\"AGE\": \"young\"}}"

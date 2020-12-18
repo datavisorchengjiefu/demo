@@ -34,7 +34,12 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -314,11 +319,13 @@ public class Test {
         System.out.println(arrayList.size());
 
         Iterator<Integer> integerIterator = arrayList.iterator();
-        while (integerIterator.hasNext()) {
-            Integer integer = integerIterator.next();
+        ListIterator<Integer> listIterator = arrayList.listIterator();
+        while (listIterator.hasNext()) {
+            Integer integer = listIterator.next();
             if (integer % 2 == 0) {
-                integerIterator.remove();
-                //                arrayList.add(100);  再加是不行的
+                //                integerIterator.remove();
+                listIterator.add(100 * integer);
+                //                arrayList.add(100);  // integerIterator再加是不行的
             }
         }
 
@@ -368,8 +375,8 @@ public class Test {
         //        FileOutputStream fos = new FileOutputStream(file);
         //        fos.write(code);
 
-        Date date = new Date();
-        System.out.println(date.getTime());
+        //        Date date = new Date();
+        //        System.out.println(date.getTime());
 
         List<String> stringList01 = new ArrayList<>();
         stringList01.add("1");
@@ -407,6 +414,119 @@ public class Test {
         list1126.add(7);
         list1126.add(4);
         LOGGER.info("list is ha: {}", list1126);
+
+        String rule = "{\n"
+                + "  \"condition\": {\n"
+                + "    \"operands\": [\n"
+                + "      \"age\",\n"
+                + "      \"10\"\n"
+                + "    ],\n"
+                + "    \"operator\": \"INT_LT\"\n"
+                + "  },\n"
+                + "  \"actions\": {\n"
+                + "    \"$df1\": {\n"
+                + "      \"value\": \"\\\"1\\\"\",\n"
+                + "      \"type\": \"String\",\n"
+                + "      \"priority\": \"2\"\n"
+                + "    },\n"
+                + "    \"$df2\": {\n"
+                + "      \"value\": \"\\\"1\\\"\",\n"
+                + "      \"type\": \"String\"\n"
+                + "    },\n"
+                + "    \"AGE\": \"young\"\n"
+                + "  }\n"
+                + "}";
+        System.out.println(rule);
+        System.out.println("yibin");
+        System.out.println("**********");
+        System.out.println(System.currentTimeMillis());
+
+        System.out.println("**********");
+
+        long ut1 = Instant.now().getEpochSecond();
+        System.out.println(ut1);
+
+        long ut2 = System.currentTimeMillis() / 1000L;
+        System.out.println(ut2);
+
+        Date now = new Date();
+        long ut3 = now.getTime() / 1000L;
+        System.out.println(ut3);
+
+        System.out.println("**********8");
+        long unixSeconds = System.currentTimeMillis();
+        // convert seconds to milliseconds
+        Date date = new java.util.Date(unixSeconds);
+        System.out.println(date);
+        // the format of your date
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        SimpleDateFormat sdf1 = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        // give a timezone reference for formatting (see comment at the bottom)
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT-4"));
+        sdf1.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+        String formattedDate = sdf.format(date);
+        String formattedDate1 = sdf1.format(date);
+        System.out.println(formattedDate);
+        System.out.println(formattedDate1);
+
+        Map<Integer, Map<String, String>> ruleResultMap = new HashMap<>();
+        Map<String, String> ruleResultMapInternal = new HashMap<>();
+        ruleResultMapInternal.put("1", "1");
+        ruleResultMapInternal.put("2", "2");
+        ruleResultMapInternal.put("3", "3");
+        Map<String, String> ruleResultMapInternal2 = new HashMap<>();
+        ruleResultMapInternal2.put("21", "21");
+        ruleResultMap.put(1, ruleResultMapInternal);
+        ruleResultMap.put(2, ruleResultMapInternal2);
+
+        Map<Integer, Map<String, String>> ruleResultMapShallow = new HashMap<>();
+        ruleResultMapShallow.putAll(ruleResultMap);
+
+        System.out.println(ruleResultMap);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        executorService.submit(new Runnable() {
+            @Override public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ruleResultMap.get(1).put("4", "4");
+
+            }
+        });
+
+        System.out.println(ruleResultMap);
+        System.out.println(ruleResultMapShallow);
+
+        System.out.println("==============");
+        Boolean testyushu = new Boolean("TRUE");
+        testyushu.booleanValue();
+
+        //        Map<String, String> stringMap = ruleResultMap.get(1);
+        //        for (Map.Entry<String, String> entry : stringMap.entrySet()) {
+        //            System.out.println(entry.getKey());
+        //            System.out.println(entry.getValue());
+        //            Thread.sleep(3000);
+        //        }
+
+        ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>(
+                ruleResultMap.get(1));
+
+        Iterator<Map.Entry<String, String>> iterator1 = concurrentHashMap.entrySet().iterator();
+        while (iterator1.hasNext()) {
+            Map.Entry<String, String> entry = iterator1.next();
+
+            //            if (entry.getKey().equals("2")) {
+            //                iterator1.remove();
+            //            } else {
+            //
+            //            }
+
+            System.out.println(entry.getKey());
+            System.out.println(entry.getValue());
+            Thread.sleep(3000);
+        }
 
     }
 

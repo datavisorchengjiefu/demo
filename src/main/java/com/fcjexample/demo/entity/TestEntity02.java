@@ -19,6 +19,33 @@ package com.fcjexample.demo.entity;
 
 public class TestEntity02 {
     private Long timeout;
+    private String name;
+    private String address;
+
+    public TestEntity02() {
+    }
+
+    public TestEntity02(Long timeout, String name, String address) {
+        this.timeout = timeout;
+        this.name = name;
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Long getTimeout() {
         return timeout;

@@ -1,1 +1,15 @@
-"{\"condition\": {\"operands\": [\"age\", \"10\"], \"operator\": \"INT_LT\"},\"actions\": {\"$df1\": {\"value\": \"\\\"1\\\"\",\"type\": \"String\",\"priority\": \"2\"},\"$df2\": {\"value\": \"\\\"1\\\"\",\"type\": \"String\"},\"AGE\": \"young\"}}"
+Map<String, String> result = new HashMap<>();
+if (primaryName#0 != null){
+    result.put("primary.name", primaryName#0);
+}
+if (primaryPhone#1 != null){
+    result.put("primary.phone", primaryPhone#1);
+}
+if (primaryEmail#2 != null){
+    result.put("primary.email_address", primaryEmail#2);
+}
+if (ip#3 != null){
+    result.put("ip_address", ip#3);
+}
+
+return result;

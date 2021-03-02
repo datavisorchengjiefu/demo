@@ -27,7 +27,51 @@ public class TestMain03 {
 
     private static final Logger logger = LoggerFactory.getLogger(TestMain03.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
+
+        TestEntity02 testEntity0201 = new TestEntity02();
+        testEntity0201.setName("01");
+        testEntity0201.setAddress("qian01");
+        TestEntity02 testEntity0202 = new TestEntity02();
+        testEntity0202.setName("02");
+        TestEntity02 testEntity0203 = new TestEntity02();
+        testEntity0203.setName("03");
+        Set<TestEntity02> testEntity02Set = new HashSet<>();
+        testEntity02Set.add(testEntity0201);
+        testEntity02Set.add(testEntity0202);
+        testEntity02Set.add(testEntity0203);
+
+        List<TestEntity02> list01 = new ArrayList<>(testEntity02Set);
+        System.out.println(list01.size());
+
+        for (TestEntity02 testEntity02 : testEntity02Set) {
+            testEntity02.setAddress("hou");
+        }
+
+        System.out.println(list01.size());
+
+        System.out.println("=========================");
+
+        String fcj01 = "fff_ee_egg";
+        //        String fcj01 = null;
+        String[] fcj01Result = fcj01
+                .split("_");
+
+        System.out.println(fcj01Result.length);
+
+        Map<String, String> map = new HashMap<>();
+        String temp = map.put("1", "11");
+        System.out.println(temp);
+        temp = map.put("1", "12");// get last value
+        System.out.println(temp);
+        System.out.println(map.get("1"));
+        System.out.println("+++++++++++++++++");
+        String temp01 = map.putIfAbsent("2", "22");
+        System.out.println(temp01);
+        temp01 = map.putIfAbsent("2", "23");
+        System.out.println(temp01);
+        System.out.println(map.get("2"));
+        System.out.println("+++++++++++++++++");
 
         List<String> list = new ArrayList<>();
         list.add("ttt");
@@ -39,12 +83,19 @@ public class TestMain03 {
         Set<TestEntity02> set = new HashSet<>();
         TestEntity02 testEntity02 = new TestEntity02(12L, "user01", "h1");
         TestEntity02 testEntity03 = new TestEntity02(12L, "user01", "h1");
+        testEntity02.setTimeout(89L);
+        testEntity02.setTimeout(null);
+        testEntity02.setHeight(37);
+        //        Long time = null;
+        //        testEntity02.setHeight(time);
 
         set.add(testEntity02);
         set.add(testEntity03);
 
         System.out.println(set.size());
-
+        System.out.println(set.toArray());
+        System.out.println("haha01----");
+        System.out.println(set.toString());
         //
         Map<String, Object> responseBody = new HashMap<>();
         Map<String, Object> map01 = new HashMap<>();
@@ -69,5 +120,54 @@ public class TestMain03 {
                         String.valueOf(responseBodyEntry.getValue()));
             }
         }
+        Map<Integer, Map<String, String>> mapOuter = new HashMap<>();
+        Map<String, String> maxMap = new HashMap<>();
+        maxMap.put("1", "1ha");
+        maxMap.put("2", "2ha");
+        maxMap.put("3", "3ha");
+
+        mapOuter.put(100, maxMap);
+        Map<String, String> mapCopy22 = new HashMap<>(mapOuter.get(100));
+        Map<String, String> mapCopy23 = mapOuter.get(100);
+        maxMap.put("3", "tmphaa");
+
+        Map<Integer, TestEntity02> map1 = new HashMap<>();
+        map1.put(1, new TestEntity02(1L, "name1", "FF1"));
+        map1.put(2, new TestEntity02(2L, "name2", "FF2"));
+        map1.put(3, new TestEntity02(3L, "name3", "FF3"));
+        Map<Integer, TestEntity02> map1Copy = new HashMap<>(map1);
+        TestEntity02 tmp = map1.get(3);
+        tmp.setName("hahfcj");
+        map1.put(3, tmp);
+        map1.remove(2);
+        map1Copy.put(4, new TestEntity02());
+
+        Map<Integer, TestEntity02> map2Copy = new HashMap<>();
+        map1.forEach((k, v) -> map2Copy.put(k, v));
+        map2Copy.put(5, new TestEntity02());
+
+        map1.get(2).setName("ha");
+
+        System.out.println(map1.get(2).getName());
+        System.out.println(map1Copy.get(2).getName());
+        System.out.println(map2Copy.get(2).getName());
+
+        Object obj01 = "ggg";
+        Set<String> set1 = new HashSet<>();
+        set1.add("s1");
+        set1.add("s2");
+        System.out.println(obj01.getClass());
+        obj01 = set1;
+        System.out.println(obj01.getClass());
+
+        //        obj01 = (Set) obj01;
+
+        Class<?> theClass = Class.forName(set1.getClass().getName());
+        theClass.cast(obj01);
+        System.out.println(obj01.getClass());
+
+        System.out.println();
+        System.out.println(((HashSet) obj01));
+
     }
 }

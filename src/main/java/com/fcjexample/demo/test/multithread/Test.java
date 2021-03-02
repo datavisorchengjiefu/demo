@@ -86,6 +86,7 @@ public class Test {
             try {
                 // CallFcjClass线程池里的抛错，如果没有future.get()，这外面是不会看到报错的。所以最好在线程池里自己try catch住打log。
                 System.out.println("result: " + future.get());
+                System.out.println("haha0101");
 
             } catch (Exception e) {
                 LOGGER.error("get() failed. ", e);

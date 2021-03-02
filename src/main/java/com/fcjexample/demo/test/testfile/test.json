@@ -1,0 +1,12 @@
+{
+  "condition": {
+    "operands": [
+      "ip",
+      "242."
+    ],
+    "operator": "STR_CONTAINS"
+  },
+  "actions": {
+    "ACCUMULATE": ""
+  }
+}

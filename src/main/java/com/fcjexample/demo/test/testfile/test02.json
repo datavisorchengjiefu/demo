@@ -1,0 +1,23 @@
+{
+  "name": "test_feature_json",
+  "description": "test description",
+  "status": "DRAFT",
+  "fraud_type": "ATOATO",
+  "function": "count",
+  "accumulator": {
+    "name": "test_accumulator_json",
+    "description": "test description for accumulator",
+    "entity": "userId",
+    "attributes": [
+      "card",
+      "time"
+    ],
+    "target": "card"
+  },
+  "window": "6000000",
+  "offset": "0",
+  "tags": [
+    "tag1",
+    "tag2"
+  ]
+}

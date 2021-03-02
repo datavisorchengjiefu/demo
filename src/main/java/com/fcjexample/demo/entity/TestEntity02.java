@@ -21,6 +21,7 @@ public class TestEntity02 {
     private Long timeout;
     private String name;
     private String address;
+    private long height;
 
     public TestEntity02() {
     }
@@ -29,6 +30,14 @@ public class TestEntity02 {
         this.timeout = timeout;
         this.name = name;
         this.address = address;
+    }
+
+    public long getHeight() {
+        return height;
+    }
+
+    public void setHeight(long height) {
+        this.height = height;
     }
 
     public String getName() {

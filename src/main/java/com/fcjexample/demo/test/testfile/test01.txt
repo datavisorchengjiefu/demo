@@ -1,1 +1,5 @@
-[Event{id='1e63adde1f81f3c30ef8333dc6438d5b', name='null', time=1579947936601, fields={52=1579947936601, 42=user04, 47=4000}, featureValues={}}, Event{id='9b93b5a07ccd6c6a9c04e09f57f91feb', name='null', time=1580010551037, fields={52=1580010551037, 42=user01, 47=2003}, featureValues={}}, Event{id='3726522de0de9559e8d6d6d1beab003c', name='null', time=1579460530848, fields={52=1579460530848, 42=user06, 47=2009}, featureValues={}}, Event{id='00003ecb56878474b1a626afd25562ee', name='null', time=1579784944013, fields={52=1579784944013, 42=user01, 47=2002}, featureValues={}}]
+{"user_id":"user001","time":"1583295528000","event_time":"1583295528000"}
+{"user_id":"user001","time":"1584295528000","event_time":"1584295528000"}
+{"user_id":"user001","time":"1595295528000","event_time":"1595295528000"}
+{"user_id":"user001","time":"1596295528000","event_time":"1596295528000"}
+{"user_id":"user001","time":"1597295528000","event_time":"1597295528000"}

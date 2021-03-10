@@ -60,6 +60,12 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
+        String wenzheng = "null";
+        String wenzheng1 = null;
+        String w = String.valueOf(wenzheng);
+        String w1 = String.valueOf(wenzheng1);
+        w.equals("null");
+
         System.out.println("hhh");
 
         TestEntity entity1 = new TestEntity();

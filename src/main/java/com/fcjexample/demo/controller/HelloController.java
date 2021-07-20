@@ -1,10 +1,15 @@
 package com.fcjexample.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fcjexample.demo.entity.PreviewResponse;
+import com.fcjexample.demo.entity.ReplayPreviewEntry;
 import com.fcjexample.demo.model.ApiResult;
 import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.service.DataViewService;
 import com.fcjexample.demo.service.HelloService;
 import com.fcjexample.demo.util.exception.DataViewException;
+import com.swrve.ratelimitedlogger.RateLimitedLog;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -12,20 +17,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.WebAsyncTask;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/hello")
 public class HelloController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
+    private static final RateLimitedLog rateLimitedLog = RateLimitedLog
+            .withRateLimit(LOGGER)
+            .maxRate(5).every(Duration.ofSeconds(30))
+            .build();
+    private static AtomicLong count = new AtomicLong();
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 25; i++)
+            //            rateLimitedLog.info(count.getAndIncrement() + "Testing: {}", i);
+            rateLimitedLog.info("Testing: {}, {}", count.getAndIncrement(), i);
+        rateLimitedLog.info("End");
+    }
 
     @Autowired
     DataViewService dataViewService;
@@ -49,6 +75,11 @@ public class HelloController {
     @RequestMapping("/hhh03")
     public Object helloha03(@RequestBody TestEntity entity) {
         return entity.getName() + "hello haha fcjdormi";
+    }
+
+    @RequestMapping("/hhh04/{id}")
+    public void helloha04(@PathVariable("id") Integer id) {
+        rateLimitedLog.info("{} + hhh04: {}", count.getAndIncrement(), id);
     }
 
     @GetMapping("/test01")
@@ -237,6 +268,132 @@ public class HelloController {
             //            System.out.println("7888" + e.getStackTrace()); 这个不行
             return new ApiResult<>(1, "failed because " + e.toString(), -999);
         }
+    }
+
+    @RequestMapping("/testStream")
+    public StreamingResponseBody testStream() throws Exception {
+        PreviewResponse previewResponse = new PreviewResponse();
+        Map<String, ReplayPreviewEntry> finalPreviewEntryMap = new HashMap<>();
+        finalPreviewEntryMap.put("01", generate("01"));
+        finalPreviewEntryMap.put("02", generate("02"));
+
+        previewResponse.setErrorLines(10);
+        previewResponse.setTotalLines(30);
+        previewResponse.setExamples(finalPreviewEntryMap);
+        StreamingResponseBody responseBody = wrapResponse(previewResponse);
+        return responseBody;
+    }
+
+    //    @RequestMapping("/testStream")
+    //    public ResponseEntity<StreamingResponseBody> testStream() throws Exception {
+    //        PreviewResponse previewResponse = new PreviewResponse();
+    //        Map<String, ReplayPreviewEntry> finalPreviewEntryMap = new HashMap<>();
+    //        finalPreviewEntryMap.put("01", generate("01"));
+    //        finalPreviewEntryMap.put("02", generate("02"));
+    //
+    //        previewResponse.setErrorLines(10);
+    //        previewResponse.setTotalLines(30);
+    //        previewResponse.setExamples(finalPreviewEntryMap);
+    //        StreamingResponseBody responseBody = wrapResponse(previewResponse);
+    //        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    //    }
+
+    @RequestMapping("/testStreamObject")
+    public ResponseEntity<StreamingResponseBody> testStreamObject() throws Exception {
+        PreviewResponse previewResponse = new PreviewResponse();
+        Map<String, ReplayPreviewEntry> finalPreviewEntryMap = new HashMap<>();
+        finalPreviewEntryMap.put("01", generate("01"));
+        finalPreviewEntryMap.put("02", generate("02"));
+
+        previewResponse.setErrorLines(10);
+        previewResponse.setTotalLines(30);
+        previewResponse.setExamples(finalPreviewEntryMap);
+        StreamingResponseBody responseBody = wrapResponseObject(previewResponse);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    private ReplayPreviewEntry generate(String name) {
+        ReplayPreviewEntry replayPreviewEntry01 = new ReplayPreviewEntry();
+        replayPreviewEntry01.setColumnName(name);
+        replayPreviewEntry01.setExamples(Arrays.asList("foo", name));
+
+        return replayPreviewEntry01;
+    }
+
+    private StreamingResponseBody wrapResponse(PreviewResponse response)
+            throws Exception {
+
+        LOGGER.info("first is: " + response.toString());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String str = objectMapper.writeValueAsString(response);
+        LOGGER.info("second is: " + str);
+
+        InputStream inputStream = IOUtils.toInputStream(str);
+        FileOutputStream fos6 = new FileOutputStream("ha6.ser");
+        IOUtils.copy(inputStream, fos6);
+        String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+
+        FileInputStream is = new FileInputStream("ha6.ser");
+        int num = is.read();
+
+        StreamingResponseBody responseBody = new StreamingResponseBody() {
+            @Override
+            public void writeTo(OutputStream outputStream) throws IOException {
+                //                BufferedOutputStream bo = new BufferedOutputStream(outputStream);
+                //                bo.write(str.getBytes(), 0, 20);
+                //                bo.write(str.getBytes());
+
+                //
+                //                outputStream.write(str.getBytes());
+                //                IOUtils.write("data", outputStream, "UTF-8");
+
+                IOUtils.copy(IOUtils.toInputStream(str, Charset.defaultCharset()), outputStream);
+
+                //                Reader reader = new StringReader(str);
+                //                IOUtils.copy(reader, outputStream);
+
+            }
+        };
+
+        return responseBody;
+    }
+
+    private StreamingResponseBody wrapResponseObject(PreviewResponse response) {
+
+        LOGGER.info("first is: " + response);
+        try {
+            FileOutputStream fos = new FileOutputStream("haha.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            // write object to file
+            oos.writeObject(response);
+            System.out.println("Done");
+            // closing resources
+            oos.close();
+            fos.close();
+
+            FileInputStream is = new FileInputStream("haha.ser");
+            ObjectInputStream ois = new ObjectInputStream(is);
+            PreviewResponse emp = (PreviewResponse) ois.readObject();
+
+            ois.close();
+            is.close();
+            System.out.println(emp.toString());
+        } catch (Exception e) {
+            LOGGER.error("errors. ", e);
+        }
+
+        StreamingResponseBody responseBody = new StreamingResponseBody() {
+            @Override
+            public void writeTo(OutputStream outputStream) throws IOException {
+                ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+                // write object to file
+                oos.writeObject(response);
+                oos.close();
+            }
+        };
+
+        return responseBody;
     }
 
 }

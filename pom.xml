@@ -92,6 +92,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.swrve</groupId>
+            <artifactId>rate-limited-logger</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
             <version>2.5.0</version>
@@ -170,6 +176,12 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.datasketches</groupId>
+            <artifactId>datasketches-java</artifactId>
+            <version>1.3.0-incubating</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -181,6 +193,11 @@
             <id>core-repo-snapshot</id>
             <url>${datavisor.nexus}/nexus/content/repositories/datavisor-core-snapshot</url>
         </repository>
+        <repository>
+            <id>feature-utils-snapshot</id>
+            <url>https://nexus.dv-api.com:8443/nexus/content/repositories/feature-utils-snapshot
+            </url>
+        </repository>
     </repositories>
 
     <build>
@@ -188,6 +205,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

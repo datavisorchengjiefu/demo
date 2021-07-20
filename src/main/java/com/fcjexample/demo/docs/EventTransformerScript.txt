@@ -1,0 +1,163 @@
+List<Map<String, Tuple2<String, String>>> resultList = new ArrayList<>();
+        HashMap<String, String> typeMap = new HashMap<>();
+        typeMap.put("ev_tt", "Long");//时间发生时间戳
+        typeMap.put("ev_n", "String");//事件名
+        typeMap.put("ev_t", "Integer");//事件类型0自动1手动埋点
+        typeMap.put("ev_ptt", "Long");//32位随机数
+        typeMap.put("ev_u", "String");//用户id
+        typeMap.put("ev_i", "String");
+
+        typeMap.put("d_d30", "Integer");//NetworkType当前网络类型
+        typeMap.put("d_d54", "Integer");//isOpenUSB 是否打开usb调试
+        typeMap.put("d_d78", "String");//UUID 客户端生成的唯一ID
+        typeMap.put("d_d33", "Integer");//ScreenBrightness 屏幕亮
+        typeMap.put("d_d15", "String");//OS
+        typeMap.put("d_d29", "String");//SSID
+        typeMap.put("d_v1", "String");//DVID
+        typeMap.put("d_d39", "Integer");//BatteryLevel  电池电量
+        typeMap.put("d_u1", "String");// AppaccessKey  由picasso办法的标志用户
+        typeMap.put("d_v2", "String");//DVIDTOKEN
+        typeMap.put("d_d601", "Long");//剩余可用内存
+        typeMap.put("d_d51", "Integer");//SimStatus  sim状态(0:未知 1: ⽆无卡 2: 需要 PIN 解锁 3: 需要 PUK 解锁 4: 需要 NetworkPIN 解 锁 5: 正常 6: sim 卡未加载完毕)
+        typeMap.put("d_d76", "String");//SolidScreenRatio  固定屏幕长宽比
+        typeMap.put("d_n1", "String");//LocalIp  本机分配的 IP 在 wifi 环境下是局域⽹网 IP 3G/4G 情况下是运营商分配的“局域⽹网”IP
+        typeMap.put("d_c10", "Integer");//Emulator  uint64_t 每⼀一位表示⼀一种调试检测⼿手法。 可以多种并存
+        typeMap.put("d_n4", "String");//GateIp  网关ip
+        typeMap.put("d_d8", "Long");//DiskFreeSize  磁盘剩余⼤大⼩小 B
+        typeMap.put("d_40", "Integer");//BatteryCharging 充电状态
+        typeMap.put("d_d44", "Integer");//是否使⽤用 VPN
+        typeMap.put("d_c1", "Integer");//root
+        typeMap.put("d_c3", "Integer");//hook
+        typeMap.put("d_c8", "Integer");//DebugDetect
+        typeMap.put("d_c9", "Integer");//MultRun  多开
+        typeMap.put("d_a9", "Long");//App Install Time
+        typeMap.put("d_d602", "Integer");//是否在省电模式
+        typeMap.put("d_d603", "String");//wifi/4g/5g 强度
+        typeMap.put("d_c201", "Integer");//root 0or1
+        typeMap.put("d_c203", "Integer");//hook
+        typeMap.put("d_c208", "Integer");//DebugDetect
+        typeMap.put("d_d24", "String");//voice  音量
+        typeMap.put("d_n5", "String");//公网ip
+        typeMap.put("d_d16", "String");//OSVersion 系统版本
+        typeMap.put("d_d42", "String");//DeviceBrand 手机品牌
+        typeMap.put("d_d94", "Long");//LocalTimeStamp 本地时间戳
+
+        typeMap.put("en_d604", "String");//重力加速度
+        typeMap.put("en_d605", "String");//电池温度
+
+        typeMap.put("u_UserName", "String");
+        typeMap.put("u_UserId", "String");
+
+        typeMap.put("p_PN", "String");//页面名
+        typeMap.put("p_PT", "String");//页面标题
+        typeMap.put("p_PPN", "String");//前一个页面名
+        typeMap.put("p_PPT", "String");//前一个页面标题
+        typeMap.put("p_IN", "Integer");//启动app后访问的第几个页面
+        typeMap.put("p_AD", "Long");//启动app后的使用时长（毫秒）
+        typeMap.put("p_NT", "Integer");//网络类型Android中0移动1wifi-1无网络iOS中0无网络1wifi2移动
+        typeMap.put("p_PNT", "Integer");//前一个页面网络类型
+        typeMap.put("p_BT", "Integer");//当前蓝牙0关1开
+        typeMap.put("p_PBT", "Integer");//前一个页面蓝牙
+
+        HashMap<String, String> nameMap = new HashMap<>();
+        nameMap.put("ev_tt", "ev_tt_event_time");//时间发生时间戳
+        nameMap.put("ev_n", "ev_n_event_type");//事件名
+        nameMap.put("ev_t", "ev_t_manual_maidian");//事件类型0自动1手动埋点
+        nameMap.put("ev_ptt", "ev_ptt");//32位随机数
+        nameMap.put("ev_u", "ev_u_id");//用户id
+        nameMap.put("ev_i", "ev_i");
+
+        nameMap.put("d_d30", "d_d30_network_type");//NetworkType当前网络类型
+        nameMap.put("d_d54", "d_d54_is_open_usb");//isOpenUSB 是否打开usb调试
+        nameMap.put("d_d78", "d_d78_uuid");//UUID 客户端生成的唯一ID
+        nameMap.put("d_d33", "d_d33_screen_brightness");//ScreenBrightness 屏幕亮
+        nameMap.put("d_d15", "d_d15_os");//OS
+        nameMap.put("d_d29", "d_d29_ssid");//SSID
+        nameMap.put("d_v1", "d_v1_dvid");//DVID
+        nameMap.put("d_d39", "d_d39_battery_level");//BatteryLevel  电池电量
+        nameMap.put("d_u1", "d_u1_app_access_key");// AppaccessKey  由picasso办法的标志用户
+        nameMap.put("d_v2", "d_v2_dvid_token");//DVIDTOKEN
+        nameMap.put("d_d601", "d_d601_memory_free_size");//剩余可用内存
+        nameMap.put("d_d51", "d_d51_sim_status");//SimStatus  sim状态(0:未知 1: ⽆无卡 2: 需要 PIN 解锁 3: 需要 PUK 解锁 4: 需要 NetworkPIN 解 锁 5: 正常 6: sim 卡未加载完毕)
+        nameMap.put("d_d76", "d_d76_solid_screen_ratio");//SolidScreenRatio  固定屏幕长宽比
+        nameMap.put("d_n1", "d_n1_local_ip");//LocalIp  本机分配的 IP 在 wifi 环境下是局域⽹网 IP 3G/4G 情况下是运营商分配的“局域⽹网”IP
+        nameMap.put("d_c10", "d_c10_emulator");//Emulator  uint64_t 每⼀一位表示⼀一种调试检测⼿手法。 可以多种并存
+        nameMap.put("d_n4", "d_n4_gate_ip");//GateIp  网关ip
+        nameMap.put("d_d8", "d_d8_disk_free_size");//DiskFreeSize  磁盘剩余⼤大⼩小 B
+        nameMap.put("d_d40", "d_d40_is_battery_charging");//BatteryCharging 充电状态
+        nameMap.put("d_d44", "d_d44_is_vpn");//是否使⽤用 VPN
+        nameMap.put("d_c1", "d_c1_is_root1");//root
+        nameMap.put("d_c3", "d_c3_is_hook1");//hook
+        nameMap.put("d_c8", "d_c8_is_debug_detect1");//DebugDetect
+        nameMap.put("d_c9", "d_c9_is_mult_run");//MultRun  多开
+        nameMap.put("d_a9", "d_a9_app_install_time");//App Install Time
+        nameMap.put("d_d602", "d_d602_is_power_saving_mode");//是否在省电模式
+        nameMap.put("d_d603", "d_d603_signal_intensity");//wifi/4g/5g 强度
+        nameMap.put("d_c201", "d_c201_is_root2");//root 0or1
+        nameMap.put("d_c203", "d_c203_is_hook2");//hook
+        nameMap.put("d_c208", "d_c208_is_debug_detect2");//DebugDetect
+        nameMap.put("d_d24", "d_d24_voice");//voice  音量
+        nameMap.put("d_n5", "d_n5_internet_ip");//公网ip
+        nameMap.put("d_d16", "d_d16_os_version");//OSVersion 系统版本
+        nameMap.put("d_d42", "d_d42_device_brand");//DeviceBrand 手机品牌
+        nameMap.put("d_d94", "d_d94_local_timestamp");//LocalTimeStamp 本地时间戳
+
+        nameMap.put("en_d604", "en_d604_gravity");//重力加速度
+        nameMap.put("en_d605", "en_d605_battery_tmperature");//电池温度
+
+        nameMap.put("u_UserName", "u_user_name");
+        nameMap.put("u_UserId", "u_user_id");
+
+        nameMap.put("p_PN", "p_PN_page_name");//页面名
+        nameMap.put("p_PT", "p_PT_page_title");//页面标题
+        nameMap.put("p_PPN", "p_PPN_previous_page_name");//前一个页面名
+        nameMap.put("p_PPT", "p_PPT_previous_page_title");//前一个页面标题
+        nameMap.put("p_IN", "p_IN_");//启动app后访问的第几个页面
+        nameMap.put("p_AD", "p_AD_app_duration");//启动app后的使用时长（毫秒）
+        nameMap.put("p_NT", "p_NT_network_type");//网络类型Android中0移动1wifi-1无网络iOS中0无网络1wifi2移动
+        nameMap.put("p_PNT", "p_PNT_previous_network_type");//前一个页面网络类型
+        nameMap.put("p_BT", "p_BT_bluetooth");//当前蓝牙0关1开
+        nameMap.put("p_PBT", "p_PBT_previous_bluetooth");//前一个页面蓝牙
+
+        Map<String, Tuple2<String, String>> convertedEvent = new HashMap<>();
+        Object timeObj = null;
+
+        if (inputObject == null) {
+            return resultList;
+        }
+        try {
+            JSONParser parser = new JSONParser();
+            String inputStr = (String) inputObject;
+            Object obj = parser.parse(inputStr);
+            JSONArray inputArray = (JSONArray) obj;
+            for (int i=0; i < inputArray.size(); i++){
+                Object obj1 = inputArray.get(i);
+                JSONObject subObject = (JSONObject) obj1;
+                for (Object key1 : subObject.keySet()) {
+                    Object obj2 = subObject.get(key1);
+                    JSONObject subJson = (JSONObject) obj2;
+                    for (Object key2 : subJson.keySet()) {
+                        Object Obj = subJson.get(key2);
+                        String key = key1 + "_" + key2;
+                        //System.out.println(key);
+                        if (!typeMap.containsKey(key)){
+                            continue;
+                        }
+                        if (!nameMap.containsKey(key)){
+                            continue;
+                        }
+                        if (typeMap.get(key).equals("String")) {
+                            convertedEvent.put(nameMap.get(key), new Tuple2<>("String", Obj.toString()));
+                        } else if (typeMap.get(key).equals("Long")) {
+                            convertedEvent.put(nameMap.get(key), new Tuple2<>("Long", Obj.toString()));
+                        } else if (typeMap.get(key).equals("Integer")) {
+                            convertedEvent.put(nameMap.get(key), new Tuple2<>("Integer", Obj.toString()));
+                        }
+                    }
+                }
+                resultList.add(convertedEvent);
+            }
+            return resultList;
+        } catch (org.json.simple.parser.ParseException e){
+            throw e;
+        }

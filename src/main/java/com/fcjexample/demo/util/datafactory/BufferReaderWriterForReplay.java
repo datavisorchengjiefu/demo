@@ -10,27 +10,27 @@ public class BufferReaderWriterForReplay {
     private static final Logger logger = LoggerFactory.getLogger(BufferReaderWriterForReplay.class);
 
     public static void main(String[] args) throws IOException {
-        //        writeUsingBufferWriter2();
+        writeUsingBufferWriter2();
         //        readUsingBufferReader();
         //        write100K_200K();
         //        writeLargeDimension();
-        writeLargeTarget();
+//        writeLargeTarget();
     }
 
     private static void writeUsingBufferWriter2() throws IOException {
         System.out.println("1. Start writing contents to file - BufferedWriter");
         try {
             FileOutputStream outputStream = new FileOutputStream(
-                    "/Users/dormifu/test/replaycli/dataFactory/replaycli02-fordistinct-count.json");
+                    "/Users/dormifu/test/replaycli/dataFactory/for-distinct-count02.json");
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
             BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 
             //            {"userId":"user001","amount":"10","time":"10"}
             //            {"userId":"user001","amount":"20","time":"20"}
-            for (int i = 1; i <= 20; i++) {
+            for (int i = 51; i <= 70; i++) {
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("{\"userId\":\"user001\",\"amount\":\"");
+                sb.append("{\"user_id\":\"user001\",\"income\":\"");
                 sb.append(i);
                 sb.append("\",\"time\":\"");
                 sb.append(i);
@@ -40,10 +40,10 @@ public class BufferReaderWriterForReplay {
                 bufferedWriter.newLine();
             }
 
-            for (int i = 21; i <= 30; i++) {
+            for (int i = 71; i <= 80; i++) {
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("{\"userId\":\"user002\",\"amount\":\"");
+                sb.append("{\"user_id\":\"user002\",\"income\":\"");
                 sb.append(i);
                 sb.append("\",\"time\":\"");
                 sb.append(i);
@@ -53,10 +53,10 @@ public class BufferReaderWriterForReplay {
                 bufferedWriter.newLine();
             }
 
-            for (int i = 31; i <= 50; i++) {
+            for (int i = 81; i <= 90; i++) {
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("{\"userId\":\"user003\",\"amount\":\"");
+                sb.append("{\"user_id\":\"user003\",\"income\":\"");
                 sb.append(i);
                 sb.append("\",\"time\":\"");
                 sb.append(i);
@@ -291,8 +291,8 @@ public class BufferReaderWriterForReplay {
     private static void readUsingBufferReader() throws IOException {
         try (FileInputStream fileStream = new FileInputStream(
                 new File("/Users/dormifu/test/replaycli/dataFactory/sampleFile.txt"));
-                InputStreamReader reader = new InputStreamReader(fileStream);
-                BufferedReader bufferedReader = new BufferedReader(reader)) {
+             InputStreamReader reader = new InputStreamReader(fileStream);
+             BufferedReader bufferedReader = new BufferedReader(reader)) {
             System.out.println("\n3. Start Reading file using BufferedReader");
             String line;
             while ((line = bufferedReader.readLine()) != null) {

@@ -1,5 +1,8 @@
-{"user_id":"user001","time":"1583295528000","event_time":"1583295528000"}
-{"user_id":"user001","time":"1584295528000","event_time":"1584295528000"}
-{"user_id":"user001","time":"1595295528000","event_time":"1595295528000"}
-{"user_id":"user001","time":"1596295528000","event_time":"1596295528000"}
-{"user_id":"user001","time":"1597295528000","event_time":"1597295528000"}
+  definition.getArguments().add(new FeatureDefinitionArgDescriptor("DEVICE_TYPE",
+          Feature.class.getName()));
+  definition.getArguments().add(new FeatureDefinitionArgDescriptor("device",
+          Feature.class.getName(), null,
+          new FeatureDefinitionArgDescriptor.DefaultValueEntity(String.class.getName(),
+                  "test_value")));
+  definition.getArguments().add(new FeatureDefinitionArgDescriptor("delim",
+          String.class.getName()));

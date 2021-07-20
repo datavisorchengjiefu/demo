@@ -20,6 +20,8 @@ package com.fcjexample.demo.test;
 import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -33,6 +35,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -40,6 +44,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -58,7 +63,72 @@ public class Test {
         }
     };
 
+    private static String test01 = "haha";
+
+    static {
+        LOGGER.info("haha01: {}", test01);
+        test01 = "haha09";
+        LOGGER.info("haha01: {}", test01);
+    }
+
     public static void main(String[] args) throws Exception {
+        BigDecimal num1 = new BigDecimal("10");
+        BigDecimal num2 = new BigDecimal("3");
+
+        BigDecimal resultBig = num1.divide(num2, 3, RoundingMode.HALF_UP);
+
+        System.out.println(resultBig);
+        //        Integer integer01 = new Integer(10);
+        Integer integer01 = null;
+        Integer result001 = Optional.ofNullable(integer01).orElse(20);
+        System.out.println(result001);
+        Collection<Integer> integerCollection = new HashSet<>();
+        integerCollection.add(5);
+        integerCollection.add(3);
+        integerCollection.add(6);
+        LOGGER.info("hh is {}. ", integerCollection);
+
+        AtomicLong atomicLong = new AtomicLong(System.currentTimeMillis());
+        atomicLong.getAndIncrement();
+
+        String externalEventLine = "[{\"id\": \"eventId003\",\"name\": \"eventName003\",\"time\": 10008,\"fields\": {\"1\": \"10008\",\"2\": \"userId11\",\"3\": \"201\"}}]";
+        String externalEventLine01 = "        {\n"
+                + "            \"id\": \"eventId003\",\n"
+                + "            \"name\": \"eventName003\",\n"
+                + "            \"time\": 10007,\n"
+                + "            \"fields\": {\n"
+                + "                \"1\": \"10007\",\n"
+                + "                \"2\": \"userId11\",\n"
+                + "                \"3\": \"200\"\n"
+                + "            }\n"
+                + "        }";
+        JSONArray externalEvent = (JSONArray) JSONValue.parseWithException(externalEventLine);
+        String testString = String.class.getName();
+
+        Set<String> setTest01 = new HashSet<>();
+        setTest01.add("w1");
+        setTest01.add("w2");
+        setTest01.add("w3");
+
+        String setString01 = "test|" + setTest01;
+        System.out.println(setString01);
+        String[] strings = setString01.split("\\|");
+        String result01 = strings[1];
+
+        List<Integer> list001 = new ArrayList<>();
+        list001.add(2);
+        list001.add(3);
+        list001.add(4);
+
+        List<Integer> list002 = new ArrayList<>(list001);
+        list002.add(5);
+        list002.add(6);
+        System.out.println(list001.size());
+        System.out.println(list002.size());
+        list002.addAll(list001);
+        List<TestEntity02> list = new ArrayList<>();
+        list.add(new TestEntity02(10L, "tttname", "ttt"));
+        list.stream().map(s -> s.getName()).collect(Collectors.toList());
 
         String wenzheng = "null";
         String wenzheng1 = null;
@@ -67,6 +137,9 @@ public class Test {
         w.equals("null");
 
         System.out.println("hhh");
+
+        String testEmpty = null;
+        System.out.println(StringUtils.isEmpty(testEmpty));
 
         TestEntity entity1 = new TestEntity();
         entity1.setName("h1");
@@ -146,12 +219,13 @@ public class Test {
 
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, String> resultMapInternal = new HashMap<>();
-        resultMapInternal.put("ha", "uuu");
+        String hh = resultMapInternal.put("ha", "uuu");
         resultMapInternal.put("ha01", "uuu02");
         resultMap.put("1", "ggg");
         resultMap.put("4", resultMapInternal);
 
-        String fcj112401 = ((Map<String, String>) resultMap.get(String.valueOf(4))).get("ha01");
+        String 个人 = ((Map<String, String>) resultMap.get(String.valueOf(4))).get("ha01");
+        个人 = "gg";
 
         Assert.assertTrue(((Map<String, String>) resultMap.get(String.valueOf(4)))
                 .containsKey("ha"));
@@ -490,6 +564,7 @@ public class Test {
 
         System.out.println(ruleResultMap);
         ExecutorService executorService = Executors.newFixedThreadPool(2);
+        Executors.newScheduledThreadPool(3);
         executorService.submit(new Runnable() {
             @Override public void run() {
                 try {
@@ -571,6 +646,11 @@ public class Test {
         }
         String str = writer.toString();
         long end = System.currentTimeMillis();
+    }
+
+    private List test() {
+
+        return Arrays.asList(1, 2);
     }
 
     private static void printTest02() throws IOException, ParseException {

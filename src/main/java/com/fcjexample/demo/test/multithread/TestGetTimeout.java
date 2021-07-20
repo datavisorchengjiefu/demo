@@ -30,14 +30,14 @@ public class TestGetTimeout {
     private static final Logger logger = LoggerFactory.getLogger(TestGetTimeout.class);
 
     public static void main(String[] args) throws InterruptedException {
-        ExecutorService threadPool2 = new ThreadPoolExecutor(3, 4, 0, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(100), new ThreadFactory() {
+        ExecutorService threadPool2 = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(2), new ThreadFactory() {
             AtomicInteger integer = new AtomicInteger();
 
             @Override public Thread newThread(Runnable r) {
                 return new Thread(r, "test-ha" + integer.getAndIncrement());
             }
-        });
+        }, new ThreadPoolExecutor.AbortPolicy());
         //        ExecutorService threadPool2 = Executors.newSingleThreadExecutor();
 
         List<Future<String>> futureList = new ArrayList<>();
@@ -46,6 +46,10 @@ public class TestGetTimeout {
         timeoutList.add(1000);
         timeoutList.add(2000);
         timeoutList.add(5000);
+        timeoutList.add(3000);
+        timeoutList.add(3000);
+        timeoutList.add(3000);
+        timeoutList.add(4000);
 
         List<CallTestClass> callTestClassList = new ArrayList<>();
         for (Integer integer : timeoutList) {
@@ -57,7 +61,11 @@ public class TestGetTimeout {
              * 执行与future.get()是没有关系的，get()只是用于获取结果
              */
             // awaitTermination 和invokeAll二选一
-            futureList.add(threadPool2.submit(new CallTestClass(integer)));
+            try {
+                futureList.add(threadPool2.submit(new CallTestClass(integer)));
+            } catch (Exception e) {
+                logger.error("fail submit. ", e);
+            }
         }
 
         /**
@@ -116,7 +124,7 @@ public class TestGetTimeout {
         }
         System.out.println("last for " + (System.currentTimeMillis() - startAwait));
 
-        for (int i = 0; i < timeoutList.size(); i++) {
+        for (int i = 0; i < futureList.size(); i++) {
             long start = System.currentTimeMillis();
             System.out.println("start..");
             try {

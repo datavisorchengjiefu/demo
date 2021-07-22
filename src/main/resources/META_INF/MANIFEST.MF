@@ -1,0 +1,1 @@
+Premain-class: com.fcjexample.demo.util.InstrumentationAgent

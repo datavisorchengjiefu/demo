@@ -1,4 +1,6 @@
 HELP.md
+*Sketch*.bin
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
@@ -19,7 +21,7 @@ target/
 *.iml
 *.ipr
 .mvn
-src/main/resources/.DS_Store
+**/.DS_Store
 
 ### NetBeans ###
 /nbproject/private/

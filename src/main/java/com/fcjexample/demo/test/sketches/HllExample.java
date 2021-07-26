@@ -25,60 +25,97 @@ import org.apache.datasketches.memory.Memory;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Set;
 
 // simplified file operations and no error handling for clarity
 public class HllExample {
 
     public static void main(String[] args) throws Exception {
-        doSketchesTempFile();
+//        doSketchesTempFile();
+        doSketchesTempFile02();
 //        doSketches02();
-//        double value = 34;
-//        int value = 34;
-//        Integer value = 34;
-//        String value = "34";
-//        Set<Integer> value = new HashSet<>();
-//        value.add(4);
-//        value.add(6);
-//        System.out.println(metricsNumberEval(value));
     }
 
-
-    public static double metricsNumberEval(Object value) throws Exception {
-        return ((Set) value).size();
-//        return Double.parseDouble(String.valueOf(value));
-    }
 
     private static void doSketchesTempFile() throws Exception {
-        final int lgK = 10;
+        int lgK = 12;
 
         // this section generates two sketches with some overlap and serializes them into files
         {
-            byte[] test = new byte[1024];
-            System.out.println("haha is " + InstrumentationAgent.getObjectSize(test));
             // 100000 unique keys
-            HllSketch sketch1 = new HllSketch(lgK, TgtHllType.HLL_4);
-            for (int key = 0; key < 1000000; key++) {
-                sketch1.update(key);
-            }
-            System.out.println(sketch1.getEstimate() + " kk " + sketch1.getCompositeEstimate());
+            HllSketch sketch1 = new HllSketch(lgK);
+            for (int key = 0; key < 100000; key++) sketch1.update(key);
+            System.out.println("sketch1 compact size is: " + sketch1.getCompactSerializationBytes());
+            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toCompactByteArray()));
+
             FileOutputStream out1 = new FileOutputStream("HllSketch1.bin");
-            System.out.println("sketch1 compact size is: " + sketch1.getCompactSerializationBytes());
             out1.write(sketch1.toCompactByteArray());
-            System.out.println("sketch1 compact size is: " + sketch1.getCompactSerializationBytes());
             out1.close();
 
             // 100000 unique keys
             HllSketch sketch2 = new HllSketch(lgK);
-            for (int key = 50000; key < 1100000; key++) {
-                sketch2.update(key);
-            }
-            System.out.println("sketch2 size is: " + InstrumentationAgent.getObjectSize(sketch2));
+            for (int key = 50000; key < 150000; key++) sketch2.update(key);
+            System.out.println("sketch2 compact size is: " + sketch2.getCompactSerializationBytes());
+            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toCompactByteArray()));
+
+
             FileOutputStream out2 = new FileOutputStream("HllSketch2.bin");
             out2.write(sketch2.toCompactByteArray());
-            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toCompactByteArray()));
             out2.close();
+        }
 
+        // this section deserializes the sketches, produces union and prints the results
+        {
+            FileInputStream in1 = new FileInputStream("HllSketch1.bin");
+            byte[] bytes1 = new byte[in1.available()];
+            in1.read(bytes1);
+            in1.close();
+            HllSketch sketch1 = HllSketch.heapify(Memory.wrap(bytes1));
+
+            FileInputStream in2 = new FileInputStream("HllSketch2.bin");
+            byte[] bytes2 = new byte[in2.available()];
+            in2.read(bytes2);
+            in2.close();
+            HllSketch sketch2 = HllSketch.heapify(Memory.wrap(bytes2));
+
+            Union union = new Union(lgK);
+            union.update(sketch1);
+            union.update(sketch2);
+            HllSketch unionResult = union.getResult(TgtHllType.HLL_4);
+
+            // debug summary of the union result sketch
+            System.out.println(unionResult.toString());
+
+            System.out.println("Union unique count estimate: " + unionResult.getEstimate());
+            System.out.println("Union unique count lower bound 95% confidence: " + unionResult.getLowerBound(2));
+            System.out.println("Union unique count upper bound 95% confidence: " + unionResult.getUpperBound(2));
+        }
+    }
+
+    private static void doSketchesTempFile02() throws Exception {
+        int lgK = 12;
+
+        // this section generates two sketches with some overlap and serializes them into files
+        {
+            // 100000 unique keys
+            HllSketch sketch1 = new HllSketch(lgK);
+            for (int key = 0; key < 8000000; key++) sketch1.update(key);
+            System.out.println("sketch1 compact size is: " + sketch1.getCompactSerializationBytes());
+            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toCompactByteArray()));
+
+            FileOutputStream out1 = new FileOutputStream("HllSketch1.bin");
+            out1.write(sketch1.toCompactByteArray());
+            out1.close();
+
+            // 100000 unique keys
+            HllSketch sketch2 = new HllSketch(lgK);
+            for (int key = 5000000; key < 864000000; key++) sketch2.update(key);
+            System.out.println("sketch2 compact size is: " + sketch2.getCompactSerializationBytes());
+            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toCompactByteArray()));
+
+
+            FileOutputStream out2 = new FileOutputStream("HllSketch2.bin");
+            out2.write(sketch2.toCompactByteArray());
+            out2.close();
         }
 
         // this section deserializes the sketches, produces union and prints the results
@@ -120,30 +157,43 @@ public class HllExample {
 //            in1.close();
 //            HllSketch sketch1 = HllSketch.heapify(Memory.wrap(bytes1));
 
+            long num1 = 4600000;
+//            long num1 = 4600;
             HllSketch sketch1 = new HllSketch(lgK);
-            for (int key = 0; key < 100000; key++) {
-                sketch1.update(key);
+            for (long key = 0; key < num1; key++) {
+                sketch1.update(key);// todo 同一个sketch? 还有不同的string的情况下。
             }
+            System.out.println("sketch1 compact size is: " + sketch1.getCompactSerializationBytes());
+
 
 //            FileInputStream in2 = new FileInputStream("HllSketch2.bin");
 //            byte[] bytes2 = new byte[in2.available()];
 //            in2.read(bytes2);
 //            in2.close();
 //            HllSketch sketch2 = HllSketch.heapify(Memory.wrap(bytes2));
+
+            long num2 = 860000000;
+            long num3 = 7000000;
+            long num4 = 8000000;
             HllSketch sketch2 = new HllSketch(lgK);
-            for (int key = 50000; key < 150000; key++) {
+            for (long key = 165000; key < num4; key++) {
                 sketch2.update(key);
             }
-
-            HllSketch sketch3 = new HllSketch(lgK);
-            for (int key = 120000; key < 200000; key++) {
-                sketch3.update(key);
+            for (long key = num3; key < num2; key++) {
+                sketch2.update(key);
             }
+            System.out.println("sketch2 compact size is: " + sketch2.getCompactSerializationBytes());
+
+
+//            HllSketch sketch3 = new HllSketch(lgK);
+//            for (int key = 120000; key < 200000; key++) {
+//                sketch3.update(key);
+//            }
 
             Union union = new Union(lgK);
             union.update(sketch1);
             union.update(sketch2);
-            union.update(sketch3);
+//            union.update(sketch3);
             HllSketch unionResult = union.getResult(TgtHllType.HLL_4);
 
             // debug summary of the union result sketch

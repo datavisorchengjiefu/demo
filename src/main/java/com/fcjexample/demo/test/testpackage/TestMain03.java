@@ -136,7 +136,6 @@ public class TestMain03 {
         Map<String, String> mapCopy22 = new HashMap<>(mapOuter.get(100));
         Map<String, String> mapCopy23 = mapOuter.get(100);
         maxMap.put("3", "tmphaa");
-        // ha03
 
         Map<Integer, TestEntity02> map1 = new HashMap<>();
         map1.put(1, new TestEntity02(1L, "name1", "FF1"));

@@ -20,6 +20,7 @@ package com.fcjexample.demo.test;
 import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
+import com.fcjexample.demo.util.Tuple;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -54,7 +55,8 @@ public class Test {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
     private static Consumer<Map.Entry<Integer, String>> mapConsumer = new Consumer<Map.Entry<Integer, String>>() {
-        @Override public void accept(
+        @Override
+        public void accept(
                 //                Map.Entry<Integer, Object> value) {
                 Map.Entry<Integer, String> value) {
 
@@ -64,6 +66,8 @@ public class Test {
     };
 
     private static String test01 = "haha";
+    public static final String FOR_TEST_SIGN = "// Script for test\n";
+
 
     static {
         LOGGER.info("haha01: {}", test01);
@@ -72,6 +76,98 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
+        Object yyy = new Integer(9);
+        String yyy7 = String.valueOf(yyy);
+
+        String addScript = FOR_TEST_SIGN
+                + "if (accumulator == null) return 1L; return 1L + (Long) accumulator; \n";
+
+        System.out.println(addScript);
+
+
+        List<Integer> orderList = new ArrayList<>();
+        orderList.add(6);
+        orderList.add(1);
+        orderList.add(4);
+
+
+        for (Integer o : orderList) {
+            System.out.println(o);
+        }
+
+        orderList.add(2, 3);
+
+        System.out.println("============");
+        for (Integer o : orderList) {
+            System.out.println(o);
+        }
+        String gggg = "{\"actions\":{\"REVIEW QUEUE\":\"demo\"},\"condition\":{\"and\":[{\"and\":[{\"operands\":[\"gender_load_customized_data\",\"man\"],\"operator\":\"STR_EQ\"},{\"operands\":[\"order_amount_load_customized_data\",\"1000\"],\"operator\":\"DOUBLE_GT\"}]}]}}";
+        System.out.println("============");
+
+        long now01 = System.currentTimeMillis();
+        long haha01 = now01 - now01 % 60000;
+        long long1 = 1627566642000L;
+        long interval = 86400000L;
+
+        Date date01 = new Date(1627516800000L);
+        System.out.println(date01.getTime());
+
+        double tmp = long1 % interval;
+        double left = long1 - tmp;
+        System.out.println(left);
+        System.out.println(left + interval);
+        System.out.println(long1 - left > (interval / 2));
+        System.out.println(left > (interval / 2));
+        Map<Tuple<Long, Long>, String> tupleStringMap = new LinkedHashMap<>();
+        Tuple<Long, Long> key = new Tuple<>(103L, 5L);
+        Tuple<Long, Long> key1 = new Tuple<>(100L, 8L);
+        Tuple<Long, Long> key11 = new Tuple<>(100L, 9L);
+        Tuple<Long, Long> key12 = new Tuple<>(100L, 8L);
+        Tuple<Long, Long> key13 = new Tuple<>(100L, 20L);
+        Tuple<Long, Long> key2 = new Tuple<>(101L, 6L);
+        Tuple<Long, Long> key21 = new Tuple<>(101L, 9L);
+        Tuple<Long, Long> key22 = new Tuple<>(101L, 5L);
+        Tuple<Long, Long> key3 = new Tuple<>(102L, 7L);
+        Tuple<Long, Long> key23 = new Tuple<>(101L, 1L);
+        Long test001 = 3L;
+        Long test002 = test001 + 4L;
+
+//        Tuple<Long, Long> key = new Tuple<>(103L, 5L);
+//        Tuple<Long, Long> key1 = new Tuple<>(100L, 8L);
+//        Tuple<Long, Long> key2 = new Tuple<>(101L, 6L);
+//        Tuple<Long, Long> key3 = new Tuple<>(102L, 7L);
+        tupleStringMap.put(key, "test");
+        tupleStringMap.put(key11, "test02");// these 2 reverse position. a.
+        tupleStringMap.put(key1, "test02");// these 2 reverse position. a.
+        tupleStringMap.put(key12, "test02");
+        tupleStringMap.put(key13, "test02");
+        tupleStringMap.put(key2, "test");
+        tupleStringMap.put(key21, "test");
+        tupleStringMap.put(key22, "test");
+        tupleStringMap.put(key23, "test");// these 2 reverse position. b.
+        tupleStringMap.put(key3, "test");// these 2 reverse position. b.
+
+        List<Tuple<Long, Long>> keys = new LinkedList<>(tupleStringMap.keySet());
+        for (Tuple<Long, Long> t : keys) {
+            System.out.println(t._1() + ":" + t._2());
+        }
+
+        System.out.println("=======");
+        Collections.reverse(keys);
+//        keys.sort((o1, o2) -> {
+//            if (o2._1().equals(o1._1())) {
+//                return (int) (o2._2() - o1._2());
+//            }
+//            return (int) (o2._1() - o1._1());
+//        });
+
+        for (Tuple<Long, Long> t : keys) {
+            System.out.println(t._1() + ":" + t._2());
+        }
+        System.out.println("=======");
+//        Collections.reverse(keys);
+
+
         BigDecimal num1 = new BigDecimal("10");
         BigDecimal num2 = new BigDecimal("3");
 
@@ -205,7 +301,8 @@ public class Test {
         lists.add("zhou");
         lists.stream()
                 .filter(new Predicate<String>() {
-                    @Override public boolean test(String s) {
+                    @Override
+                    public boolean test(String s) {
                         return s.length() > 4;
                     }
                 })
@@ -247,7 +344,8 @@ public class Test {
 
         System.out.println("==========");
         hostingMap.entrySet().stream().filter(new Predicate<Map.Entry<Integer, String>>() {
-            @Override public boolean test(Map.Entry<Integer, String> integerStringEntry) {
+            @Override
+            public boolean test(Map.Entry<Integer, String> integerStringEntry) {
                 return integerStringEntry.getKey() > 2;
             }
         }).forEach(mapConsumer);
@@ -309,19 +407,19 @@ public class Test {
 
         int testInt01 = 2;
         switch (testInt01) {
-        case 0:
-            System.out.println("ha1");
-        case 1:
-            System.out.println("ha2");
-            break;
-        case 2:
-            System.out.println("ha3");
-            //            break;
-        case 3:
-            System.out.println("ha4");
-            break;
-        default:
-            System.out.println("default");
+            case 0:
+                System.out.println("ha1");
+            case 1:
+                System.out.println("ha2");
+                break;
+            case 2:
+                System.out.println("ha3");
+                //            break;
+            case 3:
+                System.out.println("ha4");
+                break;
+            default:
+                System.out.println("default");
         }
 
         String test01 = "123";
@@ -566,7 +664,8 @@ public class Test {
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         Executors.newScheduledThreadPool(3);
         executorService.submit(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

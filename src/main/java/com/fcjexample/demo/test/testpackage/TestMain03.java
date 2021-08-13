@@ -84,10 +84,16 @@ public class TestMain03 {
         TestEntity02 testEntity02 = new TestEntity02(12L, "user01", "h1");
         TestEntity02 testEntity03 = new TestEntity02(12L, "user01", "h1");
         testEntity02.setTimeout(89L);
-        testEntity02.setTimeout(null);
+//        testEntity02.setTimeout(null);
         testEntity02.setHeight(37);
         //        Long time = null;
         //        testEntity02.setHeight(time);
+        Long tempha = testEntity02.getTimeout();
+        tempha = 100L;
+        System.out.println(testEntity02.getTimeout());
+
+        testEntity02.setTimeout(101L);
+        System.out.println(testEntity02.getTimeout());
 
         set.add(testEntity02);
         set.add(testEntity03);

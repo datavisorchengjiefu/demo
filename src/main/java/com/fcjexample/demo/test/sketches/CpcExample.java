@@ -18,17 +18,11 @@
 package com.fcjexample.demo.test.sketches;
 
 
-import com.fcjexample.demo.util.InstrumentationAgent;
 import org.apache.datasketches.cpc.CpcSketch;
 import org.apache.datasketches.cpc.CpcUnion;
 import org.apache.datasketches.memory.Memory;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 //simplified file operations and no error handling for clarity
@@ -41,173 +35,173 @@ public class CpcExample {
         test04();
     }
 
-    private static void test01() throws IOException {
-        final int lgK = 11;
-        // this section generates two sketches with some overlap and serializes them into files
-        {
-            // 100000 distinct keys
-            int num1 = 65536;
-//            int num1 = 64;
-            int num2 = 50;
-            int num3 = 150;
-            CpcSketch sketch1 = new CpcSketch(lgK);
-            for (int key = 0; key < num1; key++) sketch1.update(key);
-//            for (int key = 0; key < num1; key++) sketch1.update("198.127." + key);
-            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
-            FileOutputStream out1 = new FileOutputStream("CpcSketch1.bin");
-            byte[] b1 = sketch1.toByteArray();
-            out1.write(b1);
-            out1.close();
-
-            // 100000 distinct keys
-            CpcSketch sketch2 = new CpcSketch(lgK);
-            for (int key = num2; key < num3; key++) sketch2.update(key);
-//            for (int key = num2; key < num3; key++) sketch2.update("198.127." + key);
-            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toByteArray()));
-            FileOutputStream out2 = new FileOutputStream("CpcSketch2.bin");
-            out2.write(sketch2.toByteArray());
-            out2.close();
-        }
-
-        // this section deserializes the sketches, produces a union and prints the result
-        {
-            FileInputStream in1 = new FileInputStream("CpcSketch1.bin");
-            byte[] bytes1 = new byte[in1.available()];
-            in1.read(bytes1);
-            in1.close();
-            CpcSketch sketch1 = CpcSketch.heapify(Memory.wrap(bytes1));
-            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
-
-            FileInputStream in2 = new FileInputStream("CpcSketch2.bin");
-            byte[] bytes2 = new byte[in2.available()];
-            in2.read(bytes2);
-            in2.close();
-            CpcSketch sketch2 = CpcSketch.heapify(Memory.wrap(bytes2));
-            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toByteArray()));
-
-            CpcUnion union = new CpcUnion(lgK);
-            union.update(sketch1);
-            union.update(sketch2);
-            CpcSketch result = union.getResult();
-
-            // debug summary of the union result sketch
-            System.out.println(result.toString());
-
-            System.out.println("Distinct count estimate: " + result.getEstimate());
-            System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
-            System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
-        }
-    }
-
-    private static void test02() throws IOException {
-        final int lgK = 11;
-        // this section generates two sketches with some overlap and serializes them into files
-        {
-            // 100000 distinct keys
-            CpcSketch sketch1 = new CpcSketch(lgK);
-            for (int key = 0; key < 8000000; key++) sketch1.update(key);
-//            for (int key = 0; key < 8000000; key++) sketch1.update("198.127." + key);
-            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
-            FileOutputStream out1 = new FileOutputStream("CpcSketch1.bin");
-            out1.write(sketch1.toByteArray());
-            out1.close();
-
-            // 100000 distinct keys
-            CpcSketch sketch2 = new CpcSketch(lgK);
-            for (int key = 5000000; key < 864000000; key++) sketch2.update(key);
-            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toByteArray()));
-            FileOutputStream out2 = new FileOutputStream("CpcSketch2.bin");
-            out2.write(sketch2.toByteArray());
-            out2.close();
-        }
-
-        // this section deserializes the sketches, produces a union and prints the result
-        {
-            FileInputStream in1 = new FileInputStream("CpcSketch1.bin");
-            byte[] bytes1 = new byte[in1.available()];
-            in1.read(bytes1);
-            in1.close();
-            CpcSketch sketch1 = CpcSketch.heapify(Memory.wrap(bytes1));
-
-            FileInputStream in2 = new FileInputStream("CpcSketch2.bin");
-            byte[] bytes2 = new byte[in2.available()];
-            in2.read(bytes2);
-            in2.close();
-            CpcSketch sketch2 = CpcSketch.heapify(Memory.wrap(bytes2));
-
-            CpcUnion union = new CpcUnion(lgK);
-            union.update(sketch1);
-            union.update(sketch2);
-            CpcSketch result = union.getResult();
-
-            // debug summary of the union result sketch
-            System.out.println(result.toString());
-
-            System.out.println("Distinct count estimate: " + result.getEstimate());
-            System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
-            System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
-        }
-    }
-
-    private static void test03() throws IOException {
-        final int lgK = 11;
-        // this section generates two sketches with some overlap and serializes them into files
-
-        // 100000 distinct keys
-        CpcSketch sketch1 = new CpcSketch(lgK);
-        for (int key = 0; key < 10000; key++) sketch1.update(key);
-        System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
-
-        for (int key = 5000; key < 80000; key++) sketch1.update(key);
-        System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
-
-//        sketch1.toByteArray().toString();
-        byte[] old = sketch1.toByteArray();
-        String temp = new String(old);
-        String temp02 = temp;
-//        String temp = sketch1.toByteArray();
-        byte[] newBytes = temp02.getBytes();
-
-        // wrong, can't use Charset, should use base64
-        Charset charset = StandardCharsets.US_ASCII;
-        String string = charset.decode(ByteBuffer.wrap(old))
-                .toString();
-
-        FileOutputStream out1 = new FileOutputStream("CpcSketch1.bin");
-        out1.write(string.getBytes());
-        out1.close();
-
-        FileInputStream in1 = new FileInputStream("CpcSketch1.bin");
-        byte[] bytes1 = new byte[in1.available()];
-        in1.read(bytes1);
-        in1.close();
-
-        String string01 = charset.decode(ByteBuffer.wrap(bytes1))
-                .toString();
-//        CpcSketch sketch1 = CpcSketch.heapify(Memory.wrap(string01.getBytes()));
-
-//        byte[] byteArrrayNew02 = charset.encode(string).array();
-        byte[] byteArrrayNew02 = charset.encode(string01).array();
-
-        CpcSketch sketch = CpcSketch.heapify(byteArrrayNew02);
-
-//        CpcSketch sketch = CpcSketch.heapify(Memory.wrap(sketch1.toByteArray()));
-//        CpcSketch sketch = CpcSketch.heapify(sketch1.toByteArray());
-
-        CpcUnion union = new CpcUnion(lgK);
-        union.update(sketch);
-        CpcSketch result = union.getResult();
-
-        // debug summary of the union result sketch
-        System.out.println(result.toString());
-        System.out.println("hhhh02");
-
-        System.out.println("Distinct count estimate: " + result.getEstimate());
-        System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
-        System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
-
-
-    }
+//    private static void test01() throws IOException {
+//        final int lgK = 11;
+//        // this section generates two sketches with some overlap and serializes them into files
+//        {
+//            // 100000 distinct keys
+//            int num1 = 65536;
+////            int num1 = 64;
+//            int num2 = 50;
+//            int num3 = 150;
+//            CpcSketch sketch1 = new CpcSketch(lgK);
+//            for (int key = 0; key < num1; key++) sketch1.update(key);
+////            for (int key = 0; key < num1; key++) sketch1.update("198.127." + key);
+//            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
+//            FileOutputStream out1 = new FileOutputStream("CpcSketch1.bin");
+//            byte[] b1 = sketch1.toByteArray();
+//            out1.write(b1);
+//            out1.close();
+//
+//            // 100000 distinct keys
+//            CpcSketch sketch2 = new CpcSketch(lgK);
+//            for (int key = num2; key < num3; key++) sketch2.update(key);
+////            for (int key = num2; key < num3; key++) sketch2.update("198.127." + key);
+//            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toByteArray()));
+//            FileOutputStream out2 = new FileOutputStream("CpcSketch2.bin");
+//            out2.write(sketch2.toByteArray());
+//            out2.close();
+//        }
+//
+//        // this section deserializes the sketches, produces a union and prints the result
+//        {
+//            FileInputStream in1 = new FileInputStream("CpcSketch1.bin");
+//            byte[] bytes1 = new byte[in1.available()];
+//            in1.read(bytes1);
+//            in1.close();
+//            CpcSketch sketch1 = CpcSketch.heapify(Memory.wrap(bytes1));
+//            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
+//
+//            FileInputStream in2 = new FileInputStream("CpcSketch2.bin");
+//            byte[] bytes2 = new byte[in2.available()];
+//            in2.read(bytes2);
+//            in2.close();
+//            CpcSketch sketch2 = CpcSketch.heapify(Memory.wrap(bytes2));
+//            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toByteArray()));
+//
+//            CpcUnion union = new CpcUnion(lgK);
+//            union.update(sketch1);
+//            union.update(sketch2);
+//            CpcSketch result = union.getResult();
+//
+//            // debug summary of the union result sketch
+//            System.out.println(result.toString());
+//
+//            System.out.println("Distinct count estimate: " + result.getEstimate());
+//            System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
+//            System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
+//        }
+//    }
+//
+//    private static void test02() throws IOException {
+//        final int lgK = 11;
+//        // this section generates two sketches with some overlap and serializes them into files
+//        {
+//            // 100000 distinct keys
+//            CpcSketch sketch1 = new CpcSketch(lgK);
+//            for (int key = 0; key < 8000000; key++) sketch1.update(key);
+////            for (int key = 0; key < 8000000; key++) sketch1.update("198.127." + key);
+//            System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
+//            FileOutputStream out1 = new FileOutputStream("CpcSketch1.bin");
+//            out1.write(sketch1.toByteArray());
+//            out1.close();
+//
+//            // 100000 distinct keys
+//            CpcSketch sketch2 = new CpcSketch(lgK);
+//            for (int key = 5000000; key < 864000000; key++) sketch2.update(key);
+//            System.out.println("sketch2 compact size is: " + InstrumentationAgent.getObjectSize(sketch2.toByteArray()));
+//            FileOutputStream out2 = new FileOutputStream("CpcSketch2.bin");
+//            out2.write(sketch2.toByteArray());
+//            out2.close();
+//        }
+//
+//        // this section deserializes the sketches, produces a union and prints the result
+//        {
+//            FileInputStream in1 = new FileInputStream("CpcSketch1.bin");
+//            byte[] bytes1 = new byte[in1.available()];
+//            in1.read(bytes1);
+//            in1.close();
+//            CpcSketch sketch1 = CpcSketch.heapify(Memory.wrap(bytes1));
+//
+//            FileInputStream in2 = new FileInputStream("CpcSketch2.bin");
+//            byte[] bytes2 = new byte[in2.available()];
+//            in2.read(bytes2);
+//            in2.close();
+//            CpcSketch sketch2 = CpcSketch.heapify(Memory.wrap(bytes2));
+//
+//            CpcUnion union = new CpcUnion(lgK);
+//            union.update(sketch1);
+//            union.update(sketch2);
+//            CpcSketch result = union.getResult();
+//
+//            // debug summary of the union result sketch
+//            System.out.println(result.toString());
+//
+//            System.out.println("Distinct count estimate: " + result.getEstimate());
+//            System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
+//            System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
+//        }
+//    }
+//
+//    private static void test03() throws IOException {
+//        final int lgK = 11;
+//        // this section generates two sketches with some overlap and serializes them into files
+//
+//        // 100000 distinct keys
+//        CpcSketch sketch1 = new CpcSketch(lgK);
+//        for (int key = 0; key < 10000; key++) sketch1.update(key);
+//        System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
+//
+//        for (int key = 5000; key < 80000; key++) sketch1.update(key);
+//        System.out.println("sketch1 compact size is: " + InstrumentationAgent.getObjectSize(sketch1.toByteArray()));
+//
+////        sketch1.toByteArray().toString();
+//        byte[] old = sketch1.toByteArray();
+//        String temp = new String(old);
+//        String temp02 = temp;
+////        String temp = sketch1.toByteArray();
+//        byte[] newBytes = temp02.getBytes();
+//
+//        // wrong, can't use Charset, should use base64
+//        Charset charset = StandardCharsets.US_ASCII;
+//        String string = charset.decode(ByteBuffer.wrap(old))
+//                .toString();
+//
+//        FileOutputStream out1 = new FileOutputStream("CpcSketch1.bin");
+//        out1.write(string.getBytes());
+//        out1.close();
+//
+//        FileInputStream in1 = new FileInputStream("CpcSketch1.bin");
+//        byte[] bytes1 = new byte[in1.available()];
+//        in1.read(bytes1);
+//        in1.close();
+//
+//        String string01 = charset.decode(ByteBuffer.wrap(bytes1))
+//                .toString();
+////        CpcSketch sketch1 = CpcSketch.heapify(Memory.wrap(string01.getBytes()));
+//
+////        byte[] byteArrrayNew02 = charset.encode(string).array();
+//        byte[] byteArrrayNew02 = charset.encode(string01).array();
+//
+//        CpcSketch sketch = CpcSketch.heapify(byteArrrayNew02);
+//
+////        CpcSketch sketch = CpcSketch.heapify(Memory.wrap(sketch1.toByteArray()));
+////        CpcSketch sketch = CpcSketch.heapify(sketch1.toByteArray());
+//
+//        CpcUnion union = new CpcUnion(lgK);
+//        union.update(sketch);
+//        CpcSketch result = union.getResult();
+//
+//        // debug summary of the union result sketch
+//        System.out.println(result.toString());
+//        System.out.println("hhhh02");
+//
+//        System.out.println("Distinct count estimate: " + result.getEstimate());
+//        System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
+//        System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
+//
+//
+//    }
 
     private static void test04() throws IOException {
 
@@ -220,6 +214,7 @@ public class CpcExample {
             sketch1.update(key);
         }
 
+//        CpcSketch sketch2 = new CpcSketch(lgK);
         for (int key = 5000; key < 80000; key++) {
             sketch1.update(key);
         }
@@ -246,22 +241,35 @@ public class CpcExample {
         // need Base64!!!
         byte[] old = sketch1.toByteArray();
         String encodedString = Base64.getEncoder().encodeToString(old);
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        String temp = encodedString.toString();
+        byte[] decodedBytes = Base64.getDecoder().decode(temp);
 
         CpcSketch sketch = CpcSketch.heapify(Memory.wrap(decodedBytes));
+
+        for (int key = 60000; key < 90000; key++) {
+            sketch.update(key);
+        }
+
+
 //        CpcSketch sketch = CpcSketch.heapify(Memory.wrap(bytes1));
 
         CpcUnion union = new CpcUnion(lgK);
         union.update(sketch);
+
+
         CpcSketch result = union.getResult();
 
         // debug summary of the union result sketch
         System.out.println(result.toString());
         System.out.println("hhhh02");
 
-        System.out.println("Distinct count estimate: " + result.getEstimate());
+        System.out.println("Distinct count estimate: " + String.valueOf(result.getEstimate()));
         System.out.println("Distinct count lower bound 95% confidence: " + result.getLowerBound(2));
         System.out.println("Distinct count upper bound 95% confidence: " + result.getUpperBound(2));
+
+//        System.out.println("=========");
+//        union.update(sketch2);
+//        System.out.println("hh88 is " + union.getResult().getEstimate());
 
 
     }

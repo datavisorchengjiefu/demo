@@ -205,6 +205,8 @@ public class CpcExample {
 
     private static void test04() throws IOException {
 
+        // ha02
+
         final int lgK = 11;
         // this section generates two sketches with some overlap and serializes them into files
 

@@ -20,6 +20,7 @@
         <java.version>1.8</java.version>
         <core.version>1.0.20200512_0755</core.version>
         <datavisor.nexus>https://nexus.dv-api.com:8443</datavisor.nexus>
+        <protobuf.version>2.6.1</protobuf.version>
     </properties>
 
     <dependencies>
@@ -127,6 +128,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.datavisor</groupId>
             <artifactId>datavisor-core</artifactId>
             <version>${core.version}</version>
@@ -150,6 +157,14 @@
                 <exclusion>
                     <artifactId>simpleclient</artifactId>
                     <groupId>io.prometheus</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>protobuf-java</artifactId>
+                    <groupId>com.google.protobuf</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hbase-protocol</artifactId>
+                    <groupId>org.apache.hbase</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

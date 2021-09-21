@@ -17,6 +17,7 @@
 
 package com.fcjexample.demo.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
@@ -38,6 +39,7 @@ import javax.validation.ValidatorFactory;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -75,7 +77,79 @@ public class Test {
         LOGGER.info("haha01: {}", test01);
     }
 
+    public static Integer _int(Object val) {
+        if (val == null) {
+            return null;
+        }
+
+        if (val instanceof Integer) {
+            return (Integer) val;
+        }
+        if (val instanceof Number) {
+            return ((Number) val).intValue();
+        }
+        if (val instanceof String) {
+            try {
+                return Integer.valueOf((String) val);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     public static void main(String[] args) throws Exception {
+//        Integer aggLevel01 = 24 * 60 * 60 * 180 * 1000;
+        Integer aggLevel01 = 24 * 60 * 60 * 180;
+        boolean flag01 = 2 < aggLevel01;
+        boolean flag02 = 2 < aggLevel01 * 1000L;
+        TestEntity testEntity = new TestEntity();
+        testEntity.setDesc("hhh");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String str = objectMapper.writeValueAsString(null);
+        float f20210906 = 0.12345f;
+        String s20210906 = String.format("%.3f", f20210906);
+        System.out.println(s20210906);
+        double d20210906 = 0.12345;
+
+
+        ByteBuffer[] buffers = new ByteBuffer[2];
+        buffers[0] = ByteBuffer.allocate(4).putInt(0, 4);
+        build(false, buffers);
+
+        Queue<Integer> queue = new LinkedList<>();
+        Integer q1 = queue.peek();
+        q1 = queue.poll();
+
+        List<Long> aggLevelList = new ArrayList<>(Arrays.asList(0L));
+        aggLevelList.clear();
+
+        List<Integer> list0817 = new LinkedList<>();
+        list0817.add(2);
+        list0817.add(5);
+        list0817.add(1);
+        for (Integer i : list0817) {
+            System.out.println("ha: " + i);
+        }
+
+        list0817.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 < o2 ? 1 : -1;
+            }
+        });
+
+
+//        double d01 = Math.pow(2, 31);
+        double d01 = Math.pow(2, 33);
+//        double d01 = 80;
+
+//        int i01 = (int) d01;
+        int i01 = _int(d01);
+
+        LOGGER.info("hhh: {}", i01);
+        LOGGER.info("hhhv: {}", d01 - i01);
+
         Object yyy = new Integer(9);
         String yyy7 = String.valueOf(yyy);
 
@@ -155,13 +229,13 @@ public class Test {
         // ha04
 
         System.out.println("=======");
-        Collections.reverse(keys);
-//        keys.sort((o1, o2) -> {
-//            if (o2._1().equals(o1._1())) {
-//                return (int) (o2._2() - o1._2());
-//            }
-//            return (int) (o2._1() - o1._1());
-//        });
+//        Collections.reverse(keys);
+        keys.sort((o1, o2) -> {
+            if (o2._1().equals(o1._1())) {
+                return (int) (o2._2() - o1._2());
+            }
+            return (int) (o2._1() - o1._1());
+        });
 
         for (Tuple<Long, Long> t : keys) {
             System.out.println(t._1() + ":" + t._2());
@@ -811,6 +885,24 @@ public class Test {
         public void setMap(Map<Integer, String> map) {
             this.map = map;
         }
+    }
+
+    public static ByteBuffer build(boolean isStatic, ByteBuffer... buffers) {
+        int totalLength = isStatic ? 2 : 0;
+        for (ByteBuffer bb : buffers)
+            totalLength += 2 + bb.remaining() + 1;
+
+        ByteBuffer out = ByteBuffer.allocate(totalLength);
+
+        if (isStatic)
+            out.putShort((short) 4);
+
+        for (ByteBuffer bb : buffers) {
+            out.put(bb.duplicate());
+            out.put((byte) 0);
+        }
+        out.flip();
+        return out;
     }
 
 }

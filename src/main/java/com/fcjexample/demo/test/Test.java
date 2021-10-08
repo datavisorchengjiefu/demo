@@ -70,7 +70,6 @@ public class Test {
     private static String test01 = "haha";
     public static final String FOR_TEST_SIGN = "// Script for test\n";
 
-
     static {
         LOGGER.info("haha01: {}", test01);
         test01 = "haha09";
@@ -99,7 +98,15 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
-//        Integer aggLevel01 = 24 * 60 * 60 * 180 * 1000;
+        int int2021092701 = 4;
+        Integer int2021092702 = null;
+        String string0929 = null;
+        String s0929 = String.valueOf(string0929);
+        String s20210927 = String.valueOf(int2021092701);
+        String s2021092702 = String.valueOf(int2021092701);
+        String ddd = String.valueOf(int2021092702);
+
+        //        Integer aggLevel01 = 24 * 60 * 60 * 180 * 1000;
         Integer aggLevel01 = 24 * 60 * 60 * 180;
         boolean flag01 = 2 < aggLevel01;
         boolean flag02 = 2 < aggLevel01 * 1000L;
@@ -111,7 +118,6 @@ public class Test {
         String s20210906 = String.format("%.3f", f20210906);
         System.out.println(s20210906);
         double d20210906 = 0.12345;
-
 
         ByteBuffer[] buffers = new ByteBuffer[2];
         buffers[0] = ByteBuffer.allocate(4).putInt(0, 4);
@@ -139,12 +145,11 @@ public class Test {
             }
         });
 
-
-//        double d01 = Math.pow(2, 31);
+        //        double d01 = Math.pow(2, 31);
         double d01 = Math.pow(2, 33);
-//        double d01 = 80;
+        //        double d01 = 80;
 
-//        int i01 = (int) d01;
+        //        int i01 = (int) d01;
         int i01 = _int(d01);
 
         LOGGER.info("hhh: {}", i01);
@@ -158,12 +163,10 @@ public class Test {
 
         System.out.println(addScript);
 
-
         List<Integer> orderList = new ArrayList<>();
         orderList.add(6);
         orderList.add(1);
         orderList.add(4);
-
 
         for (Integer o : orderList) {
             System.out.println(o);
@@ -206,10 +209,10 @@ public class Test {
         Long test001 = 3L;
         Long test002 = test001 + 4L;
 
-//        Tuple<Long, Long> key = new Tuple<>(103L, 5L);
-//        Tuple<Long, Long> key1 = new Tuple<>(100L, 8L);
-//        Tuple<Long, Long> key2 = new Tuple<>(101L, 6L);
-//        Tuple<Long, Long> key3 = new Tuple<>(102L, 7L);
+        //        Tuple<Long, Long> key = new Tuple<>(103L, 5L);
+        //        Tuple<Long, Long> key1 = new Tuple<>(100L, 8L);
+        //        Tuple<Long, Long> key2 = new Tuple<>(101L, 6L);
+        //        Tuple<Long, Long> key3 = new Tuple<>(102L, 7L);
         tupleStringMap.put(key, "test");
         tupleStringMap.put(key11, "test02");// these 2 reverse position. a.
         tupleStringMap.put(key1, "test02");// these 2 reverse position. a.
@@ -229,7 +232,7 @@ public class Test {
         // ha04
 
         System.out.println("=======");
-//        Collections.reverse(keys);
+        //        Collections.reverse(keys);
         keys.sort((o1, o2) -> {
             if (o2._1().equals(o1._1())) {
                 return (int) (o2._2() - o1._2());
@@ -241,8 +244,7 @@ public class Test {
             System.out.println(t._1() + ":" + t._2());
         }
         System.out.println("=======");
-//        Collections.reverse(keys);
-
+        //        Collections.reverse(keys);
 
         BigDecimal num1 = new BigDecimal("10");
         BigDecimal num2 = new BigDecimal("3");
@@ -483,19 +485,19 @@ public class Test {
 
         int testInt01 = 2;
         switch (testInt01) {
-            case 0:
-                System.out.println("ha1");
-            case 1:
-                System.out.println("ha2");
-                break;
-            case 2:
-                System.out.println("ha3");
-                //            break;
-            case 3:
-                System.out.println("ha4");
-                break;
-            default:
-                System.out.println("default");
+        case 0:
+            System.out.println("ha1");
+        case 1:
+            System.out.println("ha2");
+            break;
+        case 2:
+            System.out.println("ha3");
+            //            break;
+        case 3:
+            System.out.println("ha4");
+            break;
+        default:
+            System.out.println("default");
         }
 
         String test01 = "123";

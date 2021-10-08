@@ -923,6 +923,32 @@ public final class AddressBookProtos {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <code>optional string ha = 3;</code>
+     *
+     * <pre>
+     * test
+     * </pre>
+     */
+    boolean hasHa();
+    /**
+     * <code>optional string ha = 3;</code>
+     *
+     * <pre>
+     * test
+     * </pre>
+     */
+    java.lang.String getHa();
+    /**
+     * <code>optional string ha = 3;</code>
+     *
+     * <pre>
+     * test
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getHaBytes();
+
+    /**
      * <code>repeated .protobuf.Person people = 1;</code>
      */
     java.util.List<com.fcjexample.demo.test.protobuf.AddressBookProtos.Person> 
@@ -999,11 +1025,17 @@ public final class AddressBookProtos {
               break;
             }
             case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 people_ = new java.util.ArrayList<com.fcjexample.demo.test.protobuf.AddressBookProtos.Person>();
-                mutable_bitField0_ |= 0x00000001;
+                mutable_bitField0_ |= 0x00000002;
               }
               people_.add(input.readMessage(com.fcjexample.demo.test.protobuf.AddressBookProtos.Person.PARSER, extensionRegistry));
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              ha_ = bs;
               break;
             }
           }
@@ -1014,7 +1046,7 @@ public final class AddressBookProtos {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           people_ = java.util.Collections.unmodifiableList(people_);
         }
         this.unknownFields = unknownFields.build();
@@ -1046,6 +1078,61 @@ public final class AddressBookProtos {
     @java.lang.Override
     public com.google.protobuf.Parser<AddressBook> getParserForType() {
       return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int HA_FIELD_NUMBER = 3;
+    private java.lang.Object ha_;
+    /**
+     * <code>optional string ha = 3;</code>
+     *
+     * <pre>
+     * test
+     * </pre>
+     */
+    public boolean hasHa() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string ha = 3;</code>
+     *
+     * <pre>
+     * test
+     * </pre>
+     */
+    public java.lang.String getHa() {
+      java.lang.Object ref = ha_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          ha_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string ha = 3;</code>
+     *
+     * <pre>
+     * test
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getHaBytes() {
+      java.lang.Object ref = ha_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ha_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int PEOPLE_FIELD_NUMBER = 1;
@@ -1084,6 +1171,7 @@ public final class AddressBookProtos {
     }
 
     private void initFields() {
+      ha_ = "";
       people_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -1108,6 +1196,9 @@ public final class AddressBookProtos {
       for (int i = 0; i < people_.size(); i++) {
         output.writeMessage(1, people_.get(i));
       }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(3, getHaBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1120,6 +1211,10 @@ public final class AddressBookProtos {
       for (int i = 0; i < people_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, people_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getHaBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1239,9 +1334,11 @@ public final class AddressBookProtos {
 
       public Builder clear() {
         super.clear();
+        ha_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
         if (peopleBuilder_ == null) {
           people_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           peopleBuilder_.clear();
         }
@@ -1272,15 +1369,21 @@ public final class AddressBookProtos {
       public com.fcjexample.demo.test.protobuf.AddressBookProtos.AddressBook buildPartial() {
         com.fcjexample.demo.test.protobuf.AddressBookProtos.AddressBook result = new com.fcjexample.demo.test.protobuf.AddressBookProtos.AddressBook(this);
         int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.ha_ = ha_;
         if (peopleBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
             people_ = java.util.Collections.unmodifiableList(people_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.people_ = people_;
         } else {
           result.people_ = peopleBuilder_.build();
         }
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1296,11 +1399,16 @@ public final class AddressBookProtos {
 
       public Builder mergeFrom(com.fcjexample.demo.test.protobuf.AddressBookProtos.AddressBook other) {
         if (other == com.fcjexample.demo.test.protobuf.AddressBookProtos.AddressBook.getDefaultInstance()) return this;
+        if (other.hasHa()) {
+          bitField0_ |= 0x00000001;
+          ha_ = other.ha_;
+          onChanged();
+        }
         if (peopleBuilder_ == null) {
           if (!other.people_.isEmpty()) {
             if (people_.isEmpty()) {
               people_ = other.people_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensurePeopleIsMutable();
               people_.addAll(other.people_);
@@ -1313,7 +1421,7 @@ public final class AddressBookProtos {
               peopleBuilder_.dispose();
               peopleBuilder_ = null;
               people_ = other.people_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
               peopleBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getPeopleFieldBuilder() : null;
@@ -1355,12 +1463,112 @@ public final class AddressBookProtos {
       }
       private int bitField0_;
 
+      private java.lang.Object ha_ = "";
+      /**
+       * <code>optional string ha = 3;</code>
+       *
+       * <pre>
+       * test
+       * </pre>
+       */
+      public boolean hasHa() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional string ha = 3;</code>
+       *
+       * <pre>
+       * test
+       * </pre>
+       */
+      public java.lang.String getHa() {
+        java.lang.Object ref = ha_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ha_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string ha = 3;</code>
+       *
+       * <pre>
+       * test
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getHaBytes() {
+        java.lang.Object ref = ha_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ha_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string ha = 3;</code>
+       *
+       * <pre>
+       * test
+       * </pre>
+       */
+      public Builder setHa(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        ha_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ha = 3;</code>
+       *
+       * <pre>
+       * test
+       * </pre>
+       */
+      public Builder clearHa() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        ha_ = getDefaultInstance().getHa();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ha = 3;</code>
+       *
+       * <pre>
+       * test
+       * </pre>
+       */
+      public Builder setHaBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        ha_ = value;
+        onChanged();
+        return this;
+      }
+
       private java.util.List<com.fcjexample.demo.test.protobuf.AddressBookProtos.Person> people_ =
         java.util.Collections.emptyList();
       private void ensurePeopleIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           people_ = new java.util.ArrayList<com.fcjexample.demo.test.protobuf.AddressBookProtos.Person>(people_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
          }
       }
 
@@ -1510,7 +1718,7 @@ public final class AddressBookProtos {
       public Builder clearPeople() {
         if (peopleBuilder_ == null) {
           people_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           peopleBuilder_.clear();
@@ -1587,7 +1795,7 @@ public final class AddressBookProtos {
           peopleBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.fcjexample.demo.test.protobuf.AddressBookProtos.Person, com.fcjexample.demo.test.protobuf.AddressBookProtos.Person.Builder, com.fcjexample.demo.test.protobuf.AddressBookProtos.PersonOrBuilder>(
                   people_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
           people_ = null;
@@ -1627,10 +1835,10 @@ public final class AddressBookProtos {
     java.lang.String[] descriptorData = {
       "\n\021addressbook.proto\022\010protobuf\"B\n\006Person\022" +
       "\014\n\004name\030\001 \002(\t\022\n\n\002id\030\002 \002(\005\022\r\n\005email\030\003 \001(\t" +
-      "\022\017\n\007numbers\030\004 \003(\t\"/\n\013AddressBook\022 \n\006peop" +
-      "le\030\001 \003(\0132\020.protobuf.PersonB6\n!com.fcjexa" +
-      "mple.demo.test.protobufB\021AddressBookProt" +
-      "os"
+      "\022\017\n\007numbers\030\004 \003(\t\";\n\013AddressBook\022\n\n\002ha\030\003" +
+      " \001(\t\022 \n\006people\030\001 \003(\0132\020.protobuf.PersonB6" +
+      "\n!com.fcjexample.demo.test.protobufB\021Add" +
+      "ressBookProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1655,7 +1863,7 @@ public final class AddressBookProtos {
     internal_static_protobuf_AddressBook_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_protobuf_AddressBook_descriptor,
-        new java.lang.String[] { "People", });
+        new java.lang.String[] { "Ha", "People", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

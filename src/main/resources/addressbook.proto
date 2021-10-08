@@ -13,5 +13,6 @@ message Person {
 }
 
 message AddressBook {
+  optional string ha = 3; // test
   repeated Person people = 1;
 }

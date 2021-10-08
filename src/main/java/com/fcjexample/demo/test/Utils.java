@@ -30,22 +30,20 @@ public class Utils {
             String str1 = "";
             StringBuilder sb = new StringBuilder();
             fis = new FileInputStream(
-                    "src/main/resources/files/errorHandlingZh.txt");// FileInputStream
+                    "src/main/resources/files/ZDProtobuf.txt");// FileInputStream
             // 从文件系统中的某个文件中获取字节
             isr = new InputStreamReader(fis);// InputStreamReader 是字节流通向字符流的桥梁,
             br = new BufferedReader(isr);// 从字符输入流中读取文件中的内容,封装了一个new InputStreamReader的对象
             while ((str = br.readLine()) != null) {
 
-                String[] ss = str.split(":");
-                if (ss.length > 1) {
+                sb.append("nameMap.put(\"").append(str).append("\", \"").append(str)
+                        .append("\");\n");
 
-                    sb.append(ss[1]).append("\n");
-                }
             }
             // 当读取的一行不为空时,把读到的str的值赋给str1
             System.out.println(sb);// 打印出str1
 
-            File file = new File("src/main/resources/files/errorChOut.txt");
+            File file = new File("src/main/resources/files/ZDProtobufOut.txt");
             if (!file.exists()) {
                 try {
                     file.createNewFile(); //如果文件不存在则创建文件

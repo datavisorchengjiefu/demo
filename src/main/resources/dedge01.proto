@@ -1,0 +1,72 @@
+syntax = "proto2";
+
+option java_package = "com.fcjexample.demo.test.protobuf";
+option java_outer_classname = "DEdgeClass01";
+
+message DV_ZD_2 {
+    optional	string	event_name	=	1;
+    optional	int32	type	=	2;
+    optional	string	source	=	3;
+    optional	string	ptt	=	4;
+    optional	string	index	=	5;
+    optional	string	page_index	=	6;
+    optional	string	page_name	=	7;
+    optional	string	page_title	=	8;
+    optional	string	pre_page_name	=	9;
+    optional	string	pre_page_title	=	10;
+    optional	uint64	stt	=	11;
+    optional	int32	net	=	12;
+    optional	int32	bluetooth	=	13;
+    optional	uint64	APP_duration	=	14;
+    optional	uint64	page_duration	=	15;
+    optional	string	u1	=	16;
+    optional	string	v1	=	17;
+    optional	string	v2	=	18;
+    optional	string	d78	=	19;
+    optional	string	d15	=	20;
+    optional	int32	d39	=	21;
+    optional	int32	d601	=	22;
+    optional	string	d29	=	23;	//	SSID
+    optional	bool	d54	=	24;	//	USB
+    optional	string	n1	=	25;	//	内网	IP
+    optional	string	n4	=	26;	//	网关	IP
+    optional	int32	d30	=	27;	//	网络类型
+    optional	float	d33	=	28;	//	屏幕亮度
+    optional	string	d24	=	29;	//	音量
+    optional	int32	d40	=	30;	//	充电状态,	empty	=	-1
+    optional	int32	d51	=	31;	//	SIM	状态
+    optional	uint64	a9	=	32;	//	当前	APP	安装时间
+    optional	string	d76	=	33;	//	分辨率
+    optional	bool	d602	=	34;	//	省电模式
+    optional	uint64	d8	=	35;	//	磁盘可用空间
+    optional	int32	d603	=	36;	//	wifi/4G/5G	信号强度
+    optional	int32	c1	=	37;	//	root
+    optional	int32	c3	=	38;	//	hook
+    optional	int32	C10	=	39;	//	emulator
+    optional	bool	c8	=	40;	//	debug
+    optional	bool	c9	=	41;	//	MultRun
+    optional	int32	c201	=	42;	//	root
+    optional	int32	c203	=	43;	//	hook
+    optional	bool	c208	=	44;	//	debug
+    optional	bool	d44	=	45;	//	VPN
+    optional	string	d16	=	46;	//	系统版本
+    optional	string	d42	=	47;	//	手机品牌
+    optional	uint64	d94	=	48;	//	本地时间戳
+    optional	uint64	d604	=	49;	//
+    optional	uint64	d605	=	50;	//
+    optional	string	u	=	51;	//	用户传入字段
+    optional	int32	net_type	=	52;	//	NT	net	type
+    optional	int32	pre_net_type	=	53;	//	NT	net	type
+    optional	bool	status	=	54;	//	NT	net	type
+    optional	bool	pre_status	=	55;	//	NT	pre	net	type
+    optional	string	txt_input_target	=	56;	//	输入框的target
+    optional	bool	cp	=	57;	//	是否有复制粘贴行为
+    optional	bool	txt_len	=	58;	//	当前输入框内容长度
+    repeated	TC_POINT	tc_info	=	59;	//	touch	信息
+    }
+
+    message TC_POINT {
+    optional int32 x = 1;
+    optional int32 y = 2;
+    optional int32 relative_time = 3;
+    }

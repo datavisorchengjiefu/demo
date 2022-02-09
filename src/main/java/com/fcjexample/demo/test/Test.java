@@ -23,14 +23,18 @@ import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.util.Tuple;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -97,7 +101,102 @@ public class Test {
         throw new IllegalArgumentException();
     }
 
+    private static double testHaohui() {
+        Integer integer = new Integer(0);
+        String str = "" + integer;
+        String uml_response01 = null;
+        String umlResponse = (String) uml_response01;
+        if (umlResponse == null) {
+            return 0.0;
+        }
+        JSONObject jsonObj;
+        try {
+            jsonObj = (JSONObject) JSONValue.parse(umlResponse);
+        } catch (Exception e) {
+            LOGGER.error("Exception when converting json {}", umlResponse);
+            return 0.0;
+        }
+
+        Object scoreObj = jsonObj.get("score");
+        Double scoreInDouble = null;
+        if (scoreObj != null) {
+            if (scoreObj instanceof Number) {
+                scoreInDouble = ((Number) scoreObj).doubleValue();
+            } else if (scoreObj instanceof String) {
+                try {
+                    scoreInDouble = Double.parseDouble((String) scoreObj);
+                } catch (NumberFormatException e) {
+                    String msg = String.format("Failed to get score from uml response in JSON: %s",
+                            scoreObj.toString());
+                    LOGGER.error(msg);
+                }
+            }
+        }
+        if (scoreInDouble == null) {
+            scoreInDouble = 0.0;
+            String msg = String.format("Failed to get score from uml response in JSON: %s",
+                    String.valueOf(scoreObj));
+            LOGGER.error(msg);
+        }
+        return scoreInDouble;
+    }
+
     public static void main(String[] args) throws Exception {
+        //        testHaohui();
+
+        String splitS = "3,,5";
+        String splitS02 = "3,,5,";
+        String[] splitSs = splitS.split(",", -1);
+        String[] splitS02s = splitS02.split(",");
+        String[] splitS02s02 = splitS02.split(",", -1);
+
+        String test1202 = splitS + "null";
+        String test120201 = splitS + null;
+
+        String jo = "{\"RULE\":[{\"createTime\":\"2019-11-01 21:34:36\",\"name\":\"import_rule_1636039465869\",\"updateTime\":\"2019-11-01 21:34:36\",\"type\":\"MANUAL\",\"script\":\"if (1500 > 150) { result.addAction(\\\"ACCUMULATE\\\");}\"}]}";
+
+        String exportResult = "{\"RULE\":[{\"createTime\":\"2019-11-01 21:34:36\",\"cpName\":\"\",\"name\":\"import_rule_1636039465869\",\"updateTime\":\"2019-11-01 21:34:36\",\"type\":\"MANUAL\",\"category\":\"RULE\",\"script\":\"if (1500 > 150) { result.addAction(\\\"ACCUMULATE\\\");}\"}]}";
+
+        JSONAssert.assertEquals(jo, exportResult,
+                JSONCompareMode.LENIENT);
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, String> errorRes = new LinkedHashMap();
+
+        String url = "https://www.baidu.com/hello";
+        String restTemplateResult = "";
+        try {
+            restTemplateResult = restTemplate.getForObject(url, String.class);
+
+        } catch (Exception e) {
+            if (e.getMessage().contains("404 Not Found")) {
+                // For dEdge, 404 is a "normal" error.
+            }
+            errorRes.put("url", url.toString());
+            errorRes.put("error_message", e.getMessage());
+            //            throw new RuntimeException(errorRes.toString());
+        }
+        System.out.println("restTemplate: " + restTemplateResult);
+
+        String toJavaLangStrReprV1 = toJavaLangStrRepr("test\"Temp", "string");
+        String toJavaLangStrReprV2 = toJavaLangStrRepr("哈哈\"哦", "string");
+        String toJavaLangStrReprV102 =
+                "\"" + StringEscapeUtils.unescapeJava(toJavaLangStrReprV1) + "\"";
+        String toJavaLangStrReprV202 =
+                "\"" + StringEscapeUtils.unescapeJava(toJavaLangStrReprV2) + "\"";
+
+        ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(toJavaLangStrReprV2);
+
+        String germanString = "来来来";
+        byte[] germanBytes = germanString.getBytes();
+
+        String asciiEncodedString = new String(germanBytes, StandardCharsets.UTF_8);
+
+        Random random = new Random();
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println(random.nextInt(3));
+        }
+        System.out.println("========");
         int int2021092701 = 4;
         Integer int2021092702 = null;
         String string0929 = null;
@@ -121,7 +220,7 @@ public class Test {
 
         ByteBuffer[] buffers = new ByteBuffer[2];
         buffers[0] = ByteBuffer.allocate(4).putInt(0, 4);
-        build(false, buffers);
+        //        build(false, buffers);
 
         Queue<Integer> queue = new LinkedList<>();
         Integer q1 = queue.peek();
@@ -132,6 +231,8 @@ public class Test {
 
         List<Integer> list0817 = new LinkedList<>();
         list0817.add(2);
+        System.out.println("haha20211110: " + list0817.get(0));
+        //        System.out.println("haha20211110: " + list0817.get(1));
         list0817.add(5);
         list0817.add(1);
         for (Integer i : list0817) {
@@ -905,6 +1006,25 @@ public class Test {
         }
         out.flip();
         return out;
+    }
+
+    public static String toJavaLangStrRepr(Object object, String simpleTypeName) {
+        switch (simpleTypeName.toLowerCase()) {
+
+        case "byte":
+        case "char":
+        case "character":
+            return "'" + object.toString() + "'";
+        case "string":
+            String escape = org.apache.commons.text.StringEscapeUtils
+                    .escapeJava(object.toString());
+            return "\"" + escape + "\"";
+        case "boolean":
+            return object.toString();
+        default:
+            throw new org.apache.commons.lang3.NotImplementedException(
+                    "Given constant type is not supported: " + simpleTypeName);
+        }
     }
 
 }

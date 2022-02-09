@@ -230,8 +230,14 @@ public class ProtobufUnitTest {
                 String camelToUnderName = camelToUnder(name);
                 //                fieldToValueMap.put(originalToEventAttrNameMap.get(camelToUnderName),
                 //                        new Tuple2<>(type.getSimpleName(), result.toString()));
-                sb.append("if (deserialized.").append(methodName).append("()) {\n")
-                        .append("fieldToValueMap.put(originalToEventAttrNameMap.getOrDefault(\"")
+                if ("String".equals(type.getSimpleName())) {
+                    sb.append("if (deserialized.").append(methodName)
+                            .append("() && deserialized.").append(getterName)
+                            .append("() != null) {\n");
+                } else {
+                    sb.append("if (deserialized.").append(methodName).append("()) {\n");
+                }
+                sb.append("fieldToValueMap.put(originalToEventAttrNameMap.getOrDefault(\"")
                         .append(camelToUnderName).append("\", \"").append(camelToUnderName)
                         .append("\"), new Tuple2<>(\"")
                         .append(type.getSimpleName()).append("\", String.valueOf(deserialized.")

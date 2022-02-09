@@ -38,6 +38,16 @@ public class TestEntity {
     private Map<Integer, TestEntity> subTestEntitys = new HashMap<>();
     private long testTime;
 
+    public TestEntity() {
+    }
+
+    public TestEntity(
+            @NotNull(message = "hhh name != null") String name,
+            @NotEmpty(message = "desc not empty") String desc) {
+        this.name = name;
+        this.desc = desc;
+    }
+
     public long getTestTime() {
         return testTime;
     }
@@ -121,6 +131,7 @@ public class TestEntity {
         return "TestEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
                 ", createTime=" + createTime +
                 ", event=" + event +
                 ", events=" + events +

@@ -10,11 +10,13 @@ public class BufferReaderWriterForReplay {
     private static final Logger logger = LoggerFactory.getLogger(BufferReaderWriterForReplay.class);
 
     public static void main(String[] args) throws IOException {
-        writeUsingBufferWriter2();
+        writeUsingBufferWriterFlink();
+        //        writeUsingBufferWriter2();
         //        readUsingBufferReader();
         //        write100K_200K();
         //        writeLargeDimension();
-//        writeLargeTarget();
+        //                writeLargeTarget();
+
     }
 
     private static void writeUsingBufferWriter2() throws IOException {
@@ -78,6 +80,30 @@ public class BufferReaderWriterForReplay {
             //                bufferedWriter.write(String.valueOf(sb));
             //                bufferedWriter.newLine();
             //            }
+
+            bufferedWriter.close();
+        } catch (Exception e) {
+            logger.error("failed. ", e);
+        }
+        System.out.println("2. Successfully written contents to file - BufferedWriter");
+    }
+
+    private static void writeUsingBufferWriterFlink() throws IOException {
+        System.out.println("1. Start writing contents to file - BufferedWriter");
+        try {
+            FileOutputStream outputStream = new FileOutputStream(
+                    "/Users/dormifu/test/replaycli/dataFactory/flink/distinct_count_12000.csv");
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+
+            bufferedWriter.write("userId,time,device,card,amount\n");
+            int num = 12000;
+            for (int i = 1; i < num; i++) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("u1,").append(i * 1000).append(",d2,c1,").append(i);
+                bufferedWriter.write(String.valueOf(sb));
+                bufferedWriter.newLine();
+            }
 
             bufferedWriter.close();
         } catch (Exception e) {
@@ -291,8 +317,8 @@ public class BufferReaderWriterForReplay {
     private static void readUsingBufferReader() throws IOException {
         try (FileInputStream fileStream = new FileInputStream(
                 new File("/Users/dormifu/test/replaycli/dataFactory/sampleFile.txt"));
-             InputStreamReader reader = new InputStreamReader(fileStream);
-             BufferedReader bufferedReader = new BufferedReader(reader)) {
+                InputStreamReader reader = new InputStreamReader(fileStream);
+                BufferedReader bufferedReader = new BufferedReader(reader)) {
             System.out.println("\n3. Start Reading file using BufferedReader");
             String line;
             while ((line = bufferedReader.readLine()) != null) {

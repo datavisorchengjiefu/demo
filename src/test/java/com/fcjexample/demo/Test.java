@@ -17,6 +17,9 @@
 
 package com.fcjexample.demo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Test {
 
     private Integer aa;
@@ -35,5 +38,25 @@ public class Test {
 
         aa = 9;
         System.out.println(aa);
+    }
+
+    public static void main(String[] args) {
+
+        List<String> list = new ArrayList<>();
+        list.add("c2");
+        list.add("c3");
+        list.add("c1");
+
+        String s = String.join(" ", list);
+        System.out.println("hhh " + s);
+
+        String str = "haha";
+        new Thread() {
+            @Override
+            public void run() {
+                System.out.println(str);
+            }
+        }.start();
+
     }
 }

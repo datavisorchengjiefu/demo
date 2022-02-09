@@ -30,7 +30,7 @@ public class AggFunction {
     public static void main(String[] args) throws Exception {
         AggFunction aggFunction = new AggFunction();
         Map<String, Object> map = new HashMap<>();
-        map.put("s01", "1");
+        //        map.put("s01", "1");
         //        map.put("s02", 2);
         double r1 = (double) aggFunction.add(map, null);
         //        long r1 = (Long) aggFunction.add(map, null);
@@ -56,7 +56,7 @@ public class AggFunction {
          * 	at org.apache.datasketches.cpc.CpcSketch.heapify(CpcSketch.java:234)
          */
         //        String s1 = String.valueOf(s);
-        Object result = getResult(s1);
+        //        Object result = getResult(s1);
 
         //        return "DUMMY_ADD_SCRIPT";
 

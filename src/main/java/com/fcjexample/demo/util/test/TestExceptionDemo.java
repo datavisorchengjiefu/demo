@@ -38,6 +38,9 @@ public class TestExceptionDemo {
             getRead02();
         } catch (Exception e) {
             LOGGER.error("testTryCatch failed. ", e);
+            System.out.println("+++++++");
+            System.out.println(e.getStackTrace());
+
         }
 
         System.out.println("end!");

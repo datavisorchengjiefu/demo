@@ -74,7 +74,7 @@ public class SampleConsumerOutter implements Runnable {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         //        BlockingQueue<TestEntity> blockingQueue = new ArrayBlockingQueue<>(20);
         //        LinkedBlockingQueue<TestEntity> blockingQueue = new LinkedBlockingQueue<>(20);
         // todo 超过size会报错重要!!!
@@ -88,6 +88,7 @@ public class SampleConsumerOutter implements Runnable {
         blockingQueue.offer(new TestEntity("name2", "desc2"));
         blockingQueue.offer(new TestEntity("name3", "desc3"));// offer will not throw exception
         blockingQueue.offer(new TestEntity("name4", "desc4"));
+        blockingQueue.put(new TestEntity("name5", "desc5"));
         logger.info("size is {}", blockingQueue.size());
 
         List<TestEntity> result = new ArrayList<>();

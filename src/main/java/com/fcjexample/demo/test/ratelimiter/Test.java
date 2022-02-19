@@ -49,13 +49,19 @@ public class Test {
         long startTime = System.currentTimeMillis();
         IntStream.range(1, 51).forEach(i -> {
             rateLimiter.acquire();
-            doSomeLimitedOperation();
+            //            logger.info("rate is {}", rateLimiter.getRate());
+            //            doSomeLimitedOperation();
+            try {
+                doSomeLimitedOperationV2(pool);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //            list.add(pool.submit(new SemaphoreTest.Task()));
         });
 
-        for (Future future : list) {
-            future.get();
-        }
+        //        for (Future future : list) {
+        //            future.get();
+        //        }
         long elapsedTimeSeconds = System.currentTimeMillis() - startTime;
 
         System.out.println("elapsedTime: " + elapsedTimeSeconds);
@@ -76,6 +82,14 @@ public class Test {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private static void doSomeLimitedOperationV2(ExecutorService pool) throws Exception {
+
+        Future future = pool.submit(new SemaphoreTest.TaskV2());
+
+        future.get();
 
     }
 }

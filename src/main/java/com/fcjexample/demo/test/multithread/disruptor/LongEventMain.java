@@ -22,11 +22,13 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LongEventMain {
     public static void main(String[] args) throws Exception {
-        int bufferSize = 1024;
+        int bufferSize = 2;
 
         Disruptor<LongEvent> disruptor =
                 new Disruptor<>(new LongEventFactory(), bufferSize, DaemonThreadFactory.INSTANCE);
@@ -39,15 +41,26 @@ public class LongEventMain {
         disruptor.start();
 
         RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
-        ByteBuffer bb = ByteBuffer.allocate(8);
-        for (long l = 0; true; l++) {
-            bb.putLong(0, l);
-            ringBuffer.publishEvent(new EventTranslatorOneArg<LongEvent, ByteBuffer>() {
-                @Override public void translateTo(LongEvent event, long sequence,
-                        ByteBuffer buffer) {
-                    event.setValue(buffer.getLong(0));
+        //        ByteBuffer bb = ByteBuffer.allocate(8);
+        //        for (long l = 0; true; l++) {
+        //            bb.putLong(0, l);
+        //            ringBuffer.publishEvent(new EventTranslatorOneArg<LongEvent, ByteBuffer>() {
+        //                @Override public void translateTo(LongEvent event, long sequence,
+        //                        ByteBuffer buffer) {
+        //                    event.setValue(buffer.getLong(0));
+        //                }
+        //            }, bb);
+        //            Thread.sleep(1000);
+        //        }
+
+        List<Long> longList = new ArrayList<>(Arrays.asList(2L, 4L, 5L, 8L));
+        for (Long l : longList) {
+            ringBuffer.publishEvent(new EventTranslatorOneArg<LongEvent, Object>() {
+                @Override public void translateTo(LongEvent event, long sequence, Object arg0) {
+                    event.setValue(
+                            (Long) arg0);// should not be setValue(l), which will instantiate an object
                 }
-            }, bb);
+            }, l);
             Thread.sleep(1000);
         }
 

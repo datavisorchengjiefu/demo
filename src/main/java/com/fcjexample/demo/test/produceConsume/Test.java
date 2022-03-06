@@ -26,6 +26,8 @@ public class Test {
         ExecutorService pool = Executors.newFixedThreadPool(4);
         long start = System.currentTimeMillis();
         List<Future> list = new ArrayList<>();
+        list.stream().sorted();
+
         //        ConsumerTest consumerTest = new ConsumerTest();
         //        Queue<String> queue = new LinkedList<>();
         BlockingQueue<String> queue = new ArrayBlockingQueue<String>(10000);

@@ -22,24 +22,24 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 
 public class Demo01 {
     private static final Logger logger = LoggerFactory.getLogger(Demo01.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        ThreadFactory threadFactory = new ThreadFactory() {
-            int i = 0;
-
-            @Override public Thread newThread(Runnable r) {
-                return new Thread(r, "simpleThread" + String.valueOf(i++));
-            }
-        };
+        //        ThreadFactory threadFactory = new ThreadFactory() {
+        //            int i = 0;
+        //
+        //            @Override public Thread newThread(Runnable r) {
+        //                return new Thread(r, "simpleThread" + String.valueOf(i++));
+        //            }
+        //        };
 
         EventFactory<DemoElement> factory = new EventFactory<DemoElement>() {
             @Override public DemoElement newInstance() {
@@ -48,14 +48,20 @@ public class Demo01 {
         };
 
         BlockingWaitStrategy strategy = new BlockingWaitStrategy();
+        //        TimeoutBlockingWaitStrategy strategy = new TimeoutBlockingWaitStrategy(1000,
+        //                TimeUnit.MILLISECONDS);// not sure the use case
 
         // 会有影响，对于生产者
         int bufferSize = 4;
         //        int bufferSize = 8;
         //        int bufferSize = 16;
 
-        Disruptor<DemoElement> disruptor = new Disruptor<>(factory, bufferSize, threadFactory,
-                ProducerType.SINGLE, strategy);
+        //        Disruptor<DemoElement> disruptor = new Disruptor<>(factory, bufferSize, threadFactory,
+        //                ProducerType.SINGLE, strategy);
+        //        Disruptor<DemoElement> disruptor = new Disruptor<>(factory, bufferSize, threadFactory);
+        Disruptor<DemoElement> disruptor = new Disruptor<>(factory, bufferSize,
+                DaemonThreadFactory.INSTANCE,
+                ProducerType.MULTI, strategy);
 
         //
         LinkedBlockingQueue<String> blockingQueue = new LinkedBlockingQueue<>(1000);
@@ -65,18 +71,37 @@ public class Demo01 {
 
         disruptor.start();
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             disruptor.publishEvent(new EventTranslatorOneArg<DemoElement, Integer>() {
                 @Override public void translateTo(DemoElement event, long sequence, Integer arg0) {
-                    System.out.println(
-                            "之前的数据" + event.getValue() + ", 当前的sequence" + sequence + ", 当前的arg是"
-                                    + arg0);
-                    //                    event.setValue("我是第" + sequence + "个");
-                    event.setValue("我是第" + sequence + "个. " + "我要设置的值为" + arg0);
+                    try {
+
+                        //                    try {
+                        //                        Thread.sleep(2000);
+                        //                    } catch (InterruptedException e) {
+                        //                        e.printStackTrace();
+                        //                    }
+                        System.out.println(
+                                "之前的数据" + event.getValue() + ", 当前的sequence" + sequence
+                                        + ", 当前的arg是"
+                                        + arg0);
+                        //                    event.setValue("我是第" + sequence + "个");
+                        //                    event.setValue("我是第" + sequence + "个. " + "我要设置的值为" + arg0);
+                        event.setValue(String.valueOf(arg0));
+                        //                    throw new RuntimeException("producer exception");
+                    } catch (Exception e) {
+                        logger.error("publish error. ", e);
+                    }
                 }
             }, i);
             logger.info("after publish time is {}", System.currentTimeMillis() - start);
+            //            try {
+            //                Thread.sleep(2000);
+            //            } catch (InterruptedException e) {
+            //                e.printStackTrace();
+            //            }
         }
+        Thread.sleep(8000);
         logger.info("Main thread blockingQueue size is {}", blockingQueue.size());
 
     }

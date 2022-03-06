@@ -36,15 +36,24 @@ public class DemoEventHandler implements EventHandler<DemoElement> {
 
     @Override public void onEvent(DemoElement event, long sequence, boolean endOfBatch)
             throws Exception {
-        Thread.sleep(1000);
-        //        System.out.println(
-        //                "DemoElement: " + Thread.currentThread().getName() + ": " + event
-        //                        .getValue()
-        //                        + ": "
-        //                        + sequence);
+        try {
+            Thread.sleep(2000);
+            System.out.println(
+                    "DemoElement: " + Thread.currentThread().getName() + ": " + event
+                            .getValue()
+                            + ": "
+                            + sequence);
+            if ("2".equals(event.getValue())) {
+                throw new RuntimeException("there is exception. ");
+            }
 
-        blockingQueue.offer(event.getValue());
-        logger.info("blockingQueue size is {}", blockingQueue.size());
-        Thread.sleep(1000);
+            blockingQueue.offer(event.getValue());
+            logger.info("blockingQueue size is {}", blockingQueue.size());
+            Thread.sleep(1000);
+
+        } catch (Exception e) {
+            logger.error("onEvent error. ", e);
+        }
+
     }
 }

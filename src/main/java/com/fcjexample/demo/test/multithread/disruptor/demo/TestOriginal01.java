@@ -23,9 +23,8 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslator;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.util.DaemonThreadFactory;
 import sun.misc.Contended;
-
-import java.util.concurrent.ThreadFactory;
 
 public class TestOriginal01 {
     public static void main(String[] args) {
@@ -41,13 +40,13 @@ public class TestOriginal01 {
             }
         }
 
-        ThreadFactory threadFactory = new ThreadFactory() {
-            int i = 0;
-
-            @Override public Thread newThread(Runnable r) {
-                return new Thread(r, "simpleThread" + String.valueOf(i++));
-            }
-        };
+        //        ThreadFactory threadFactory = new ThreadFactory() {
+        //            int i = 0;
+        //
+        //            @Override public Thread newThread(Runnable r) {
+        //                return new Thread(r, "simpleThread" + String.valueOf(i++));
+        //            }
+        //        };
 
         EventFactory<Element> factory = new EventFactory<Element>() {
             @Override public Element newInstance() {
@@ -62,7 +61,7 @@ public class TestOriginal01 {
                         "Element: " + Thread.currentThread().getName() + ": " + element.getValue()
                                 + ": "
                                 + sequence);
-                Thread.sleep(3000);
+                Thread.sleep(1000);
 
             }
         };
@@ -74,13 +73,14 @@ public class TestOriginal01 {
         //        int bufferSize = 8;
         //        int bufferSize = 16;
 
-        Disruptor<Element> disruptor = new Disruptor(factory, bufferSize, threadFactory,
+        Disruptor<Element> disruptor = new Disruptor(factory, bufferSize,
+                DaemonThreadFactory.INSTANCE,
                 ProducerType.SINGLE, strategy);
         // 设置EventHandler
         disruptor.handleEventsWith(handler);
 
         disruptor.start();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             disruptor.publishEvent(new EventTranslator<Element>() {
                 @Override public void translateTo(Element element, long sequence) {
                     System.out.println("之前的数据" + element.getValue() + "当前的sequence" + sequence);

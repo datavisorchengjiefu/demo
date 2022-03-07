@@ -691,6 +691,9 @@ public class Test {
         //        printTest02();
 
         TestEntity02 testEntity02 = new TestEntity02();
+        testEntity02.setName("before");
+        modify(testEntity02);
+        TestEntity02 final02 = testEntity02;
         //        testEntity02.setTimeout(30L);
         long timeout = testEntity02.getTimeout() == null ? 60 : testEntity02.getTimeout();
 
@@ -929,6 +932,10 @@ public class Test {
     private List test() {
 
         return Arrays.asList(1, 2);
+    }
+
+    private static void modify(TestEntity02 testEntity02) {
+        testEntity02.setName("after");
     }
 
     private static void printTest02() throws IOException, ParseException {

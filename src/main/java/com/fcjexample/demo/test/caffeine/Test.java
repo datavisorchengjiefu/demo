@@ -19,6 +19,7 @@ package com.fcjexample.demo.test.caffeine;
 
 import com.fcjexample.demo.entity.TestEntity02;
 import com.github.benmanes.caffeine.cache.*;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -29,14 +30,25 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 public class Test {
     private static final Logger logger = LoggerFactory.getLogger(Test.class);
 
     public static void main(String[] args) throws Exception {
+        Long longtest01 = Long.valueOf("09") + 3;
+        String s01 = "test";
+        String s02 = "2.03";
+        String s03 = "";
+        logger.info("NumberUtils.isParsable is {}, ", NumberUtils.isParsable(s01));
+        logger.info("NumberUtils.isParsable is {}, ", NumberUtils.isParsable(s02));
+        logger.info("NumberUtils.isParsable is {}, ", NumberUtils.isParsable(s03));
+        System.out.println("gg: " + Long.MAX_VALUE);
+        System.out.println("gg: " + Long.MIN_VALUE);
+        int time = 164663360;
+        long reverseTime = reverseFromCacheKeyTime((long) time);
+
         Cache<String, DataObject> cache = Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.MINUTES)
                 .maximumSize(100)
@@ -111,25 +123,67 @@ public class Test {
                 .buildAsync(cacheLoaderAllAsync);
 
         CompletableFuture<DataObject> resultAllFuture = loadingCacheAllAsync.get("A");
-        logger.info("entry is {}. ", resultAllFuture.get().getData());
+        logger.info("first entry is {}. ", loadingCacheAllAsync.get("A").get().getData());
+        logger.info("first entry is {}. ", loadingCacheAllAsync.get("A").get().getData());
+        //        loadingCacheAllAsync.synchronous().invalidate("A");
+        //        loadingCacheAllAsync.asMap().remove("A").get();
+        //        logger.info("first entry is {}. ", loadingCacheAllAsync.get("A").get().getData());
+
         resultAllFuture = loadingCacheAllAsync.get("B");
-        logger.info("entry is {}. ", resultAllFuture.get().getData());
+        logger.info("second entry is {}. ", loadingCacheAllAsync.get("B").get().getData());
+        logger.info("second entry is {}. ", loadingCacheAllAsync.get("B").get().getData());
+
+        logger.info("first entry is {}. ", loadingCacheAllAsync.get("A").get().getData());
+        logger.info("second entry is {}. ", loadingCacheAllAsync.get("B").get().getData());
 
         System.out.println("===============");
+        logger.info("availableProcessors is {}. ", Runtime.getRuntime().availableProcessors());
+        ExecutorService executors = Executors.newFixedThreadPool(4);
+        // load不会影响cache，可以对比A和B part
+        cacheLoaderAllAsync.asyncLoadAll(Arrays.asList("A", "B", "C", "D", "E"), executors);
+        // A part
         CompletableFuture<Map<String, DataObject>> dataObjectMapAllFuture = loadingCacheAllAsync
                 .getAll(Arrays.asList("A", "B", "C", "D", "E"));
+        // B part
+        dataObjectMapAllFuture = loadingCacheAllAsync
+                .getAll(Arrays.asList("A", "B", "C", "D", "E", "F"));
 
-        for (Map.Entry<String, DataObject> entry : dataObjectMapAllFuture.get().entrySet()) {
-            logger.info("entry is {}, {}. ", entry.getKey(), entry.getValue().getData());
+        for (Map.Entry<String, DataObject> entry : loadingCacheAllAsync
+                .getAll(Arrays.asList("A", "B", "C", "D", "E", "F")).get().entrySet()) {
+            logger.info("here01 entry is {}, {}. ", entry.getKey(), entry.getValue().getData());
         }
+        loadingCacheAllAsync.synchronous().invalidateAll();
+        //        loadingCacheAllAsync.synchronous().cleanUp();
+        //        loadingCacheAllAsync.asMap().remove("A").get();
+        //        loadingCacheAllAsync.get("A").get();
+
+        //
+        logger.info("start 02. ");
+        for (Map.Entry<String, DataObject> entry : loadingCacheAllAsync
+                .getAll(Arrays.asList("A", "B", "C", "D", "E", "F")).get().entrySet()) {
+            logger.info("here02 entry is {}, {}. ", entry.getKey(), entry.getValue().getData());
+        }
+
+        Map<String, AsyncLoadingCache<DataObject, Map<Integer, String>>> tenantToCacheMap = new ConcurrentHashMap<>();
+        AsyncLoadingCache<DataObject, Map<Integer, String>> a1 = tenantToCacheMap.get("a");
+        //        tenantToCacheMap.put("a", null);
+        //        tenantToCacheMap.put(null, null);
+
+        int int01 = 5;
+        int int02 = 5;
+        Integer int03 = 6;
+        byte byte01 = (byte) int01;
+        byte byte02 = (byte) int02;
+        System.out.println("equals? " + (byte01 == byte02));
+        System.out.println("equals03? " + (byte01 == int03));
 
         //
         System.out.println("==========");
 
         Long minuteWindow = 60 * 1000L;
         //        Long timestamp = System.currentTimeMillis();
-        //        Long timestamp = 1646634070514L;
-        Long timestamp = 1646634060000L;
+        Long timestamp = 1646634070514L;
+        //        Long timestamp = 1646634060000L;
 
         Long timestamp01 = timestamp - timestamp % minuteWindow;
 
@@ -159,7 +213,7 @@ public class Test {
 
         //
         System.out.println("===========");
-        Long timestamp03 = 1646634070514L;
+        Long timestamp03 = 1646634190515L;
         Long timestamp03_01 = 2147483647L;
         Long timestamp03_02 = 1646634060L;
         Long timestamp03Minute = timestamp03 - timestamp03 % minuteWindow;
@@ -171,6 +225,12 @@ public class Test {
 
         int timestamp03Truncate = truncateByMinute(timestamp03);
         System.out.println("timestamp03Truncate: " + timestamp03Truncate);
+        long leftSlowBucketedStart = timestamp03Truncate - timestamp03Truncate % 5 + 5;
+        long test01 = truncateByMinute(timestamp03 - timestamp03 % 5 + 5);
+
+        //
+        long aa01 = timestamp03Truncate * 1000L;
+        long aa01_02 = (aa01 - aa01 % 5 + 5) / 1000;
 
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         stringIntegerMap.put("3", 3);
@@ -205,5 +265,9 @@ public class Test {
 
     public static int truncateByMinute(Long timestamp) {
         return (int) ((timestamp - timestamp % 60000) / 1000);
+    }
+
+    public static Long reverseFromCacheKeyTime(Long time) {
+        return (long) (time * 1000);
     }
 }

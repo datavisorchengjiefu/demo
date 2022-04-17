@@ -19,6 +19,8 @@ package com.fcjexample.demo.test.caffeine;
 
 import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +30,14 @@ import java.util.function.Supplier;
 
 public class CacheLoaderTestAsync implements AsyncCacheLoader<String, DataObject> {
 
+    private static final Logger logger = LoggerFactory.getLogger(CacheLoaderTestAsync.class);
+
     @Override public @NonNull CompletableFuture<DataObject> asyncLoad(@NonNull String key,
             @NonNull Executor executor) {
         CompletableFuture<DataObject> future = CompletableFuture.supplyAsync(
                 new Supplier<DataObject>() {
                     @Override public DataObject get() {
+                        logger.info("start get. ");
                         return DataObject.get("load Data01 ha for " + key);
                     }
                 });
@@ -47,7 +52,9 @@ public class CacheLoaderTestAsync implements AsyncCacheLoader<String, DataObject
                 new Supplier<Map<String, DataObject>>() {
                     @Override public Map<String, DataObject> get() {
                         Map<String, DataObject> map = new HashMap<>();
+                        logger.info("start loadAll");
                         for (String key : keys) {
+                            logger.info("key is {}", key);
                             if ("A".equals(key) || "D".equals(key)) {
                                 map.put(key, DataObject.get("loadAll Data02 ha for " + key));
                             }

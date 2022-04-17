@@ -103,6 +103,10 @@ public class Test {
 
     private static double testHaohui() {
         Integer integer = new Integer(0);
+        Integer integer02 = new Integer(100000);
+        short short01 = integer.shortValue();
+        short short02 = integer02.shortValue();
+
         String str = "" + integer;
         String uml_response01 = null;
         String umlResponse = (String) uml_response01;
@@ -142,7 +146,9 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
-        //        testHaohui();
+        Map<String, String> conMap01 = new ConcurrentHashMap<>();
+        testHaohui();
+        //        testBlibli();
 
         String splitS = "3,,5";
         String splitS02 = "3,,5,";
@@ -402,8 +408,11 @@ public class Test {
         System.out.println(list002.size());
         list002.addAll(list001);
         List<TestEntity02> list = new ArrayList<>();
-        list.add(new TestEntity02(10L, "tttname", "ttt"));
-        list.stream().map(s -> s.getName()).collect(Collectors.toList());
+        list.add(null);
+        //        list.add(new TestEntity02(10L, "tttname", "ttt"));
+        //        list.add(null);
+        //        list.stream().map(s -> s.getName()).collect(Collectors.toList());
+        System.out.println("is empty? " + list.isEmpty());
 
         String wenzheng = "null";
         String wenzheng1 = null;
@@ -1032,6 +1041,33 @@ public class Test {
             throw new org.apache.commons.lang3.NotImplementedException(
                     "Given constant type is not supported: " + simpleTypeName);
         }
+    }
+
+    public static void testBlibli() {
+        String externalEventLine = "[{\"id\": \"eventId003\",\"name\": \"eventName003\",\"time\": 10008,\"fields\": {\"1\": \"10008\",\"2\": \"userId11\",\"3\": \"201\"}}]";
+        String externalEventLine01 = "        {\n"
+                + "            \"id\": \"eventId003\",\n"
+                + "            \"name\": \"eventName003\",\n"
+                + "            \"time\": 10007,\n"
+                + "            \"fields\": {\n"
+                + "                \"1\": \"10007\",\n"
+                + "                \"2\": \"userId11\",\n"
+                + "                \"3\": \"200\"\n"
+                + "            }\n"
+                + "        }";
+
+        if (externalEventLine == null) {
+        }
+        Object obj = JSONValue.parse(externalEventLine);
+        JSONArray jsonArray = (JSONArray) obj;
+        Set<String> brandNameset = new HashSet<String>();
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject jo = (JSONObject) jsonArray.get(i);
+            brandNameset.add(jo.get("productTypeCode").toString());
+        }
+        brandNameset.stream().sorted(Comparator.reverseOrder());
+        String str = String.join("@", brandNameset);
     }
 
 }

@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TestMain03 {
 
@@ -40,6 +41,16 @@ public class TestMain03 {
         testEntity02Set.add(testEntity0201);
         testEntity02Set.add(testEntity0202);
         testEntity02Set.add(testEntity0203);
+
+        Map<String, TestEntity02> stringTestMain02Map = new ConcurrentHashMap<>();
+        stringTestMain02Map.putIfAbsent("1", testEntity0201);
+        stringTestMain02Map.putIfAbsent("1", testEntity0202);
+        //        testEntity0201.setName("02_02");// useful
+        //        testEntity0201 = null; // no use
+        //        stringTestMain02Map.put("1", null);// fail
+        stringTestMain02Map.remove("1");
+        testEntity0201 = null;
+        stringTestMain02Map.putIfAbsent("1", testEntity0203);
 
         List<TestEntity02> list01 = new ArrayList<>(testEntity02Set);
         System.out.println(list01.size());
@@ -84,7 +95,7 @@ public class TestMain03 {
         TestEntity02 testEntity02 = new TestEntity02(12L, "user01", "h1");
         TestEntity02 testEntity03 = new TestEntity02(12L, "user01", "h1");
         testEntity02.setTimeout(89L);
-//        testEntity02.setTimeout(null);
+        //        testEntity02.setTimeout(null);
         testEntity02.setHeight(37);
         //        Long time = null;
         //        testEntity02.setHeight(time);

@@ -144,6 +144,46 @@ public class AggFunction {
         return Base64.getEncoder().encodeToString(union.getResult().toByteArray());
     }
 
+    public Object mergetestCount(Object o1, Object o2) {
+        if (o1 instanceof Long)
+            return (Long) o1 + (Long) o2;
+        else
+            return Long.valueOf((String) o1) + Long.valueOf((String) o2);
+    }
+
+    public Object mergetestCountV2(Object o1, Object o2) {
+        if (o1 == null)
+            o1 = "0";
+        if (o2 == null)
+            o2 = "0";
+        if (o1 instanceof Long)
+            return (Long) o1 + (Long) o2;
+        else
+            return Long.valueOf((String) o1) + Long.valueOf((String) o2);
+    }
+
+    public Object mergetestSum(Object o1, Object o2) {
+
+
+
+        if (o1 instanceof Long)
+            return (Long) o1 + (Long) o2;
+        else
+            return Long.valueOf((String) o1) + Long.valueOf((String) o2);
+
+    }
+
+    public Object mergetestSumV2(Object o1, Object o2) {
+        if (o1 == null)
+            o1 = "0";
+        if (o2 == null)
+            o2 = "0";
+        if (o1 instanceof Long)
+            return (Long) o1 + (Long) o2;
+        else
+            return Long.valueOf((String) o1) + Long.valueOf((String) o2);
+    }
+
     public Object getResult(String accumulator) throws Exception {
         final int lgK = 11;
         byte[] decodedBytes = Base64.getDecoder().decode(accumulator);

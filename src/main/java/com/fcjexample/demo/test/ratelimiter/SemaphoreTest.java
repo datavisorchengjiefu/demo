@@ -83,6 +83,8 @@ public class SemaphoreTest {
 
         @Override public void run() {
             try {
+                logger.info("num is {}. ", atomicInteger.getAndIncrement());
+                //                Thread.sleep(1000 * atomicInteger.getAndIncrement());
                 Thread.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();

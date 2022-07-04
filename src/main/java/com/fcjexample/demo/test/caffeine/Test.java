@@ -37,6 +37,13 @@ public class Test {
     private static final Logger logger = LoggerFactory.getLogger(Test.class);
 
     public static void main(String[] args) throws Exception {
+        boolean b1 = NumberUtils.isParsable("20");
+        boolean b2 = NumberUtils.isParsable("20.0");
+        logger.info("b1 is {}", b1);
+        logger.info("b2 is {}", b2);
+        Long l1 = Long.parseLong("20");
+        //        Long l2 = Long.parseLong("20.0");
+
         Long longtest01 = Long.valueOf("09") + 3;
         String s01 = "test";
         String s02 = "2.03";

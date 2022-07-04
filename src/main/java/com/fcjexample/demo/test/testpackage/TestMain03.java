@@ -29,6 +29,12 @@ public class TestMain03 {
     private static final Logger logger = LoggerFactory.getLogger(TestMain03.class);
 
     public static void main(String[] args) throws ClassNotFoundException {
+        Map<Integer, Boolean> accumulatorDimMisMatch = new HashMap<>();
+        accumulatorDimMisMatch.put(1, true);
+        logger.info("1: {}. ", accumulatorDimMisMatch.get(1));
+        logger.info("1: {}. ", accumulatorDimMisMatch.get(2));
+        //        logger.info("1: {}. ", (false == accumulatorDimMisMatch.get(2)));// NPE
+        //        logger.info("1: {}. ", (accumulatorDimMisMatch.get(2) == false));// NPE
 
         TestEntity02 testEntity0201 = new TestEntity02();
         testEntity0201.setName("01");

@@ -145,7 +145,32 @@ public class Test {
         return scoreInDouble;
     }
 
+    private static void testSub(TestEntity testEntity) {
+        testEntity.setName("01");
+        testEntity.setDesc("02");
+    }
+
     public static void main(String[] args) throws Exception {
+        TestEntity testEntity062601 = new TestEntity("name01", "desc01");
+        TestEntity testEntity062602 = new TestEntity("name02", "desc02");
+
+        testSub(testEntity062601);
+        StringBuilder stringBuilder01 = new StringBuilder();
+        stringBuilder01.append("test01");
+        stringBuilder01.append("test02");
+        stringBuilder01.append("test03");
+
+        stringBuilder01.deleteCharAt(stringBuilder01.length() - 1);
+        stringBuilder01.deleteCharAt(stringBuilder01.length() - 2);
+
+        Map<String, String> map20220421 = new HashMap<>();
+        String valueMap20220421v1 = map20220421.putIfAbsent("1", "testv1");
+        String valueMap20220421 = map20220421.computeIfAbsent("1", new Function<String, String>() {
+            @Override public String apply(String s) {
+                return "testv2";
+            }
+        });
+
         Map<String, String> conMap01 = new ConcurrentHashMap<>();
         testHaohui();
         //        testBlibli();
@@ -479,6 +504,8 @@ public class Test {
         json.put("codeId", "12");
         // 11
         json.put("codeKey", "1234");
+        String jsonString = json.toJSONString();
+        String string01 = json.toString();
         int jsonLength = json.toJSONString().length();
         int endIndexException = Math.min(240 - jsonLength, s.length());
 
@@ -869,6 +896,7 @@ public class Test {
 
         System.out.println(ruleResultMap);
         System.out.println(ruleResultMapShallow);
+        executorService.shutdown();
 
         System.out.println("==============");
         Boolean testyushu = new Boolean("TRUE");

@@ -35,6 +35,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
+import scala.Tuple2;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -151,6 +152,11 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
+        Date date0704 = new Date(System.currentTimeMillis());
+        Date date0704V1 = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String lastEventTimeStrha = dateFormat.format(date0704V1);
+
         TestEntity testEntity062601 = new TestEntity("name01", "desc01");
         TestEntity testEntity062602 = new TestEntity("name02", "desc02");
 
@@ -235,6 +241,7 @@ public class Test {
         String s20210927 = String.valueOf(int2021092701);
         String s2021092702 = String.valueOf(int2021092701);
         String ddd = String.valueOf(int2021092702);
+        Object testhaha = "test";
 
         //        Integer aggLevel01 = 24 * 60 * 60 * 180 * 1000;
         Integer aggLevel01 = 24 * 60 * 60 * 180;
@@ -244,6 +251,25 @@ public class Test {
         testEntity.setDesc("hhh");
         ObjectMapper objectMapper = new ObjectMapper();
         String str = objectMapper.writeValueAsString(null);
+        String str01 = objectMapper.writeValueAsString(new Integer(3));
+        String str02 = objectMapper.writeValueAsString("testha");
+        String str021 = objectMapper.writeValueAsString("testha" + 8);
+        String str022 = objectMapper.writeValueAsString(s20210927);
+        String str023 = objectMapper.writeValueAsString(flag01);
+        String str024 = objectMapper.writeValueAsString(testhaha);
+        String str03 = objectMapper.writeValueAsString(testEntity);
+        String str04 = objectMapper.writeValueAsString(4);
+        String str05 = objectMapper.writeValueAsString(map20220421);
+        String ttt = "if ($ConnectedTime == null || $Duration == null){\n"
+                + "    return \"\";\n"
+                + "}\n"
+                + "\n"
+                + "long second = TimeLib.toTimestamp($ConnectedTime, \"yyyy-MM-dd HH:mm:ss.SSS\");\n"
+                + "long num = Long.parseLong($Duration) * 1000;\n"
+                + "long res = num + second;\n"
+                + "\n"
+                + "String result = TimeLib.parseTimestampToStrFormat(res, \"yyyy-MM-dd HH:mm:ss.SSS\");\n"
+                + "return result;";
         float f20210906 = 0.12345f;
         String s20210906 = String.format("%.3f", f20210906);
         System.out.println(s20210906);
@@ -1096,6 +1122,28 @@ public class Test {
         }
         brandNameset.stream().sorted(Comparator.reverseOrder());
         String str = String.join("@", brandNameset);
+    }
+
+    public List<Map<String, Tuple2<String, String>>> eval(Object inputObject) throws Exception {
+        Map<String, String> typeMap = new HashMap<>();
+        typeMap.put("userId", "String");
+        typeMap.put("time", "Long");
+        typeMap.put("device", "String");
+        typeMap.put("city", "String");
+        typeMap.put("amount", "Long");
+
+        Map<String, Tuple2<String, String>> fieldToValueMap = new HashMap<>();
+        String content = (String) inputObject;
+        Map<String, Object> contentJson = (Map<String, Object>) (new JSONParser()).parse(content);
+        for (String key : contentJson.keySet()) {
+            if (typeMap.get(key).equalsIgnoreCase("String")) {
+                fieldToValueMap
+                        .put(key, new Tuple2<>("String", contentJson.get(key).toString()));
+            } else if (typeMap.get(key).equalsIgnoreCase("Long")) {
+                fieldToValueMap.put(key, new Tuple2<>("Long", contentJson.get(key).toString()));
+            }
+        }
+        return Arrays.asList(fieldToValueMap);
     }
 
 }

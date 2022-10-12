@@ -176,6 +176,11 @@ public class Test {
                 return "testv2";
             }
         });
+        String valueMap20220422 = map20220421.computeIfAbsent("2", new Function<String, String>() {
+            @Override public String apply(String s) {
+                return "testv2";
+            }
+        });
 
         Map<String, String> conMap01 = new ConcurrentHashMap<>();
         testHaohui();

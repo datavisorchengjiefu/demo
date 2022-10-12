@@ -37,4 +37,15 @@ public class HelloServiceImpl implements HelloService {
         logger.info("exit sayHello. ");
         return "haha6666";
     }
+
+    @Override public String sayHelloV2() {
+        logger.info("enter sayHello. ");
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            logger.error("interrupted. ", e);
+        }
+        logger.info("exit sayHello. ");
+        return "haha6666";
+    }
 }

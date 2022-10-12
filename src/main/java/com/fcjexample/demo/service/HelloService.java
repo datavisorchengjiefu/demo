@@ -19,4 +19,5 @@ package com.fcjexample.demo.service;
 
 public interface HelloService {
     String sayHello();
+    String sayHelloV2();
 }

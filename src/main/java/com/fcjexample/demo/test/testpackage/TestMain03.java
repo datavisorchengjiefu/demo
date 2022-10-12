@@ -51,6 +51,7 @@ public class TestMain03 {
         Map<String, TestEntity02> stringTestMain02Map = new ConcurrentHashMap<>();
         stringTestMain02Map.putIfAbsent("1", testEntity0201);
         stringTestMain02Map.putIfAbsent("1", testEntity0202);
+        stringTestMain02Map.putIfAbsent("2", testEntity0202);
         //        testEntity0201.setName("02_02");// useful
         //        testEntity0201 = null; // no use
         //        stringTestMain02Map.put("1", null);// fail

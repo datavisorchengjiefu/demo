@@ -18,24 +18,85 @@
 package com.fcjexample.demo.service.Impl;
 
 import com.fcjexample.demo.model.TestEntity;
+import com.fcjexample.demo.quartz.SimpleJob;
 import com.fcjexample.demo.service.DataViewService;
 import com.fcjexample.demo.util.exception.DataViewException;
 import com.fcjexample.demo.util.exception.ViewTypeException;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.quartz.JobBuilder.newJob;
+
 @Service
 public class DataViewServiceImpl implements DataViewService {
+    private static final Logger logger = LoggerFactory.getLogger(DataViewServiceImpl.class);
 
     @EventListener
     public void onApplicationEvente(ContextRefreshedEvent event) throws Exception {
-
+        logger.info("listener ha! ");
+        test();
         System.out.println("listenerhaha.");
 
+    }
+
+    private void test() throws SchedulerException {
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        try {
+
+            // define the job and tie it to our HelloJob class
+            //            JobDetail job01 = newJob(SimpleJob.class)
+            //                    .withIdentity("job1", "group1")
+            //                    .usingJobData("jobSays", "Hello World!")
+            //                    .usingJobData("myFloatValue", 3.141f)
+            //                    .build();
+
+            JobDetail job02 = newJob(SimpleJob.class)
+                    .withIdentity("job2", "group2")
+                    .usingJobData("jobSays", "Hello World2!")
+                    .usingJobData("myFloatValue", 2f)
+                    .build();
+
+            //
+            //            CronTrigger trigger01 = TriggerBuilder.newTrigger()
+            //                    .withIdentity("trigger1", "groupT1")
+            //                    .withSchedule(CronScheduleBuilder.cronSchedule("0/10 * * * * ?"))
+            //                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
+            //                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10-19 * * ?"))
+            //                    //                    .forJob("myJob", "myGroup")// the key is different
+            //                    //                    .forJob("job1", "group1")
+            //                    .build();
+
+            CronTrigger trigger02 = TriggerBuilder.newTrigger()
+                    .withIdentity("trigger2", "groupT2")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
+                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
+                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10-19 * * ?"))
+                    //                    .forJob("myJob", "myGroup")// the key is different
+                    //                    .forJob("job1", "group1")
+                    .build();
+            //            trigger02.
+
+            // Tell quartz to schedule the job using our trigger
+            //            scheduler.scheduleJob(job01, trigger01);
+
+            scheduler.scheduleJob(job02, trigger02);
+
+            // and start it off
+            scheduler.start();
+            logger.info("Current time is {}", new Date());
+        } catch (Exception e) {
+            logger.error("There is error. ", e);
+        }
     }
 
     @Override public String publishDataView(String tenant) {

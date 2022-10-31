@@ -152,6 +152,13 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
+        String[] strings2022 = new String[] { "java", "c", "python" };
+        List<String> stringList = new ArrayList<>(Arrays.asList(strings2022));
+        stringList.add(stringList.size() - 2, "test01");
+        stringList.add(stringList.size() - 2, "test02");
+        stringList.add(stringList.size() - 1, "test03");
+        stringList.add(stringList.size(), "test04");
+
         Date date0704 = new Date(System.currentTimeMillis());
         Date date0704V1 = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");

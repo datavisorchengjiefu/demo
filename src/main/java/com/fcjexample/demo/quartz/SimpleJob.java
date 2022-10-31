@@ -17,9 +17,11 @@
 
 package com.fcjexample.demo.quartz;
 
+import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.service.BeanUtil;
 import com.fcjexample.demo.service.HelloService;
 import com.fcjexample.demo.service.Impl.HelloServiceImpl;
+import com.fcjexample.demo.util.storage.TenantContext;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -51,13 +53,21 @@ public class SimpleJob implements Job {
         logger.info("========================");
         logger.info("This is a quartz job! {}. ", new Date());
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+        logger.info("execute tenant is  {}. ", TenantContext.getTenant());
+        TenantContext.setTenant(dataMap.getString("tenantName"));
+        logger.info("later execute tenant is  {}. ", TenantContext.getTenant());
 
         String jobSays = dataMap.getString("jobSays");
         float myFloatValue = dataMap.getFloat("myFloatValue");
         logger.info("Job says: {}, and val is: {}", jobSays, myFloatValue);
-        logger.info("JobDetail key is {}, {}. ", context.getJobDetail().getKey().getGroup(),
-                context.getJobDetail().getKey().getName());
+        logger.info("JobDetail key is {}. ", context.getJobDetail().getKey());
         logger.info("execute simpleJob");
+        logger.info("context ha 01 is {}", context.getJobDetail().getJobDataMap());
+
+        logger.info("context ha 02 is {}", dataMap.get("entityKey02"));
+        TestEntity02 testEntity02 = (TestEntity02) dataMap.get("entityKey02");
+
+        logger.info("context ha 03 is {}", testEntity02.getTimeout());
         hello.sayHelloV2();
     }
 

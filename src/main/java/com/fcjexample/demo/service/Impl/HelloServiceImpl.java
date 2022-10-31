@@ -18,6 +18,7 @@
 package com.fcjexample.demo.service.Impl;
 
 import com.fcjexample.demo.service.HelloService;
+import com.fcjexample.demo.util.storage.TenantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,7 @@ public class HelloServiceImpl implements HelloService {
     }
 
     @Override public String sayHelloV2() {
-        logger.info("enter sayHello. ");
+        logger.info("enter sayHello. {}. ", TenantContext.getTenant());
         try {
             Thread.sleep(20);
         } catch (InterruptedException e) {

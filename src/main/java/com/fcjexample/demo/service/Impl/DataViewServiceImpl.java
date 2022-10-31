@@ -17,11 +17,13 @@
 
 package com.fcjexample.demo.service.Impl;
 
+import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.quartz.SimpleJob;
 import com.fcjexample.demo.service.DataViewService;
 import com.fcjexample.demo.util.exception.DataViewException;
 import com.fcjexample.demo.util.exception.ViewTypeException;
+import com.fcjexample.demo.util.storage.TenantContext;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -60,10 +62,19 @@ public class DataViewServiceImpl implements DataViewService {
             //                    .usingJobData("myFloatValue", 3.141f)
             //                    .build();
 
+            String tenantName = "tenant01";
+            TenantContext.setTenant(tenantName);
+
+            TestEntity02 testEntity02 = new TestEntity02(10L, "name01", "address11");
+            JobDataMap jobDataMap = new JobDataMap();
+            jobDataMap.put("entityKey02", testEntity02);
+
             JobDetail job02 = newJob(SimpleJob.class)
                     .withIdentity("job2", "group2")
                     .usingJobData("jobSays", "Hello World2!")
                     .usingJobData("myFloatValue", 2f)
+                    .usingJobData(jobDataMap)
+                    .usingJobData("tenantName", tenantName)
                     .build();
 
             //

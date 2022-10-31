@@ -63,4 +63,13 @@ public class TestEntity02 {
     public void setTimeout(Long timeout) {
         this.timeout = timeout;
     }
+
+    @Override public String toString() {
+        return "TestEntity02{" +
+                "timeout=" + timeout +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", height=" + height +
+                '}';
+    }
 }

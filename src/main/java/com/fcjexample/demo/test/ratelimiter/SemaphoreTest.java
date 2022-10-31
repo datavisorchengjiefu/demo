@@ -70,8 +70,9 @@ public class SemaphoreTest {
 
         @Override public void run() {
             try {
-                logger.info("num is {}. ", atomicInteger.get());
-                Thread.sleep(1000 * atomicInteger.getAndIncrement());
+                int num = atomicInteger.getAndIncrement();
+                logger.info("num is {}. ", num);
+                Thread.sleep(1000 * num);
                 //                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -85,7 +86,7 @@ public class SemaphoreTest {
             try {
                 logger.info("num is {}. ", atomicInteger.getAndIncrement());
                 //                Thread.sleep(1000 * atomicInteger.getAndIncrement());
-                Thread.sleep(5);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

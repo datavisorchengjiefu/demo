@@ -17,6 +17,8 @@
 
 package com.fcjexample.demo.quartz;
 
+import com.fcjexample.demo.entity.TestEntity02;
+import com.fcjexample.demo.util.storage.TenantContext;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -37,11 +39,23 @@ public class QuartzTest {
         Scheduler scheduler = schedulerFactory.getScheduler();
         try {
 
+            String tenantName = "tenant01";
+            TenantContext.setTenant(tenantName);
+
+            TestEntity02 testEntity02 = new TestEntity02(10L, "name01", "address11");
+            JobDataMap jobDataMap = new JobDataMap();
+            jobDataMap.put("entityKey02", testEntity02);
+            jobDataMap.put("tenantName", tenantName);
+
+            logger.info("testEntity02 is {}", testEntity02);
+
             // define the job and tie it to our HelloJob class
             JobDetail job01 = newJob(SimpleJob.class)
                     .withIdentity("job1", "group1")
                     .usingJobData("jobSays", "Hello World!")
                     .usingJobData("myFloatValue", 3.141f)
+                    .usingJobData(jobDataMap)
+                    //                    .usingJobData("tenantName", tenantName)
                     .build();
 
             JobDetail job02 = newJob(SimpleJob.class)
@@ -82,7 +96,7 @@ public class QuartzTest {
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(job01, trigger01);
 
-            scheduler.scheduleJob(job02, trigger02);
+            //            scheduler.scheduleJob(job02, trigger02);
 
             // and start it off
             scheduler.start();
@@ -126,6 +140,8 @@ public class QuartzTest {
         } catch (Exception e) {
             logger.error("Failed. ", e);
             scheduler.shutdown(true);
+        } finally {
+            TenantContext.reset();
         }
     }
 }

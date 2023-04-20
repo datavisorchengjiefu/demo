@@ -37,6 +37,10 @@ public class QuartzTest {
         //            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
+        // and start it off
+        scheduler.start();
+        logger.info("Current time is {}", new Date());
+
         try {
 
             String tenantName = "tenant01";
@@ -46,6 +50,7 @@ public class QuartzTest {
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.put("entityKey02", testEntity02);
             jobDataMap.put("tenantName", tenantName);
+            TestEntity02 testEntity888 = testEntity02;
 
             logger.info("testEntity02 is {}", testEntity02);
 
@@ -58,11 +63,11 @@ public class QuartzTest {
                     //                    .usingJobData("tenantName", tenantName)
                     .build();
 
-            JobDetail job02 = newJob(SimpleJob.class)
-                    .withIdentity("job2", "group2")
-                    .usingJobData("jobSays", "Hello World2!")
-                    .usingJobData("myFloatValue", 2f)
-                    .build();
+            //            JobDetail job02 = newJob(SimpleJob.class)
+            //                    .withIdentity("job2", "group2")
+            //                    .usingJobData("jobSays", "Hello World2!")
+            //                    .usingJobData("myFloatValue", 2f)
+            //                    .build();
 
             // compute a time that is on the next round minute
             Date runTime = evenMinuteDate(new Date());
@@ -76,40 +81,37 @@ public class QuartzTest {
             //
             CronTrigger trigger01 = TriggerBuilder.newTrigger()
                     .withIdentity("trigger1", "groupT1")
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0/10 * * * * ?"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * * * ?"))
                     //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
                     //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10-19 * * ?"))
                     //                    .forJob("myJob", "myGroup")// the key is different
                     //                    .forJob("job1", "group1")
                     .build();
 
-            CronTrigger trigger02 = TriggerBuilder.newTrigger()
-                    .withIdentity("trigger2", "groupT2")
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
-                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
-                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10-19 * * ?"))
-                    //                    .forJob("myJob", "myGroup")// the key is different
-                    //                    .forJob("job1", "group1")
-                    .build();
+            //            CronTrigger trigger02 = TriggerBuilder.newTrigger()
+            //                    .withIdentity("trigger2", "groupT2")
+            //                    .withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * * * ?"))
+            //                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
+            //                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10-19 * * ?"))
+            //                    //                    .forJob("myJob", "myGroup")// the key is different
+            //                    //                    .forJob("job1", "group1")
+            //                    .build();
             //            trigger02.
 
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(job01, trigger01);
-
+            Thread.sleep(1000);
+            logger.info("sleep finish. ");
             //            scheduler.scheduleJob(job02, trigger02);
-
-            // and start it off
-            scheduler.start();
-            logger.info("Current time is {}", new Date());
 
             Thread.sleep(10L * 1000L);
 
             // 1. delete
-            logger.info("job02 key is {}. ", job02.getKey());
-            scheduler.deleteJob(job02.getKey());
-            // delete multiple times or delete non job is fine.
-            scheduler.deleteJob(job02.getKey());
-            scheduler.deleteJob(new JobKey("testName", "testGroup"));
+            //            logger.info("job02 key is {}. ", job02.getKey());
+            //            scheduler.deleteJob(job02.getKey());
+            //            // delete multiple times or delete non job is fine.
+            //            scheduler.deleteJob(job02.getKey());
+            //            scheduler.deleteJob(new JobKey("testName", "testGroup"));
 
             // 2. pause: no work???
             //            scheduler.pauseJob(job02.getKey());

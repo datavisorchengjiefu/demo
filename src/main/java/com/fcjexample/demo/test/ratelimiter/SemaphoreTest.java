@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
+import java.util.stream.IntStream;
 
 /**
  * 这个是控制了整体的个数qps
@@ -34,6 +34,8 @@ public class SemaphoreTest {
     static AtomicInteger atomicInteger = new AtomicInteger(1);
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        long bytesToSkip = (long) (22221 * (1 - 0.01));
+
         ExecutorService pool = Executors.newFixedThreadPool(50);
         Semaphore semaphore = new Semaphore(3);
         int num = 6;
@@ -41,19 +43,39 @@ public class SemaphoreTest {
 
         long startTime = System.currentTimeMillis();
 
-        for (int i = 0; i < num; i++) {
-            //            list.add(pool.submit(new Task()));
-            semaphore.acquireUninterruptibly();
-            //            Future future = pool.submit(new Task());
-            CompletableFuture f = CompletableFuture.runAsync(new Task(), pool);
-            f.whenComplete(new BiConsumer() {
-                @Override public void accept(Object o, Object o2) {
-                    semaphore.release();
-                }
-            });
-            list.add(f);
+        //        for (int i = 0; i < num; i++) {
+        //            //            list.add(pool.submit(new Task()));
+        //            semaphore.acquireUninterruptibly();
+        //            CompletableFuture f = CompletableFuture.runAsync(new Task(), pool);
+        //            f.whenComplete(new BiConsumer() {
+        //                @Override public void accept(Object o, Object o2) {
+        //                    semaphore.release();
+        //                }
+        //            });
+        //            list.add(f);
+        //
+        //            //            Thread.sleep(10);
+        //            //            Thread.sleep(2000);
+        //            //            semaphore.release();
+        //
+        //        }
 
-        }
+        IntStream.range(1, 31).forEach(i -> {
+            list.add(pool.submit(new Runnable() {
+                @Override public void run() {
+                    semaphore.acquireUninterruptibly();
+                    logger.info("num1108 is {}", atomicInteger.getAndIncrement());
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        semaphore.release();
+                    }
+                    logger.info("num1109 is {}", atomicInteger.getAndDecrement());
+                }
+            }));
+        });
 
         for (Future future : list) {
             future.get();
@@ -70,10 +92,11 @@ public class SemaphoreTest {
 
         @Override public void run() {
             try {
-                int num = atomicInteger.getAndIncrement();
-                logger.info("num is {}. ", num);
+                //                int num = atomicInteger.getAndIncrement();
+                int num = 1;
+                logger.info("Task num is {}. ", num);
                 Thread.sleep(1000 * num);
-                //                Thread.sleep(500);
+                //                Thread.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -84,8 +107,10 @@ public class SemaphoreTest {
 
         @Override public void run() {
             try {
-                logger.info("num is {}. ", atomicInteger.getAndIncrement());
+                logger.info("TaskV2 num is {}. ", atomicInteger.getAndIncrement());
                 //                Thread.sleep(1000 * atomicInteger.getAndIncrement());
+                //                Thread.sleep(1000);
+                //                Thread.sleep(10);
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -17,27 +17,22 @@
 
 package com.fcjexample.demo.quartz;
 
-import com.fcjexample.demo.entity.TestEntity02;
-import com.fcjexample.demo.service.BeanUtil;
 import com.fcjexample.demo.service.HelloService;
-import com.fcjexample.demo.service.Impl.HelloServiceImpl;
-import com.fcjexample.demo.util.storage.TenantContext;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+@PersistJobDataAfterExecution
+@DisallowConcurrentExecution
 public class SimpleJob implements Job {
     private static final Logger logger = LoggerFactory.getLogger(SimpleJob.class);
 
     // work
     public SimpleJob() {
         logger.info("create a new simpleJob");
-        hello = BeanUtil.getBean(HelloServiceImpl.class);
+        //        hello = BeanUtil.getBean(HelloServiceImpl.class);
         //        this.hello = BeanUtil.getBean(HelloServiceImpl.class);
     }
 
@@ -51,24 +46,31 @@ public class SimpleJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         logger.info("========================");
-        logger.info("This is a quartz job! {}. ", new Date());
-        JobDataMap dataMap = context.getJobDetail().getJobDataMap();
-        logger.info("execute tenant is  {}. ", TenantContext.getTenant());
-        TenantContext.setTenant(dataMap.getString("tenantName"));
-        logger.info("later execute tenant is  {}. ", TenantContext.getTenant());
+        logger.info("This is a quartz job! {}. {} ", context.getJobDetail().getKey(), new Date());
+        //        JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+        //        logger.info("execute tenant is  {}. ", TenantContext.getTenant());
+        //        TenantContext.setTenant(dataMap.getString("tenantName"));
+        //        logger.info("later execute tenant is  {}. ", TenantContext.getTenant());
+        //
+        //        String jobSays = dataMap.getString("jobSays");
+        //        float myFloatValue = dataMap.getFloat("myFloatValue");
+        //        logger.info("Job says: {}, and val is: {}", jobSays, myFloatValue);
+        //        logger.info("JobDetail key is {}. ", context.getJobDetail().getKey());
+        //        logger.info("execute simpleJob");
+        //        logger.info("context ha 01 is {}", context.getJobDetail().getJobDataMap());
+        //
+        //        logger.info("context ha 02 is {}", dataMap.get("entityKey02"));
+        //        TestEntity02 testEntity02 = (TestEntity02) dataMap.get("entityKey02");
+        //
+        //        logger.info("context ha 03 is {}", testEntity02.getTimeout());
+        //        hello.sayHelloV2();
 
-        String jobSays = dataMap.getString("jobSays");
-        float myFloatValue = dataMap.getFloat("myFloatValue");
-        logger.info("Job says: {}, and val is: {}", jobSays, myFloatValue);
-        logger.info("JobDetail key is {}. ", context.getJobDetail().getKey());
-        logger.info("execute simpleJob");
-        logger.info("context ha 01 is {}", context.getJobDetail().getJobDataMap());
-
-        logger.info("context ha 02 is {}", dataMap.get("entityKey02"));
-        TestEntity02 testEntity02 = (TestEntity02) dataMap.get("entityKey02");
-
-        logger.info("context ha 03 is {}", testEntity02.getTimeout());
-        hello.sayHelloV2();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logger.info("quartz job finish. {}. ", context.getJobDetail().getKey());
     }
 
     private HelloService hello;

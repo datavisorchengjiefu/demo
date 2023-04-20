@@ -19,6 +19,7 @@ package com.fcjexample.demo.test.multithread;
 
 import org.junit.Test;
 
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -28,15 +29,34 @@ public class ScheduledThreadPoolExecutorTest {
     private static ScheduledThreadPoolExecutor executor;
     private static Runnable task;
     private static volatile boolean flag = true;
+    static ScheduledFuture scheduledFuture;
 
-    public static void main(String[] args) {
-        while (flag) {
-            executor = initExecutor();
-            task = initTask();
-            executor.scheduleWithFixedDelay(task, 1, 3, SECONDS);
-        }
+    public static void main(String[] args) throws Exception {
+        //        while (flag) { // wrong
+        executor = initExecutor();
+        task = initTask();
+        test();
+        //        }
 
-        executor.shutdown();
+        //        while (flag) {
+        //            executor.shutdown();
+        //        }
+    }
+
+    private static void test() throws Exception {
+        scheduledFuture = executor.scheduleWithFixedDelay(task, 1, 3, SECONDS);
+
+        print("before get");
+        //        if (scheduledFuture.isDone()) {
+        //            print("is done");
+        //        }
+        //        if (scheduledFuture.isCancelled()) {
+        //            print("is isCancelled");
+        //        }
+
+        //        scheduledFuture.get();
+        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        print("after get");
     }
 
     //    @Before
@@ -46,15 +66,20 @@ public class ScheduledThreadPoolExecutorTest {
     //    }
 
     private static ScheduledThreadPoolExecutor initExecutor() {
-        return new ScheduledThreadPoolExecutor(2);
+        return new ScheduledThreadPoolExecutor(1);
     }
 
     private static Runnable initTask() {
         long start = System.currentTimeMillis();
         return () -> {
             print("start task: " + getPeriod(start, System.currentTimeMillis()));
-            //            sleep(SECONDS, 10);
+            //                        sleep(SECONDS, 10);
             print("end task: " + getPeriod(start, System.currentTimeMillis()));
+            if (getPeriod(start, System.currentTimeMillis()) > 9) {
+                print("shutting down");
+                //                scheduledFuture.cancel(false);
+                executor.shutdown();
+            }
         };
     }
 

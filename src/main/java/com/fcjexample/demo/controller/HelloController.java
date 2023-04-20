@@ -90,6 +90,15 @@ public class HelloController {
         return result;
     }
 
+    @GetMapping("/test02")
+    public String test02Controller(
+            @RequestParam(value = "cpName", defaultValue = "") String cpName) {
+        LOGGER.info(Thread.currentThread().getName() + " 进入test01Controller方法");
+        String result = "ha " + cpName;
+        LOGGER.info(Thread.currentThread().getName() + " 从test01Controller方法返回");
+        return result;
+    }
+
     @GetMapping("/helloha")
     public Callable<String> helloController() {
         LOGGER.info(Thread.currentThread().getName() + " 进入helloController方法");

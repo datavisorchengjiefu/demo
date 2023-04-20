@@ -35,10 +35,10 @@ import java.util.stream.IntStream;
  */
 public class Test {
     private static final Logger logger = LoggerFactory.getLogger(Test.class);
-    static AtomicInteger atomicInteger = new AtomicInteger(1);
+    static AtomicInteger atomicInteger = new AtomicInteger(0);
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExecutorService pool = Executors.newFixedThreadPool(50);
+        ExecutorService pool = Executors.newFixedThreadPool(80);
 
         // given
         RateLimiter rateLimiter = RateLimiter.create(10);
@@ -47,21 +47,45 @@ public class Test {
 
         // when
         long startTime = System.currentTimeMillis();
-        IntStream.range(1, 51).forEach(i -> {
-            rateLimiter.acquire();
-            //            logger.info("rate is {}", rateLimiter.getRate());
-            //            doSomeLimitedOperation();
-            try {
-                doSomeLimitedOperationV2(pool);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //            list.add(pool.submit(new SemaphoreTest.Task()));
+
+        IntStream.range(1, 31).forEach(i -> {
+            list.add(pool.submit(new Runnable() {
+                @Override public void run() {
+                    rateLimiter.acquire();
+                    logger.info("num1108 is {}", atomicInteger.getAndIncrement());
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    logger.info("num1109 is {}", atomicInteger.getAndDecrement());
+                }
+            }));
         });
 
-        //        for (Future future : list) {
-        //            future.get();
-        //        }
+        //        IntStream.range(1, 31).forEach(i -> {
+        //            double waitTime = rateLimiter.acquire();
+        //            logger.info("time is {}", waitTime);
+        //            try {
+        //                Thread.sleep(3000);
+        //            } catch (InterruptedException e) {
+        //                e.printStackTrace();
+        //            }
+        //
+        //            //            logger.info("rate is {}", rateLimiter.getRate());
+        //            //            doSomeLimitedOperation();
+        //            //            try {
+        //            //                doSomeLimitedOperationV2(pool);
+        //            //            } catch (Exception e) {
+        //            //                e.printStackTrace();
+        //            //            }
+        //
+        //            //            list.add(pool.submit(new SemaphoreTest.Task()));
+        //        });
+
+        for (Future future : list) {
+            future.get();
+        }
         long elapsedTimeSeconds = System.currentTimeMillis() - startTime;
 
         System.out.println("elapsedTime: " + elapsedTimeSeconds);

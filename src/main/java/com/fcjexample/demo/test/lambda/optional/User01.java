@@ -71,6 +71,8 @@ public class User01 {
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(str);
             putUserIdAndFeatureValue(json, "user01", featureName, userNameToFeatureValueMap);
+            putUserIdAndFeatureValue(json, null, featureName, userNameToFeatureValueMap);
+
             putUserIdAndFeatureValue(json, "user02", featureName, userNameToFeatureValueMap);
             putUserIdAndFeatureValue(json, "user03", featureName, userNameToFeatureValueMap);
         }
@@ -115,9 +117,9 @@ public class User01 {
 
     private static void putUserIdAndFeatureValue(JSONObject json, String userId, String featureName,
             Map<String, List<String>> userNameToFeatureValueMap) {
-        if (userId.equals(json.get("user_id"))) {
+//        if (userId.equals(json.get("user_id"))) {
             userNameToFeatureValueMap.computeIfAbsent(userId, k -> new ArrayList<>());
             userNameToFeatureValueMap.get(userId).add((String) json.get(featureName));
-        }
+//        }
     }
 }

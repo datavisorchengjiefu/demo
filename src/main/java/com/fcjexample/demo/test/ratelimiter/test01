@@ -1,0 +1,144 @@
+{
+  "response_list": [
+    {
+      "node_infos": {
+        "DATA_VIEW_INSTANCE_28": {
+          "children": [],
+          "id": 28,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_26": {
+          "children": [],
+          "id": 26,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_7": {
+          "id": 7,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_9": {
+          "children": [],
+          "id": 9,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_150": {
+          "children": [],
+          "id": 150,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_29": {
+          "children": [],
+          "id": 29,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_130": {
+          "children": [],
+          "id": 130,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_250": {
+          "id": 250,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_132": {
+          "children": [],
+          "id": 132,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_131": {
+          "children": [],
+          "id": 131,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_134": {
+          "children": [],
+          "id": 134,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_133": {
+          "children": [],
+          "id": 133,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_136": {
+          "children": [],
+          "id": 136,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_157": {
+          "children": [],
+          "id": 157,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_135": {
+          "children": [],
+          "id": 135,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_159": {
+          "children": [],
+          "id": 159,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_2": {
+          "children": [],
+          "id": 2,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_161": {
+          "children": [],
+          "id": 161,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_160": {
+          "children": [],
+          "id": 160,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_162": {
+          "id": 162,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_145": {
+          "children": [],
+          "id": 145,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_147": {
+          "children": [],
+          "id": 147,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_146": {
+          "children": [],
+          "id": 146,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_127": {
+          "children": [],
+          "id": 127,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_148": {
+          "children": [],
+          "id": 148,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_129": {
+          "children": [],
+          "id": 129,
+          "category": "DATA_VIEW_INSTANCE"
+        },
+        "DATA_VIEW_INSTANCE_128": {
+          "children": [],
+          "id": 128,
+          "category": "DATA_VIEW_INSTANCE"
+        }
+      },
+      "root_node": {
+        "id": 2,
+        "category": "RULE_SET"
+      }
+    }
+  ]
+}

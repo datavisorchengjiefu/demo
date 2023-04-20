@@ -151,12 +151,48 @@ public class Test {
         testEntity.setDesc("02");
     }
 
+    // 可变参数作为参数的方法
+    public static void element(int... args) {
+        for (int arg : args) {
+            System.out.println(arg);
+        }
+    }
+
+    public static void element(String s, int... args) {
+        for (int arg : args) {
+            System.out.println(arg);
+        }
+    }
+
+    public static void element(Object... args) {
+        System.out.println(args.length);
+    }
+
     public static void main(String[] args) throws Exception {
+
+        //        //都可以
+        //        element(1, 2, 3);
+        //        int[] array = { 1, 2, 3 };
+        //        element(array);
+        //
+        //        //Integer[]可以转型为Object[],可以作为一个对象数组
+        //        element(new Integer[] { 1, 2, 3 });
+        //        //多个参数的话，Integer[]会被当做一个单纯的数组对象
+        //        element(1, new Integer[] { 2, 3 });
+        //        element(1, 2, 3);
+        //        //int[] 无法转型为Object[]，因此会被当做一个单纯的数组对象
+        //        element(new int[] { 1, 2, 3 });
+
+        String test20230413 = "s3a://datavisor-unittest/data/replayCli/ferry_test/folder01/";
+        String[] test20230413s = test20230413.split("/");
+        System.out.println(test20230413s[test20230413s.length - 1]);
+
         String[] strings2022 = new String[] { "java", "c", "python" };
         List<String> stringList = new ArrayList<>(Arrays.asList(strings2022));
         stringList.add(stringList.size() - 2, "test01");
         stringList.add(stringList.size() - 2, "test02");
         stringList.add(stringList.size() - 1, "test03");
+        stringList.add("");
         stringList.add(stringList.size(), "test04");
 
         Date date0704 = new Date(System.currentTimeMillis());
@@ -195,9 +231,11 @@ public class Test {
 
         String splitS = "3,,5";
         String splitS02 = "3,,5,";
+        String splitS03 = "";
         String[] splitSs = splitS.split(",", -1);
         String[] splitS02s = splitS02.split(",");
         String[] splitS02s02 = splitS02.split(",", -1);
+        String[] splitS02s03 = splitS03.split(",");
 
         String test1202 = splitS + "null";
         String test120201 = splitS + null;
@@ -500,6 +538,8 @@ public class Test {
 
         Set<TestEntity> set = new HashSet<>();
         set.add(entity1);
+        set.remove(entity1);
+        set.remove(entity2);
         set.add(entity2);
 
         Iterator<TestEntity> iterator = set.iterator();

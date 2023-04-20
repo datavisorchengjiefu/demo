@@ -17,8 +17,21 @@
 
 package com.fcjexample.demo.util.test;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Test {
     public static void main(String[] args) {
+
+        String inputFolder = "s3a://datavisor-prod-tenant/cronferryrawdata";
+        String[] strings = inputFolder.split("/");
+        List<String> stringList = new ArrayList<>(Arrays.asList(strings));
+        stringList.set(stringList.size() - 1, "test01");
+        String newFile = StringUtils.join(stringList, "/");
+        System.out.println("newFile is " + newFile);
 
         testRegex();
 

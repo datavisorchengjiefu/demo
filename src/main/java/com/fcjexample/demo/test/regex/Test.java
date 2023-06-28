@@ -40,6 +40,8 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
+        convertTimeRange("");
+
         //        Pattern s3Pattern = Pattern.compile("s3a?://");
         Pattern s3Pattern = Pattern.compile("^s3[an]://([^/]+)/(.*)$");
         String s3String01 = "gegee g s3a://datavisor-qa-";
@@ -87,6 +89,53 @@ public class Test {
         url = "http://localhost:8080/feature";
         resultUrl = generatePathAndSetUpdateVelocity(url);
         logger.info("resultUrl is {}", resultUrl);
+    }
+
+    public static String convertTimeRange(String timeRange) {
+        String timeRangeTemp = "hahaPREVIOUS_3_WEEK";
+        String regex = "PREVIOUS_(\\d+)_(WEEK|MONTH|QUARTER)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(timeRangeTemp);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            System.out.println("Match found");
+        } else {
+            System.out.println("Match not found");
+        }
+
+        logger.info("group 0 is {}. ", matcher.group(0));
+        logger.info("group 1 is {}. ", matcher.group(1));
+        logger.info("group 2 is {}. ", matcher.group(2));
+
+        // Define a regular expression pattern to match the input string
+        pattern = Pattern.compile("(\\d+)\\s+(days?|hours?|minutes?)");
+        matcher = pattern.matcher(timeRangeTemp);
+
+        int totalMinutes = 0;
+        while (matcher.find()) {
+            int amount = Integer.parseInt(matcher.group(1));
+            String unit = matcher.group(2);
+
+            // Convert the time unit to minutes and add to total
+            switch (unit) {
+            case "day":
+            case "days":
+                totalMinutes += amount * 24 * 60;
+                break;
+            case "hour":
+            case "hours":
+                totalMinutes += amount * 60;
+                break;
+            case "minute":
+            case "minutes":
+                totalMinutes += amount;
+                break;
+            default:
+                // Handle unsupported units
+                throw new IllegalArgumentException("Unsupported time unit: " + unit);
+            }
+        }
+        return "";
     }
 
     private void test() {

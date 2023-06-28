@@ -17,17 +17,22 @@
 
 package com.fcjexample.demo.test.fp;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class DateRangeExample {
+
+    private static final Logger logger = LoggerFactory.getLogger(DateRangeExample.class);
 
     public static void main(String[] args) {
         //
         //        test01();
         //        test02();
-        test03();
+        //        test03();
+        test04();
 
     }
 
@@ -92,5 +97,61 @@ public class DateRangeExample {
         String lastMonthRange = firstDayOfLastMonth.format(formatter) + " - " + lastDayOfLastMonth
                 .format(formatter);
         System.out.println("上个月的时间范围为: " + lastMonthRange);
+    }
+
+    public static void test04() {
+        // 定义日期格式
+        //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // 获取当前日期
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        // todo: LocalDateTime 无法使用lengthOfMonth
+        LocalDateTime lastDayOfLastMonth = localDateTime.minusMonths(1).withDayOfMonth(
+                localDateTime.minusMonths(1).getDayOfMonth());
+
+        // LocalDate.now() also use ZoneId.systemDefault()
+        LocalDate currentDate = LocalDate.now();
+        ZonedDateTime dateTime = currentDate.atStartOfDay(ZoneId.systemDefault());
+        long milliseconds = dateTime.toInstant().toEpochMilli();
+        System.out.println("Milliseconds since epoch: " + milliseconds);
+
+        int amount = 1;
+        LocalDate firstDayOfSomeWeek = currentDate.minusWeeks(amount)
+                .with(DayOfWeek.MONDAY);
+        LocalDate lastDayOfSomeWeek = currentDate.minusWeeks(amount)
+                .with(DayOfWeek.SUNDAY);
+        logger.info("firstDayOfSomeWeek is {}", firstDayOfSomeWeek.format(formatter));
+        logger.info("firstDayOfSomeWeek is {}", getStartMilli(firstDayOfSomeWeek));
+        logger.info("lastDayOfSomeWeek is {}", lastDayOfSomeWeek.format(formatter));
+        logger.info("lastDayOfSomeWeek is {}", getEndMilli(lastDayOfSomeWeek));
+
+        //
+        LocalDate firstDay = currentDate.minusDays(7);
+        logger.info("firstDay is {}", firstDay.format(formatter));
+        LocalDate lastDay = currentDate.minusDays(1);
+        logger.info("lastDay is {}", lastDay.format(formatter));
+
+        logger.info("=========");
+
+        currentDate = LocalDate.of(2023, 4, 1);
+        //        currentDate.isAfter()
+        firstDay = currentDate.withDayOfMonth(1);
+        logger.info("firstDay is {}", firstDay.format(formatter));
+        lastDay = currentDate.minusDays(1);
+        logger.info("lastDay is {}", lastDay.format(formatter));
+
+    }
+
+    private static long getStartMilli(LocalDate localDate) {
+        ZonedDateTime dateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+        return dateTime.toInstant().toEpochMilli();
+    }
+
+    private static long getEndMilli(LocalDate localDate) {
+        ZonedDateTime dateTime = localDate.atStartOfDay().with(LocalTime.MAX)
+                .atZone(ZoneId.systemDefault());
+        return dateTime.toInstant().toEpochMilli();
     }
 }

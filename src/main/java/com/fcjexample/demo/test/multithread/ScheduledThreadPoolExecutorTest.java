@@ -55,7 +55,19 @@ public class ScheduledThreadPoolExecutorTest {
         //        }
 
         //        scheduledFuture.get();
-        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        //        executor.awaitTermination(Long.MAX_VALUE, SECONDS);
+
+/*        if (executor.awaitTermination(Long.MAX_VALUE, SECONDS)) {
+            executor.shutdown();
+            print("await executor.shutdown(). ");
+        }*/
+
+        //        if (!executor.awaitTermination(6, SECONDS)) {
+        if (!executor.awaitTermination(Long.MAX_VALUE, SECONDS)) {
+            executor.shutdown();
+            print("await timeout executor.shutdown(). ");
+        }
+
         print("after get");
     }
 
@@ -80,6 +92,7 @@ public class ScheduledThreadPoolExecutorTest {
                 //                scheduledFuture.cancel(false);
                 executor.shutdown();
             }
+            print("hhh finish. ");
         };
     }
 

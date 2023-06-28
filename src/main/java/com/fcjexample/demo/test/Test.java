@@ -168,6 +168,12 @@ public class Test {
         System.out.println(args.length);
     }
 
+    public static void swap(String a, String b) {
+        String temp = a;
+        a = b;
+        b = temp;
+    }
+
     public static void main(String[] args) throws Exception {
 
         //        //都可以
@@ -182,6 +188,13 @@ public class Test {
         //        element(1, 2, 3);
         //        //int[] 无法转型为Object[]，因此会被当做一个单纯的数组对象
         //        element(new int[] { 1, 2, 3 });
+
+        Calendar calendar = Calendar.getInstance();
+
+        String aV2 = "testa";
+        String b = "testb";
+
+        swap(aV2, b);
 
         String test20230413 = "s3a://datavisor-unittest/data/replayCli/ferry_test/folder01/";
         String[] test20230413s = test20230413.split("/");

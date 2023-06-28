@@ -23,11 +23,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @PersistJobDataAfterExecution
 @DisallowConcurrentExecution
 public class SimpleJob implements Job {
     private static final Logger logger = LoggerFactory.getLogger(SimpleJob.class);
+    protected final ScheduledExecutorService cronJobScheduler = Executors.newScheduledThreadPool(1,
+            new ThreadFactory() {
+                @Override public Thread newThread(Runnable r) {
+                    logger.info("create new Thread. [{}]", integer.getAndIncrement());
+                    return new Thread(r, "batch-cronjob-check-replay-" + integer.get());
+                }
+
+                AtomicInteger integer = new AtomicInteger();
+
+            });
 
     // work
     public SimpleJob() {
@@ -65,12 +81,43 @@ public class SimpleJob implements Job {
         //        logger.info("context ha 03 is {}", testEntity02.getTimeout());
         //        hello.sayHelloV2();
 
+        long start = System.currentTimeMillis();
+        cronJobScheduler.scheduleWithFixedDelay(new Runnable() {
+            @Override public void run() {
+                logger.info("cronJobScheduler run. ");
+                logger.info("start task: {}. ", getPeriod(start, System.currentTimeMillis()));
+                //                        sleep(SECONDS, 10);
+                logger.info("end task: {}", getPeriod(start, System.currentTimeMillis()));
+                if (getPeriod(start, System.currentTimeMillis()) > 9) {
+                    logger.info("shutting down");
+                    //                scheduledFuture.cancel(false);
+                    cronJobScheduler.shutdown();
+                }
+                logger.info("hhh finish. ");
+            }
+        }, 1, 3, SECONDS);
         try {
-            Thread.sleep(5000);
+            //            Thread.sleep(5000);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        try {
+            if (!cronJobScheduler.awaitTermination(Long.MAX_VALUE, SECONDS)) {
+                cronJobScheduler.shutdown();
+                logger.info("await timeout executor.shutdown(). ");
+            }
+        } catch (InterruptedException e) {
+            logger.error("ERROR ha. ", e);
+            cronJobScheduler.shutdownNow();
+        }
+
         logger.info("quartz job finish. {}. ", context.getJobDetail().getKey());
+    }
+
+    private static int getPeriod(long start, long end) {
+        return (int) (end - start) / 1000;
     }
 
     private HelloService hello;

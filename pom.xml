@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <core.version>1.0.20200512_0755</core.version>
+        <core.version>1.0.20210305_1926.2</core.version>
         <datavisor.nexus>https://nexus.dv-api.com:8443</datavisor.nexus>
         <protobuf.version>2.6.1</protobuf.version>
     </properties>

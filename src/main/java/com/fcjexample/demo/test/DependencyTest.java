@@ -19,19 +19,20 @@ package com.fcjexample.demo.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class DependencyTest {
     public static void main(String[] args) {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3));
-        //        Iterator<Integer> iterator = list.iterator();
-        //        while (iterator.hasNext()) {
-        //            Integer integer = iterator.next();
-        //            if (integer == 2) {
-        //                list.add(5);
-        //                iterator.remove();
-        //            }
-        //        }
+        Iterator<Integer> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            Integer integer = iterator.next();
+            if (integer == 2) {
+                //                list.add(5);
+                iterator.remove();
+            }
+        }
 
         List<Integer> toRemove = new ArrayList<>();
         List<Integer> toAdd = new ArrayList<>();

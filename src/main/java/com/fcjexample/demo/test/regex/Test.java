@@ -20,6 +20,9 @@ package com.fcjexample.demo.test.regex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +40,29 @@ public class Test {
     private static final Pattern updateVelocityPattern = Pattern
             .compile("[\\?\\&]updateVelocity=(.*?)(&|$)");
     private static final Pattern pattern = Pattern.compile("\\?(.*?)=");
+    public static final String CLIENT_BUCKET_PLACEHOLDER = "[[clientName]]";
 
     public static void main(String[] args) throws Exception {
+
+        String replaceResult = "s3a://datavisor-dev-qa22/test/haha/";
+        replaceResult = maybeReplaceBucket(replaceResult);
+        logger.info("replaceResult is {}. ", replaceResult);
+        replaceResult = maybeReplaceBucket("s3://datavisor-qa-qa784/test02/haha/");
+        logger.info("replaceResult is {}. ", replaceResult);
+
+        List<String> replaceResultList = Arrays.asList("gs://datavisor-dev-qa22/test03/haha",
+                "gs://datavisor-dev-qa22/test04/haha");
+        replaceResultList.forEach(r -> logger.info("replaceResult is {}. ", r));
+
+        logger.info("========");
+        replaceResult = maybeReplaceBucket("gs://datavisor-dev-qa22/test03/haha");
+        logger.info("replaceResult is {}. ", replaceResult);
+        try {
+            replaceResult = maybeReplaceBucket("wronggs://datavisor-dev-qa22/test03/haha");
+            logger.info("replaceResult is {}. ", replaceResult);
+        } catch (Exception e) {
+            logger.error("ha", e);
+        }
 
         convertTimeRange("");
 
@@ -47,11 +71,14 @@ public class Test {
         String s3String01 = "gegee g s3a://datavisor-qa-";
         String s3String02 = "dan20220222/DATASET/dataset_1/dcube_dataset.jsons3://get";
         String s3String03 = "s3a://datavisor-prod-tenant/cronferryrawdata";
+        String s3String04 = "s3a://datavisor-prod-tenant/cronferryrawdata/test01";
         Matcher matcherS3 = s3Pattern.matcher(s3String01);
         logger.info("s3 find {}", matcherS3.find());
         matcherS3 = s3Pattern.matcher(s3String02);
         logger.info("s3 find {}", matcherS3.find());
         matcherS3 = s3Pattern.matcher(s3String03);
+        logger.info("s3 find {}", matcherS3.find());
+        matcherS3 = s3Pattern.matcher(s3String04);
         logger.info("s3 find {}", matcherS3.find());
 
         Pattern returnStatement01 = Pattern.compile("&&(.*)&&");
@@ -69,7 +96,8 @@ public class Test {
         String resultUrl = generatePathAndSetUpdateVelocity(url);
         logger.info("resultUrl is {}", resultUrl);
 
-        url = "http://localhost:8080/feature?updateVelocity=tr-ue";
+        //        url = "http://localhost:8080/feature?updateVelocity=tr-ue";
+        url = null;
         resultUrl = generatePathAndSetUpdateVelocity(url);
         logger.info("resultUrl is {}", resultUrl);
 
@@ -223,6 +251,18 @@ public class Test {
         }
 
         return resultUrl;
+    }
+
+    public static final String S3_URI_REGEX = "(^s3[an]?://([^/]+))/?(.*)$";
+    public static final String GS_URI_REGEX = "(^gs://([^/]+))/?(.*)$";
+    private static Pattern S3_URI_PATTERN = Pattern.compile(S3_URI_REGEX);
+    private static Pattern GS_URI_PATTERN = Pattern.compile(GS_URI_REGEX);
+
+    // 一个新的matcher，必须先find（类似迭代器的next），然后才能group
+
+    public static String maybeReplaceBucket(String path) {
+        List<String> pathList = Collections.singletonList(path);
+        return (pathList == null || pathList.isEmpty()) ? null : pathList.get(0);
     }
 
 }

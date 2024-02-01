@@ -4,8 +4,35 @@ import java.io.*;
 
 public class BufferReaderWriter {
     public static void main(String[] args) throws IOException {
-        writeUsingBufferWriter();
-        readUsingBufferReader();
+        //        writeUsingBufferWriter();
+        //        readUsingBufferReader();
+        writeEventForHotspot();
+    }
+
+    public static void writeEventForHotspot() {
+        String fileName = "/Users/chengjiefu/research/work/develop/QA-2352/eventsForHotspot02.json";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (int i = 0; i < 10000; i++) {
+                String jsonData = generateJsonData(i);
+                writer.write(jsonData);
+                writer.newLine();
+            }
+            System.out.println("Data generated successfully and written to " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String generateJsonData(int index) {
+        String userId = "u" + (index % 10);
+        long eventTime = 1703146419001L + index;
+        String eventType = "dummyFCJ1";
+        String dimensionFcj = "f" + (index % 3);
+        int amount = 2;
+
+        return String.format(
+                "{\"user_id\":\"%s\",\"event_time\":%d,\"eventType\":\"%s\",\"dimension_fcj\":\"%s\",\"amount\":%d}",
+                userId, eventTime, eventType, dimensionFcj, amount);
     }
 
     private static void writeUsingBufferWriter() throws IOException {

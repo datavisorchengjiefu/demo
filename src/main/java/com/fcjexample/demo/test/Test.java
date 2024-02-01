@@ -61,6 +61,8 @@ import java.util.stream.Collectors;
 public class Test {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
+    static boolean bo;
+
     private static Consumer<Map.Entry<Integer, String>> mapConsumer = new Consumer<Map.Entry<Integer, String>>() {
         @Override
         public void accept(
@@ -175,6 +177,7 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
+        testyu("666");
 
         //        //都可以
         //        element(1, 2, 3);
@@ -874,6 +877,7 @@ public class Test {
         stringList01.add("6");
 
         List<String> newList = stringList01.subList(2, 4);
+        newList = stringList01.subList(0, 0);
 
         System.out.println(newList.size());// 01
 
@@ -1018,6 +1022,12 @@ public class Test {
             Thread.sleep(3000);
         }
 
+    }
+
+    static void testyu(String test) {
+        System.out.println("=======hhh");
+        System.out.println(test + "|" + bo);
+        System.out.println("=======hhh");
     }
 
     static class RuleTestClass {

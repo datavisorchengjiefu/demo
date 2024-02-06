@@ -81,8 +81,8 @@ public class QuartzTest {
             //
             CronTrigger trigger01 = TriggerBuilder.newTrigger()
                     .withIdentity("trigger1", "groupT1")
-                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * * * ?"))
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 30 * ? * * *"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0/2 * * * * ?"))
+                    //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 30 * ? * * *"))
                     //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * * ?"))
                     //                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10-19 * * ?"))
                     //                    .forJob("myJob", "myGroup")// the key is different

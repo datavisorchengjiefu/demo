@@ -39,6 +39,7 @@ public class QuartzTest {
         Scheduler scheduler = schedulerFactory.getScheduler();
         // and start it off
         scheduler.start();
+        //
         logger.info("Current time is {}", new Date());
 
         try {

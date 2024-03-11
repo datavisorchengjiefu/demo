@@ -1,0 +1,10 @@
+    // e.g. s3a://datavisor-prod-[[clientName]]-useast1
+    private String bucketForReplace = "";
+    // e.g. s3a://datavisor-[[clientName]]-useast1
+    private String externalBucketForReplace = "";
+
+    // opposite region
+    // e.g. s3a://datavisor-prod-[[clientName]]-eu
+    private String oppositeBucketForReplace = "";
+    // e.g. s3a://datavisor-[[clientName]]-eu
+    private String oppositeExternalBucketForReplace = "";

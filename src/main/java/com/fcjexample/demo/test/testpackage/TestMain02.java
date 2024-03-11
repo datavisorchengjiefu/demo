@@ -32,6 +32,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,13 @@ public class TestMain02 {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMain02.class);
 
     public static void main(String[] args) throws Exception {
+        Map<String, String> mapTest01 = new HashMap<>();
+        mapTest01.put("1", "test1");
+        mapTest01.put("2", "test2");
+        LOGGER.info("gg is {}. ", mapTest01.toString());
+        mapTest01.clear();
+        mapTest01.put("3", "test3");
+
         String ekata01 = "headers.set(\"Authorization\", \"Bearer $bearer_token\");";
         String ekata02 = "headers.set(\"Authorization\", Bearer $bearer_token);";
         System.out.println(ekata01);
@@ -48,6 +56,8 @@ public class TestMain02 {
         ekata02 = ekata02.replace("$bearer_token", "ha66");
         System.out.println(ekata01);
         System.out.println(ekata02);
+        String ees = "";
+        ees.replace("get", "ggg");
 
         URIBuilder uriBuilder = new URIBuilder()
                 .setScheme("https")

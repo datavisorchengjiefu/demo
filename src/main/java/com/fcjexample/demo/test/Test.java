@@ -22,6 +22,7 @@ import com.fcjexample.demo.entity.TestEntity02;
 import com.fcjexample.demo.model.TT;
 import com.fcjexample.demo.model.TestEntity;
 import com.fcjexample.demo.util.Tuple;
+import com.google.common.util.concurrent.AtomicDouble;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.simple.JSONArray;
@@ -46,6 +47,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
@@ -177,6 +179,32 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
+        double number = 123.456789;
+
+        // 创建DecimalFormat对象，指定格式为小数点后两位
+        DecimalFormat df = new DecimalFormat("#0.00");
+
+        // 格式化double类型的数字
+        String formattedNumber = df.format(number);
+        double t01 = Double.parseDouble(formattedNumber);
+        formattedNumber = df.format(1);
+        t01 = Double.parseDouble(formattedNumber);
+        formattedNumber = df.format(0.3);
+        t01 = Double.parseDouble(formattedNumber);
+        formattedNumber = df.format(7.352);
+        t01 = Double.parseDouble(formattedNumber);
+
+        AtomicDouble atomicDouble = new AtomicDouble(0.3);
+        double resultDouble = atomicDouble.get();
+        resultDouble = 1 + resultDouble;
+        LOGGER.info("1 is {}. ", (atomicDouble.get() < 1));
+        LOGGER.info("1.1 is {}. ", atomicDouble.compareAndSet(0.3, 1));
+        LOGGER.info("2 is {}. ", (atomicDouble.get() < 1));
+        LOGGER.info("2.2 is {}. ", atomicDouble.compareAndSet(1.0, 2.0));
+        LOGGER.info("3 is {}. ", (atomicDouble.get()));
+
+        //        LOGGER.info("1 is {}. ", atomicDouble.get() < 1);
+
         testyu("666");
 
         //        //都可以

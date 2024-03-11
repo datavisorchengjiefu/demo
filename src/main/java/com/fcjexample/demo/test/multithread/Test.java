@@ -25,11 +25,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Test {
     private static final Logger LOGGER = LoggerFactory.getLogger(Test.class);
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+        int replayThreadCount = 4;
+        ExecutorService signoffThreadPool = Executors.newFixedThreadPool(replayThreadCount);
+        AtomicLong atomicLong = new AtomicLong(50);
+        signoffThreadPool.submit(new ConsumerSignoff(atomicLong, 1));
+        signoffThreadPool.submit(new ConsumerSignoff(atomicLong, 2));
+    }
+
+    public static void mainV2(String[] args) throws ExecutionException, InterruptedException {
         int replayThreadCount = 4;
         ExecutorService signoffThreadPool = Executors.newFixedThreadPool(replayThreadCount);
 
@@ -106,12 +115,33 @@ public class Test {
     }
 
     static class ConsumerSignoff implements Runnable {
+        private AtomicLong atomicLong;
+
+        private Integer num;
+
+        public ConsumerSignoff() {
+        }
+
+        public ConsumerSignoff(AtomicLong atomicLong, Integer num) {
+            this.atomicLong = atomicLong;
+            this.num = num;
+        }
 
         @Override public void run() {
 
             try {
-                Thread.sleep(1000);
-                System.out.println("ha: " + Thread.currentThread().getName());
+                //                Thread.sleep(1000);
+                //                System.out.println("ha: " + Thread.currentThread().getName());
+
+                int count = 30;
+                while (count > 0) {
+                    Thread.sleep(100);
+                    if (num.compareTo(1) == 0 && count % 4 == 0) {
+                        atomicLong.addAndGet(10);
+                    }
+                    LOGGER.info("num {} atomicLong is {}. ", num, atomicLong.get());
+                    count--;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -169,6 +169,6 @@ public class PGPEncryptionExampleForSO {
         System.out.println(
                 "get source files: https://www.bouncycastle.org/java-crypto-tools-src.zip");
         elgamalExample();
-        ecExample();
+        //        ecExample();
     }
 }

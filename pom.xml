@@ -166,6 +166,10 @@
                     <artifactId>hbase-protocol</artifactId>
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                    <groupId>org.bouncycastle</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -232,17 +236,22 @@
             <version>1.4.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.70</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpg-jdk15on</artifactId>
-            <version>1.70</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.bouncycastle</groupId>-->
+        <!--            <artifactId>bcprov-jdk16</artifactId>-->
+        <!--            <version>1.46</version>-->
+        <!--        </dependency>-->
 
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpg-jdk16</artifactId>
+            <version>1.46</version>
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.bouncycastle</groupId>-->
+        <!--            <artifactId>bcpg-jdk18on</artifactId>-->
+        <!--            <version>1.76</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 

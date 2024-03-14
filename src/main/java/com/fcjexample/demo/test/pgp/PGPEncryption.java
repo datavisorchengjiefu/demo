@@ -101,11 +101,11 @@ public class PGPEncryption {
             char[] password) throws Exception {
         InputStream inputStream = new FileInputStream(inputFile);
         InputStream keyStream = new FileInputStream(keyFile);
-        InputStream decryptedStream = decryptStream(inputStream, keyStream, password);
-        OutputStream outputStream = new FileOutputStream(outputFile);
-        streamFlow(decryptedStream, outputStream);
+        OutputStream decryptedStream = decryptStream(inputStream, keyStream, password, outputFile);
+        //        OutputStream outputStream = new FileOutputStream(outputFile);
+        //        streamFlow(decryptedStream, outputStream);
         decryptedStream.close();
-        outputStream.close();
+        //        outputStream.close();
         keyStream.close();
         inputStream.close();
     }
@@ -140,8 +140,8 @@ public class PGPEncryption {
      * @throws PGPException
      * @throws NoSuchProviderException
      */
-    public static InputStream decryptStream(InputStream inputStream,
-            InputStream keyStream, char[] password)
+    public static OutputStream decryptStream(InputStream inputStream,
+            InputStream keyStream, char[] password, String outputFile)
             throws IOException, PGPException, NoSuchProviderException {
         Security.addProvider(new BouncyCastleProvider());
         inputStream = PGPUtil.getDecoderStream(inputStream);
@@ -189,7 +189,15 @@ public class PGPEncryption {
             throw new PGPException("Message is not a simple encrypted file - type unknown.");
         }
 
-        return decryptedStream;
+        // Write decrypted data to output stream
+        OutputStream outputStream = new FileOutputStream(outputFile);
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = decryptedStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+
+        return outputStream;
     }
 
     /**
@@ -218,7 +226,7 @@ public class PGPEncryption {
         try {
             String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/rawlog.20240304_010102.csv.pgp";
             String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/towerfedcu.key";
-            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt02";
+            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt03";
             char[] passphrase = "datavisor".toCharArray();
 
             //            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/fcjtest/data01.csv.gpg";

@@ -77,6 +77,65 @@ public class PGPEncryption {
         //        }
     }
 
+    public static InputStream decryptPGPFile(InputStream encryptedStream,
+            InputStream privateKeyStream,
+            char[] passphrase) throws Exception {
+        Security.addProvider(new BouncyCastleProvider());
+        InputStream in = PGPUtil.getDecoderStream(encryptedStream);
+
+        PGPObjectFactory pgpF = new PGPObjectFactory(in);
+
+        PGPEncryptedDataList enc = null;
+        // Read the encrypted data
+        Object o = pgpF.nextObject();
+
+        // The first object might be a PGP marker packet.
+        if (o instanceof PGPEncryptedDataList) {
+            enc = (PGPEncryptedDataList) o;
+        } else {
+            enc = (PGPEncryptedDataList) pgpF.nextObject();
+        }
+
+        // Decrypt the data
+        // Find the secret key
+        Iterator it = enc.getEncryptedDataObjects();
+        PGPPrivateKey sKey = null;
+        PGPPublicKeyEncryptedData pbe = null;
+        PGPSecretKeyRingCollection pgpSec = new PGPSecretKeyRingCollection(
+                PGPUtil.getDecoderStream(privateKeyStream));
+        while (sKey == null && it.hasNext()) {
+            pbe = (PGPPublicKeyEncryptedData) it.next();
+            sKey = findSecretKey(pgpSec, pbe.getKeyID(), passphrase);
+        }
+        if (sKey == null) {
+            throw new IllegalArgumentException(
+                    "secret key for message not found.");
+        }
+
+        InputStream clearDataStream = pbe.getDataStream(sKey, "BC");
+        PGPObjectFactory plainFact = new PGPObjectFactory(clearDataStream);
+        Object message = plainFact.nextObject();
+
+        // Decrypt messages
+        if (message instanceof PGPCompressedData) {
+            PGPCompressedData compressedData = (PGPCompressedData) message;
+            PGPObjectFactory pgpFact = new PGPObjectFactory(compressedData.getDataStream());
+            message = pgpFact.nextObject();
+        }
+        InputStream decryptedStream;
+        if (message instanceof PGPLiteralData) {
+            PGPLiteralData literalData = (PGPLiteralData) message;
+            decryptedStream = literalData.getDataStream();
+        } else if (message instanceof PGPOnePassSignatureList) {
+            throw new PGPException(
+                    "Encrypted message contains a signed message - not literal data.");
+        } else {
+            throw new PGPException("Message is not a simple encrypted file - type unknown.");
+        }
+
+        return decryptedStream;
+    }
+
     private static PGPPrivateKey findSecretKey(PGPSecretKeyRingCollection secKeyRing, long keyID,
             char[] password)
             throws PGPException, NoSuchProviderException {
@@ -88,6 +147,7 @@ public class PGPEncryption {
     }
 
     /**
+     * 这是第一种，直接outputStream
      * This function decrypts data contained in inputFile and output to outputFile
      *
      * @param inputFile
@@ -97,13 +157,24 @@ public class PGPEncryption {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    //    public static void decryptFile(String inputFile, String outputFile, String keyFile,
+    //            char[] password) throws Exception {
+    //        InputStream inputStream = new FileInputStream(inputFile);
+    //        InputStream keyStream = new FileInputStream(keyFile);
+    //        OutputStream decryptedStream = decryptStream(inputStream, keyStream, password, outputFile);
+    //        decryptedStream.close();
+    //        keyStream.close();
+    //        inputStream.close();
+    //    }
+
+    // 这是第二种，先得到InputStream
     public static void decryptFile(String inputFile, String outputFile, String keyFile,
             char[] password) throws Exception {
         InputStream inputStream = new FileInputStream(inputFile);
         InputStream keyStream = new FileInputStream(keyFile);
-        OutputStream decryptedStream = decryptStream(inputStream, keyStream, password, outputFile);
-        //        OutputStream outputStream = new FileOutputStream(outputFile);
-        //        streamFlow(decryptedStream, outputStream);
+        InputStream decryptedStream = decryptPGPFile(inputStream, keyStream, password);
+        OutputStream outputStream = new FileOutputStream(outputFile);
+        streamFlow(decryptedStream, outputStream);
         decryptedStream.close();
         //        outputStream.close();
         keyStream.close();
@@ -226,7 +297,12 @@ public class PGPEncryption {
         try {
             String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/rawlog.20240304_010102.csv.pgp";
             String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/towerfedcu.key";
-            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt03";
+            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt06";
+            //            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt04.pgp";
+
+            //            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/T24TransactionSFTPTestSample.csv.pgp";
+            //            String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/eqbank.key";
+            //            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/decrypt01";
             char[] passphrase = "datavisor".toCharArray();
 
             //            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/fcjtest/data01.csv.gpg";

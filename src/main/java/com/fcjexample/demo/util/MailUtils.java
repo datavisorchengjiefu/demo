@@ -18,14 +18,13 @@
 package com.fcjexample.demo.util;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-@Component
+//@Component
 public class MailUtils {
 
     @Value("${gmail.user")

@@ -68,7 +68,8 @@ public class HelloController {
     }
 
     @RequestMapping("/hhh02")
-    public Object helloha02(@RequestBody String rawExternal) {
+    public Object helloha02(@RequestParam(name = "createEventAttributeIfNotExist", required = false)
+    Boolean createEventAttributeIfNotExist, @RequestBody String rawExternal) {
         return rawExternal + "hello haha fcjdormi";
     }
 

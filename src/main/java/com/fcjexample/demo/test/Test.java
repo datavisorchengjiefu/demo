@@ -179,7 +179,20 @@ public class Test {
     }
 
     public static void main(String[] args) throws Exception {
+        String s20240530v1 = "s3a://datavisor-prod-tenant/cronferryrawdata/";
+        String s20240530v2 = "s3a://datavisor-prod-tenant/cronferryrawdata";
+        String[] strings20240530v1 = s20240530v1.split("/");
+        String[] strings20240530v2 = s20240530v2.split("/");
+        StringBuilder stringBuilder = new StringBuilder();
+        // Remove last part
+        for (int i = 0; i < strings20240530v2.length - 1; i++) {
+            stringBuilder.append(strings20240530v2[i]).append("/");
+        }
         double number = 123.456789;
+        double n1 = 1.0;
+        LOGGER.info("result is {}. ", n1 < 1);
+        LOGGER.info("result is {}. ", n1 < 1.0);
+        //        LOGGER.info("result is {}. ", n1 < 1);
 
         // 创建DecimalFormat对象，指定格式为小数点后两位
         DecimalFormat df = new DecimalFormat("#0.00");
@@ -233,6 +246,7 @@ public class Test {
 
         String[] strings2022 = new String[] { "java", "c", "python" };
         List<String> stringList = new ArrayList<>(Arrays.asList(strings2022));
+
         stringList.add(stringList.size() - 2, "test01");
         stringList.add(stringList.size() - 2, "test02");
         stringList.add(stringList.size() - 1, "test03");

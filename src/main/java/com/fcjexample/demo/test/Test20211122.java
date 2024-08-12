@@ -28,6 +28,8 @@ import java.util.function.Consumer;
 
 public class Test20211122 {
     public static void main(String[] args) throws Exception {
+        process();
+
         List<List<String>> result = new ArrayList<>();
         FileInputStream fis = null;
         InputStreamReader isr = null;
@@ -53,5 +55,33 @@ public class Test20211122 {
                 System.out.println("==========");
             }
         });
+    }
+
+    private static void process() {
+        int[] nums = new int[] { 3, -4, 5, -1, 8 };
+
+        int start = 0;
+        int end = 0;
+        int temp = 0;
+        int max = nums[0];
+        int sum = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            if (sum < 0) {
+                sum = nums[i];
+                temp = i;// 新的开始了
+            } else {
+                sum += nums[i];
+            }
+
+            if (sum > max) {
+                max = sum;
+                start = temp;
+                end = i;
+            }
+        }
+
+        System.out.println("max is ha " + max);
+
     }
 }

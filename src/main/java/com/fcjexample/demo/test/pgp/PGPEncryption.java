@@ -113,6 +113,14 @@ public class PGPEncryption {
         }
 
         InputStream clearDataStream = pbe.getDataStream(sKey, "BC");
+
+        //        PGPObjectFactory pgpFact = new PGPObjectFactory(clearDataStream);
+        //        PGPCompressedData cData = (PGPCompressedData) pgpFact.nextObject();
+        //        pgpFact = new PGPObjectFactory(cData.getDataStream());
+        //        PGPLiteralData ld = (PGPLiteralData) pgpFact.nextObject();
+        //        InputStream unc = ld.getInputStream();
+        //        return unc;
+
         PGPObjectFactory plainFact = new PGPObjectFactory(clearDataStream);
         Object message = plainFact.nextObject();
 
@@ -127,8 +135,18 @@ public class PGPEncryption {
             PGPLiteralData literalData = (PGPLiteralData) message;
             decryptedStream = literalData.getDataStream();
         } else if (message instanceof PGPOnePassSignatureList) {
-            throw new PGPException(
-                    "Encrypted message contains a signed message - not literal data.");
+            //            throw new PGPException(
+            //                    "Encrypted message contains a signed message - not literal data.");
+
+            message = plainFact.nextObject();// for len's example:T24TransactionSFTPTestSample.csv.pgp
+            if (message instanceof PGPLiteralData) {
+                PGPLiteralData literalData = (PGPLiteralData) message;
+                decryptedStream = literalData.getDataStream();
+            } else {
+                throw new PGPException(
+                        "Encrypted message contains a signed message - not literal data.");
+            }
+
         } else {
             throw new PGPException("Message is not a simple encrypted file - type unknown.");
         }
@@ -295,14 +313,14 @@ public class PGPEncryption {
     public static void main(String[] args) {
 
         try {
-            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/rawlog.20240304_010102.csv.pgp";
-            String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/towerfedcu.key";
-            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt06";
+            //            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/rawlog.20240304_010102.csv.pgp";
+            //            String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/towerfedcu.key";
+            //            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt07";
             //            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/tower/decrypt04.pgp";
 
-            //            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/T24TransactionSFTPTestSample.csv.pgp";
-            //            String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/eqbank.key";
-            //            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/decrypt01";
+            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/T24TransactionSFTPTestSample.csv.pgp";
+            String privateKeyFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/eqbank.key";
+            String decryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/len/decrypt01";
             char[] passphrase = "datavisor".toCharArray();
 
             //            String encryptedFileName = "/Users/chengjiefu/research/work/develop/FP-3571/fcjtest/data01.csv.gpg";

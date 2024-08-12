@@ -20,7 +20,6 @@ package com.fcjexample.demo.test.lambda.optional;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Assert;
 
 import java.util.*;
 
@@ -80,7 +79,7 @@ public class User01 {
         Collections.sort(userNameToFeatureValueMap.get("user01"));
         Collections.sort(userNameToFeatureValueMap.get("user02"));
 
-        Assert.assertEquals("1,3,5", String.join(",", userNameToFeatureValueMap.get("user01")));
+        //        Assert.assertEquals("1,3,5", String.join(",", userNameToFeatureValueMap.get("user01")));
 
         for (String str : list) {
             JSONParser parser = new JSONParser();
@@ -98,6 +97,8 @@ public class User01 {
         for (String s : stringSet) {
             System.out.println(s);
         }
+        System.out.println("set is ha  " + stringSet);
+        System.out.println("set is ha  " + stringSet.toArray());
 
         System.out.println("=========");
 
@@ -117,9 +118,9 @@ public class User01 {
 
     private static void putUserIdAndFeatureValue(JSONObject json, String userId, String featureName,
             Map<String, List<String>> userNameToFeatureValueMap) {
-//        if (userId.equals(json.get("user_id"))) {
-            userNameToFeatureValueMap.computeIfAbsent(userId, k -> new ArrayList<>());
-            userNameToFeatureValueMap.get(userId).add((String) json.get(featureName));
-//        }
+        //        if (userId.equals(json.get("user_id"))) {
+        userNameToFeatureValueMap.computeIfAbsent(userId, k -> new ArrayList<>());
+        userNameToFeatureValueMap.get(userId).add((String) json.get(featureName));
+        //        }
     }
 }
